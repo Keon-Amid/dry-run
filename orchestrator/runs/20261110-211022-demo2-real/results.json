@@ -1,0 +1,3504 @@
+{
+  "run_id": "20261110-211022-demo2-real",
+  "waves": [
+    {
+      "wave": "natural",
+      "purpose": "natural",
+      "check": null,
+      "targets": [],
+      "checkpoint_id": "dsk-00000000001919d8/c0",
+      "fork_step": 0,
+      "to_step": 7,
+      "n": 3,
+      "wall_s": 56.1,
+      "max_builders": 8,
+      "routes": [
+        {
+          "route": "natural",
+          "kind": "none",
+          "edit": null,
+          "runs": 3,
+          "passed": 3,
+          "errors": 0,
+          "invalid": 0,
+          "graded": 3,
+          "score": "3/3"
+        }
+      ],
+      "copies": [
+        {
+          "id": "natural-natural-r1",
+          "route": "natural",
+          "kind": "none",
+          "edit": null,
+          "ok": true,
+          "branch": "natural-natural-r1-cfff2d",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "natural-natural-r1",
+            "from_step": 1,
+            "to_step": 7,
+            "last_done": 7,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": false,
+            "spec_sha_before": null,
+            "spec_sha_after": null,
+            "repairs": [],
+            "steps": [
+              {
+                "step": 1,
+                "commit": "f1cd8974d11c24a45edc8822d05f21bbd9201d31",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 3.02,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 359,
+                  "cache_creation_input_tokens": 318,
+                  "cache_read_input_tokens": 2494
+                }
+              },
+              {
+                "step": 2,
+                "commit": "e0e417a3eeb099f6915b2f39bd8239970b1fbcae",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 4.746,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 660,
+                  "cache_creation_input_tokens": 1372,
+                  "cache_read_input_tokens": 3258
+                }
+              },
+              {
+                "step": 3,
+                "commit": "358b56f0e877425e46acce126bd1dad48ae8802b",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 4.25,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 612,
+                  "cache_creation_input_tokens": 2390,
+                  "cache_read_input_tokens": 4569
+                }
+              },
+              {
+                "step": 4,
+                "commit": "2365aafc869fcf7d47749644206de5b2eedaa9de",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 9.752,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1338,
+                  "cache_creation_input_tokens": 3906,
+                  "cache_read_input_tokens": 5846
+                }
+              },
+              {
+                "step": 5,
+                "commit": "72dab9a46b5e2cb6b5498fda5d9b9164919d8988",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 4.748,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 311,
+                  "cache_creation_input_tokens": 4346,
+                  "cache_read_input_tokens": 7636
+                }
+              },
+              {
+                "step": 6,
+                "commit": "9e23d7ab8dcc375ac8ba8d2daf76190d92bf97c2",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 9.947,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1320,
+                  "cache_creation_input_tokens": 5894,
+                  "cache_read_input_tokens": 8421
+                }
+              },
+              {
+                "step": 7,
+                "commit": "27b85ced6c2d9de7b7813571d7b73cf35865b46b",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 8.125,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1037,
+                  "cache_creation_input_tokens": 7015,
+                  "cache_read_input_tokens": 10596
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": false,
+            "demo_scene": true,
+            "heldout_cave_ring": false,
+            "heldout_hud_text_other": false,
+            "heldout_torch_light_corner": true,
+            "hero_is_yellow": false,
+            "hud_hp_bar": true,
+            "hud_status_text": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": true,
+            "void_tiles_empty": true
+          },
+          "passed": true,
+          "wall_s": 54.398,
+          "timings_ms": {
+            "branch": 164.4,
+            "sandbox": 1367.7,
+            "mount": 2017.4
+          }
+        },
+        {
+          "id": "natural-natural-r2",
+          "route": "natural",
+          "kind": "none",
+          "edit": null,
+          "ok": true,
+          "branch": "natural-natural-r2-efcc2c",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "natural-natural-r2",
+            "from_step": 1,
+            "to_step": 7,
+            "last_done": 7,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": false,
+            "spec_sha_before": null,
+            "spec_sha_after": null,
+            "repairs": [],
+            "steps": [
+              {
+                "step": 1,
+                "commit": "c8dc9f6e660585547fb836b18f9f22712787c0c4",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 2.597,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 292,
+                  "cache_creation_input_tokens": 247,
+                  "cache_read_input_tokens": 2494
+                }
+              },
+              {
+                "step": 2,
+                "commit": "079fdd6dbc50fe01f1d3a8ab787674c4f3bca9a3",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 4.999,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 680,
+                  "cache_creation_input_tokens": 1308,
+                  "cache_read_input_tokens": 3191
+                }
+              },
+              {
+                "step": 3,
+                "commit": "1654ef4d66efaddbe0b8d9ea58da164542ebfbde",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 4.085,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 624,
+                  "cache_creation_input_tokens": 2303,
+                  "cache_read_input_tokens": 4522
+                }
+              },
+              {
+                "step": 4,
+                "commit": "a88eb0ae9ef490fa8693f4e8780cda22444766a6",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 8.677,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1206,
+                  "cache_creation_input_tokens": 3904,
+                  "cache_read_input_tokens": 5778
+                }
+              },
+              {
+                "step": 5,
+                "commit": "61d33ba5bf7e2b3a0193f61bd5055949c37b652c",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 4.102,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 331,
+                  "cache_creation_input_tokens": 4331,
+                  "cache_read_input_tokens": 7603
+                }
+              },
+              {
+                "step": 6,
+                "commit": "7a81d4dc120c8eebbaf1e2d2199d8486c3c1c2c3",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 8.84,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1175,
+                  "cache_creation_input_tokens": 5683,
+                  "cache_read_input_tokens": 8408
+                }
+              },
+              {
+                "step": 7,
+                "commit": "035fd8259a633d6d058cf0988925912c695482f9",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 7.612,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 917,
+                  "cache_creation_input_tokens": 6417,
+                  "cache_read_input_tokens": 10376
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": false,
+            "demo_scene": true,
+            "heldout_cave_ring": false,
+            "heldout_hud_text_other": false,
+            "heldout_torch_light_corner": false,
+            "hero_is_yellow": false,
+            "hud_hp_bar": true,
+            "hud_status_text": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": false,
+            "void_tiles_empty": true
+          },
+          "passed": true,
+          "wall_s": 50.066,
+          "timings_ms": {
+            "branch": 161.2,
+            "sandbox": 463.9,
+            "mount": 1680.6
+          }
+        },
+        {
+          "id": "natural-natural-r3",
+          "route": "natural",
+          "kind": "none",
+          "edit": null,
+          "ok": true,
+          "branch": "natural-natural-r3-746670",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "natural-natural-r3",
+            "from_step": 1,
+            "to_step": 7,
+            "last_done": 7,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": false,
+            "spec_sha_before": null,
+            "spec_sha_after": null,
+            "repairs": [],
+            "steps": [
+              {
+                "step": 1,
+                "commit": "c8dc9f6e660585547fb836b18f9f22712787c0c4",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 3.018,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 372,
+                  "cache_creation_input_tokens": 327,
+                  "cache_read_input_tokens": 2494
+                }
+              },
+              {
+                "step": 2,
+                "commit": "0ee094253817638d456881a0554d97ed51a5f869",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 4.966,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 688,
+                  "cache_creation_input_tokens": 1390,
+                  "cache_read_input_tokens": 3271
+                }
+              },
+              {
+                "step": 3,
+                "commit": "4ca39b5e38164028fbcdd2c2dc10fefc6852c67f",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 6.124,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1006,
+                  "cache_creation_input_tokens": 2870,
+                  "cache_read_input_tokens": 4610
+                }
+              },
+              {
+                "step": 4,
+                "commit": "e6eb938144ba51573544e7aaa82b8bfe49833971",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 9.734,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1422,
+                  "cache_creation_input_tokens": 4916,
+                  "cache_read_input_tokens": 6345
+                }
+              },
+              {
+                "step": 5,
+                "commit": "a79a8bfb8f03c4446d9b8786046f42c02817400b",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 3.526,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 282,
+                  "cache_creation_input_tokens": 5515,
+                  "cache_read_input_tokens": 8675
+                }
+              },
+              {
+                "step": 6,
+                "commit": "c05fb3c0fd6bc5b5099d5c771c07a8b6f47e8893",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 9.702,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1342,
+                  "cache_creation_input_tokens": 7047,
+                  "cache_read_input_tokens": 9556
+                }
+              },
+              {
+                "step": 7,
+                "commit": "861ed2e35533959c4cc728543441647d21d0260c",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 6.814,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 839,
+                  "cache_creation_input_tokens": 7880,
+                  "cache_read_input_tokens": 11700
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": false,
+            "demo_scene": true,
+            "heldout_cave_ring": false,
+            "heldout_hud_text_other": false,
+            "heldout_torch_light_corner": false,
+            "hero_is_yellow": false,
+            "hud_hp_bar": true,
+            "hud_status_text": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": false,
+            "void_tiles_empty": true
+          },
+          "passed": true,
+          "wall_s": 52.57,
+          "timings_ms": {
+            "branch": 162.6,
+            "sandbox": 461.1,
+            "mount": 1681.6
+          }
+        }
+      ]
+    },
+    {
+      "wave": "triage-cave_keeps_shape",
+      "purpose": "triage",
+      "check": "cave_keeps_shape",
+      "targets": [
+        "cave_keeps_shape"
+      ],
+      "checkpoint_id": "dsk-00000000001919d8/c4",
+      "fork_step": 4,
+      "to_step": 5,
+      "n": 3,
+      "wall_s": 18.539,
+      "max_builders": 8,
+      "routes": [
+        {
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "runs": 3,
+          "passed": 0,
+          "errors": 0,
+          "invalid": 0,
+          "graded": 3,
+          "score": "0/3"
+        }
+      ],
+      "copies": [
+        {
+          "id": "triage-cave_keeps_shape-rebuild-r1",
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "ok": true,
+          "branch": "triage-cave-keeps-shape-rebuild-r1-8a80fc",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "triage-cave_keeps_shape-rebuild-r1",
+            "from_step": 5,
+            "to_step": 5,
+            "last_done": 5,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": false,
+            "spec_sha_before": null,
+            "spec_sha_after": null,
+            "repairs": [],
+            "steps": [
+              {
+                "step": 5,
+                "commit": "2e4899886100a3a151fb4d06d5077021f5480fd0",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 4.318,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 356,
+                  "cache_creation_input_tokens": 237,
+                  "cache_read_input_tokens": 12118
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": false,
+            "heldout_cave_ring": false,
+            "heldout_torch_light_corner": false,
+            "hero_is_yellow": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": false,
+            "void_tiles_empty": true
+          },
+          "passed": false,
+          "wall_s": 13.497,
+          "timings_ms": {
+            "branch": 221.6,
+            "sandbox": 337.6,
+            "mount": 1258.1
+          }
+        },
+        {
+          "id": "triage-cave_keeps_shape-rebuild-r2",
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "ok": true,
+          "branch": "triage-cave-keeps-shape-rebuild-r2-83b78c",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "triage-cave_keeps_shape-rebuild-r2",
+            "from_step": 5,
+            "to_step": 5,
+            "last_done": 5,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": false,
+            "spec_sha_before": null,
+            "spec_sha_after": null,
+            "repairs": [],
+            "steps": [
+              {
+                "step": 5,
+                "commit": "ce0857e00c8f7c8c6d9af8036278c623767edd42",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 5.205,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 454,
+                  "cache_creation_input_tokens": 296,
+                  "cache_read_input_tokens": 12118
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": false,
+            "heldout_cave_ring": false,
+            "heldout_torch_light_corner": false,
+            "hero_is_yellow": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": false,
+            "void_tiles_empty": true
+          },
+          "passed": false,
+          "wall_s": 17.186,
+          "timings_ms": {
+            "branch": 223.7,
+            "sandbox": 1795.3,
+            "mount": 2118.4
+          }
+        },
+        {
+          "id": "triage-cave_keeps_shape-rebuild-r3",
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "ok": true,
+          "branch": "triage-cave-keeps-shape-rebuild-r3-5c01be",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "triage-cave_keeps_shape-rebuild-r3",
+            "from_step": 5,
+            "to_step": 5,
+            "last_done": 5,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": false,
+            "spec_sha_before": null,
+            "spec_sha_after": null,
+            "repairs": [],
+            "steps": [
+              {
+                "step": 5,
+                "commit": "16f5c26af8c6d4de962f956dc5b78fb48867c4af",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 4.006,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 313,
+                  "cache_creation_input_tokens": 232,
+                  "cache_read_input_tokens": 12118
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": false,
+            "heldout_cave_ring": false,
+            "heldout_torch_light_corner": false,
+            "hero_is_yellow": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": false,
+            "void_tiles_empty": true
+          },
+          "passed": false,
+          "wall_s": 13.099,
+          "timings_ms": {
+            "branch": 219.9,
+            "sandbox": 340.2,
+            "mount": 1257.1
+          }
+        }
+      ]
+    },
+    {
+      "wave": "triage-hud_status_text",
+      "purpose": "triage",
+      "check": "hud_status_text",
+      "targets": [
+        "hud_status_text"
+      ],
+      "checkpoint_id": "dsk-00000000001919d8/c5",
+      "fork_step": 5,
+      "to_step": 6,
+      "n": 3,
+      "wall_s": 20.798,
+      "max_builders": 8,
+      "routes": [
+        {
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "runs": 3,
+          "passed": 0,
+          "errors": 0,
+          "invalid": 0,
+          "graded": 3,
+          "score": "0/3"
+        }
+      ],
+      "copies": [
+        {
+          "id": "triage-hud_status_text-rebuild-r1",
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "ok": true,
+          "branch": "triage-hud-status-text-rebuild-r1-5d9b19",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "triage-hud_status_text-rebuild-r1",
+            "from_step": 6,
+            "to_step": 6,
+            "last_done": 6,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": false,
+            "spec_sha_before": null,
+            "spec_sha_after": null,
+            "repairs": [],
+            "steps": [
+              {
+                "step": 6,
+                "commit": "0c44164905920bf0ed6442ece56e3876f98e34ef",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 9.554,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1319,
+                  "cache_creation_input_tokens": 1442,
+                  "cache_read_input_tokens": 13234
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": false,
+            "heldout_cave_ring": false,
+            "heldout_hud_text_other": false,
+            "heldout_torch_light_corner": false,
+            "hero_is_yellow": false,
+            "hud_hp_bar": true,
+            "hud_status_text": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": false,
+            "void_tiles_empty": true
+          },
+          "passed": false,
+          "wall_s": 19.092,
+          "timings_ms": {
+            "branch": 192.6,
+            "sandbox": 499.0,
+            "mount": 2203.5
+          }
+        },
+        {
+          "id": "triage-hud_status_text-rebuild-r2",
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "ok": true,
+          "branch": "triage-hud-status-text-rebuild-r2-7b6686",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "triage-hud_status_text-rebuild-r2",
+            "from_step": 6,
+            "to_step": 6,
+            "last_done": 6,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": false,
+            "spec_sha_before": null,
+            "spec_sha_after": null,
+            "repairs": [],
+            "steps": [
+              {
+                "step": 6,
+                "commit": "ce4728716c1b0ef81c52ec49155ce6b8b7df174d",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 9.458,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1297,
+                  "cache_creation_input_tokens": 1417,
+                  "cache_read_input_tokens": 13234
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": false,
+            "heldout_cave_ring": false,
+            "heldout_hud_text_other": false,
+            "heldout_torch_light_corner": false,
+            "hero_is_yellow": false,
+            "hud_hp_bar": true,
+            "hud_status_text": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": false,
+            "void_tiles_empty": true
+          },
+          "passed": false,
+          "wall_s": 18.743,
+          "timings_ms": {
+            "branch": 190.9,
+            "sandbox": 501.7,
+            "mount": 2202.5
+          }
+        },
+        {
+          "id": "triage-hud_status_text-rebuild-r3",
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "ok": true,
+          "branch": "triage-hud-status-text-rebuild-r3-f68f79",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "triage-hud_status_text-rebuild-r3",
+            "from_step": 6,
+            "to_step": 6,
+            "last_done": 6,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": false,
+            "spec_sha_before": null,
+            "spec_sha_after": null,
+            "repairs": [],
+            "steps": [
+              {
+                "step": 6,
+                "commit": "33acec5d2976f18532ff45a448030448a8a10052",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 9.698,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1369,
+                  "cache_creation_input_tokens": 1540,
+                  "cache_read_input_tokens": 13234
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": false,
+            "heldout_cave_ring": false,
+            "heldout_hud_text_other": false,
+            "heldout_torch_light_corner": false,
+            "hero_is_yellow": false,
+            "hud_hp_bar": true,
+            "hud_status_text": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": false,
+            "void_tiles_empty": true
+          },
+          "passed": false,
+          "wall_s": 19.092,
+          "timings_ms": {
+            "branch": 189.4,
+            "sandbox": 501.3,
+            "mount": 2204.4
+          }
+        }
+      ]
+    },
+    {
+      "wave": "triage-torch_light_stops_at_walls",
+      "purpose": "triage",
+      "check": "torch_light_stops_at_walls",
+      "targets": [
+        "torch_light_stops_at_walls"
+      ],
+      "checkpoint_id": "dsk-00000000001919d8/c3",
+      "fork_step": 3,
+      "to_step": 4,
+      "n": 3,
+      "wall_s": 21.089,
+      "max_builders": 8,
+      "routes": [
+        {
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "runs": 3,
+          "passed": 0,
+          "errors": 0,
+          "invalid": 0,
+          "graded": 3,
+          "score": "0/3"
+        }
+      ],
+      "copies": [
+        {
+          "id": "triage-torch_light_stops_at_walls-rebuild-r1",
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "ok": true,
+          "branch": "triage-torch-light-stops-at-walls-rebuild-r1-aa7a2b",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "triage-torch_light_stops_at_walls-rebuild-r1",
+            "from_step": 4,
+            "to_step": 4,
+            "last_done": 4,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": false,
+            "spec_sha_before": null,
+            "spec_sha_after": null,
+            "repairs": [],
+            "steps": [
+              {
+                "step": 4,
+                "commit": "c9d071550571814462e10cda26be20793f5b8d62",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 8.46,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1198,
+                  "cache_creation_input_tokens": 1870,
+                  "cache_read_input_tokens": 8462
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "heldout_torch_light_corner": false,
+            "hero_is_yellow": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": false
+          },
+          "passed": false,
+          "wall_s": 18.291,
+          "timings_ms": {
+            "branch": 449.7,
+            "sandbox": 413.3,
+            "mount": 2336.5
+          }
+        },
+        {
+          "id": "triage-torch_light_stops_at_walls-rebuild-r2",
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "ok": true,
+          "branch": "triage-torch-light-stops-at-walls-rebuild-r2-12d54f",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "triage-torch_light_stops_at_walls-rebuild-r2",
+            "from_step": 4,
+            "to_step": 4,
+            "last_done": 4,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": false,
+            "spec_sha_before": null,
+            "spec_sha_after": null,
+            "repairs": [],
+            "steps": [
+              {
+                "step": 4,
+                "commit": "720a546137de9fa6df0d7c560aa36b8a861c0191",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 9.153,
+                "model_calls": 3,
+                "usage": {
+                  "input_tokens": 8,
+                  "output_tokens": 1277,
+                  "cache_creation_input_tokens": 1495,
+                  "cache_read_input_tokens": 13750
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "heldout_torch_light_corner": false,
+            "hero_is_yellow": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": false
+          },
+          "passed": false,
+          "wall_s": 18.979,
+          "timings_ms": {
+            "branch": 448.8,
+            "sandbox": 412.6,
+            "mount": 2338.2
+          }
+        },
+        {
+          "id": "triage-torch_light_stops_at_walls-rebuild-r3",
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "ok": true,
+          "branch": "triage-torch-light-stops-at-walls-rebuild-r3-5e4895",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "triage-torch_light_stops_at_walls-rebuild-r3",
+            "from_step": 4,
+            "to_step": 4,
+            "last_done": 4,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": false,
+            "spec_sha_before": null,
+            "spec_sha_after": null,
+            "repairs": [],
+            "steps": [
+              {
+                "step": 4,
+                "commit": "48076b2f481ae23197121962a04d4f7266695bf4",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 10.065,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1417,
+                  "cache_creation_input_tokens": 1231,
+                  "cache_read_input_tokens": 8462
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "heldout_torch_light_corner": false,
+            "hero_is_yellow": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": false
+          },
+          "passed": false,
+          "wall_s": 20.13,
+          "timings_ms": {
+            "branch": 450.0,
+            "sandbox": 410.7,
+            "mount": 2338.7
+          }
+        }
+      ]
+    },
+    {
+      "wave": "suspects-cave_keeps_shape",
+      "purpose": "suspects",
+      "check": "cave_keeps_shape",
+      "targets": [
+        "cave_keeps_shape"
+      ],
+      "checkpoint_id": "dsk-00000000001919d8/c0",
+      "fork_step": 0,
+      "to_step": 7,
+      "n": 15,
+      "wall_s": 99.683,
+      "max_builders": 8,
+      "routes": [
+        {
+          "route": "spec-step4",
+          "kind": "spec_line",
+          "edit": "Every torch lights the floor tiles it can reach in at most 3 steps, walking up, down, left or right through floor tiles only (light does not pass through walls, water or doors).",
+          "runs": 3,
+          "passed": 0,
+          "errors": 0,
+          "invalid": 0,
+          "graded": 3,
+          "score": "0/3"
+        },
+        {
+          "route": "spec-step1",
+          "kind": "spec_line",
+          "edit": "Trailing whitespace is removed from each line (leading spaces are kept: they are tiles) and blank lines are skipped;",
+          "runs": 3,
+          "passed": 3,
+          "errors": 0,
+          "invalid": 0,
+          "graded": 3,
+          "score": "3/3"
+        },
+        {
+          "route": "rule-portable",
+          "kind": "rule_off",
+          "edit": "portable.md",
+          "runs": 3,
+          "passed": 0,
+          "errors": 0,
+          "invalid": 0,
+          "graded": 3,
+          "score": "0/3"
+        },
+        {
+          "route": "spec-step3",
+          "kind": "spec_line",
+          "edit": "All sprites come after every tile in the SVG, which puts them on top.",
+          "runs": 3,
+          "passed": 0,
+          "errors": 0,
+          "invalid": 0,
+          "graded": 3,
+          "score": "0/3"
+        },
+        {
+          "route": "control",
+          "kind": "control",
+          "edit": null,
+          "runs": 3,
+          "passed": 0,
+          "errors": 0,
+          "invalid": 0,
+          "graded": 3,
+          "score": "0/3"
+        }
+      ],
+      "copies": [
+        {
+          "id": "suspects-cave_keeps_shape-spec-step4-r1",
+          "route": "spec-step4",
+          "kind": "spec_line",
+          "edit": "Every torch lights the floor tiles it can reach in at most 3 steps, walking up, down, left or right through floor tiles only (light does not pass through walls, water or doors).",
+          "ok": true,
+          "branch": "suspects-cave-keeps-shape-spec-step4-r1-c11820",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "suspects-cave_keeps_shape-spec-step4-r1",
+            "from_step": 1,
+            "to_step": 7,
+            "last_done": 7,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": true,
+            "spec_sha_before": "2086998a849ede3adafefc8887b99c9a67a5cc7c28f8d96acca8a02c0c3398ae",
+            "spec_sha_after": "610aa05aca86b544c8ebfa19a4ffaff0b1681b14cc269fdcee1a4b658408d613",
+            "repairs": [],
+            "steps": [
+              {
+                "step": 1,
+                "commit": "45bebb7fc969703581f58872ba2898a933d94909",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 3.338,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 367,
+                  "cache_creation_input_tokens": 322,
+                  "cache_read_input_tokens": 2494
+                }
+              },
+              {
+                "step": 2,
+                "commit": "4f557267ebfe8ff0a325cdce9c162ef3d44fb11c",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 4.384,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 664,
+                  "cache_creation_input_tokens": 1385,
+                  "cache_read_input_tokens": 3266
+                }
+              },
+              {
+                "step": 3,
+                "commit": "75b07f091dfc08e91d594e44db723ae7ad4ea153",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 4.478,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 625,
+                  "cache_creation_input_tokens": 2405,
+                  "cache_read_input_tokens": 4581
+                }
+              },
+              {
+                "step": 4,
+                "commit": "2f5d96eb8b5b776b37ec685bf8e288bf7b465239",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 7.162,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1084,
+                  "cache_creation_input_tokens": 5684,
+                  "cache_read_input_tokens": 4227
+                }
+              },
+              {
+                "step": 5,
+                "commit": "46006db9a210641d315b2d01b31186c47021ce7d",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 4.413,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 451,
+                  "cache_creation_input_tokens": 6218,
+                  "cache_read_input_tokens": 5932
+                }
+              },
+              {
+                "step": 6,
+                "commit": "c501218673d46064d1494bc5c9f290b95f95240c",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 9.45,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1262,
+                  "cache_creation_input_tokens": 8080,
+                  "cache_read_input_tokens": 6631
+                }
+              },
+              {
+                "step": 7,
+                "commit": "df5da17fddadce5c7bec8bd4073c9da6bad4b495",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 7.333,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 908,
+                  "cache_creation_input_tokens": 9436,
+                  "cache_read_input_tokens": 8637
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": false,
+            "demo_scene": true,
+            "heldout_cave_ring": false,
+            "heldout_hud_text_other": false,
+            "heldout_torch_light_corner": true,
+            "hero_is_yellow": false,
+            "hud_hp_bar": true,
+            "hud_status_text": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": true,
+            "void_tiles_empty": true
+          },
+          "passed": false,
+          "wall_s": 52.686,
+          "timings_ms": {
+            "branch": 239.3,
+            "sandbox": 388.6,
+            "mount": 2326.9
+          }
+        },
+        {
+          "id": "suspects-cave_keeps_shape-spec-step1-r1",
+          "route": "spec-step1",
+          "kind": "spec_line",
+          "edit": "Trailing whitespace is removed from each line (leading spaces are kept: they are tiles) and blank lines are skipped;",
+          "ok": true,
+          "branch": "suspects-cave-keeps-shape-spec-step1-r1-3f673f",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "suspects-cave_keeps_shape-spec-step1-r1",
+            "from_step": 1,
+            "to_step": 7,
+            "last_done": 7,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": true,
+            "spec_sha_before": "2086998a849ede3adafefc8887b99c9a67a5cc7c28f8d96acca8a02c0c3398ae",
+            "spec_sha_after": "18e060e041c972e0c2dcbe1a96087f061d3966fc7e85f51496a9043cd1a170e9",
+            "repairs": [],
+            "steps": [
+              {
+                "step": 1,
+                "commit": "bf30b15d7fe8e60aad5784006bb16d2b7bb8656e",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 2.412,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 285,
+                  "cache_creation_input_tokens": 241,
+                  "cache_read_input_tokens": 2522
+                }
+              },
+              {
+                "step": 2,
+                "commit": "9d3334b2815b869b300574e0b2b400ef1e880547",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 4.203,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 632,
+                  "cache_creation_input_tokens": 1276,
+                  "cache_read_input_tokens": 3212
+                }
+              },
+              {
+                "step": 3,
+                "commit": "db25783b7d48375c52e0b38f9095859994c28807",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 4.539,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 589,
+                  "cache_creation_input_tokens": 2257,
+                  "cache_read_input_tokens": 4495
+                }
+              },
+              {
+                "step": 4,
+                "commit": "9f4b4dca4cf9fd012cb049d1e30bfec6aad75167",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 8.875,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1193,
+                  "cache_creation_input_tokens": 3901,
+                  "cache_read_input_tokens": 5749
+                }
+              },
+              {
+                "step": 5,
+                "commit": "f9df1555a9867567bd5f28eec80e698b251c6e06",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 3.095,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 328,
+                  "cache_creation_input_tokens": 4345,
+                  "cache_read_input_tokens": 7660
+                }
+              },
+              {
+                "step": 6,
+                "commit": "8338823dad15e7a678b9b36f8cf553584f905460",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 9.493,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1198,
+                  "cache_creation_input_tokens": 5754,
+                  "cache_read_input_tokens": 8460
+                }
+              },
+              {
+                "step": 7,
+                "commit": "4f05fdfa23cfa48b102ce1cfd42608904846a5a6",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 4.82,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 554,
+                  "cache_creation_input_tokens": 6524,
+                  "cache_read_input_tokens": 10505
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": true,
+            "demo_scene": true,
+            "heldout_cave_ring": true,
+            "heldout_hud_text_other": false,
+            "heldout_torch_light_corner": true,
+            "hero_is_yellow": false,
+            "hud_hp_bar": true,
+            "hud_status_text": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": true,
+            "void_tiles_empty": true
+          },
+          "passed": true,
+          "wall_s": 92.873,
+          "timings_ms": {
+            "branch": 238.4,
+            "sandbox": 1591.5,
+            "mount": 2092.5
+          }
+        },
+        {
+          "id": "suspects-cave_keeps_shape-rule-portable-r1",
+          "route": "rule-portable",
+          "kind": "rule_off",
+          "edit": "portable.md",
+          "ok": true,
+          "branch": "suspects-cave-keeps-shape-rule-portable-r1-8405a9",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "suspects-cave_keeps_shape-rule-portable-r1",
+            "from_step": 1,
+            "to_step": 7,
+            "last_done": 7,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": true,
+            "spec_sha_before": "2086998a849ede3adafefc8887b99c9a67a5cc7c28f8d96acca8a02c0c3398ae",
+            "spec_sha_after": "2086998a849ede3adafefc8887b99c9a67a5cc7c28f8d96acca8a02c0c3398ae",
+            "repairs": [],
+            "steps": [
+              {
+                "step": 1,
+                "commit": "8b070c72c9be5deaeb913b27ac45f0d360a7ed07",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 3.294,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 400,
+                  "cache_creation_input_tokens": 1503,
+                  "cache_read_input_tokens": 1180
+                }
+              },
+              {
+                "step": 2,
+                "commit": "4c00364f7dcb88547639ab11893d9a6605817037",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 4.73,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 654,
+                  "cache_creation_input_tokens": 2747,
+                  "cache_read_input_tokens": 1836
+                }
+              },
+              {
+                "step": 3,
+                "commit": "f08ce1f899d921086d3fbe4c723ec9c31bf58a4f",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 5.769,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 755,
+                  "cache_creation_input_tokens": 4014,
+                  "cache_read_input_tokens": 2989
+                }
+              },
+              {
+                "step": 4,
+                "commit": "aec19eb16e7439b3959c0f24fa044f762b55fee2",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 8.649,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1324,
+                  "cache_creation_input_tokens": 4355,
+                  "cache_read_input_tokens": 5890
+                }
+              },
+              {
+                "step": 5,
+                "commit": "bd201992d334cf8fd2e3716fa4a548c959190313",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 4.509,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 382,
+                  "cache_creation_input_tokens": 4830,
+                  "cache_read_input_tokens": 7928
+                }
+              },
+              {
+                "step": 6,
+                "commit": "3192b94449a0c868a045baeb8261cb8bca4f7626",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 5.645,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 819,
+                  "cache_creation_input_tokens": 6002,
+                  "cache_read_input_tokens": 8784
+                }
+              },
+              {
+                "step": 7,
+                "commit": "8bff069eca400b7a3c7cc5935d7f4ecf7f6a0f81",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 7.834,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 865,
+                  "cache_creation_input_tokens": 6962,
+                  "cache_read_input_tokens": 10429
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": false,
+            "demo_scene": true,
+            "heldout_cave_ring": false,
+            "heldout_hud_text_other": true,
+            "heldout_torch_light_corner": true,
+            "hero_is_yellow": false,
+            "hud_hp_bar": true,
+            "hud_status_text": true,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": true,
+            "void_tiles_empty": true
+          },
+          "passed": false,
+          "wall_s": 52.81,
+          "timings_ms": {
+            "branch": 233.5,
+            "sandbox": 389.2,
+            "mount": 1799.8
+          }
+        },
+        {
+          "id": "suspects-cave_keeps_shape-spec-step3-r1",
+          "route": "spec-step3",
+          "kind": "spec_line",
+          "edit": "All sprites come after every tile in the SVG, which puts them on top.",
+          "ok": true,
+          "branch": "suspects-cave-keeps-shape-spec-step3-r1-f34472",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "suspects-cave_keeps_shape-spec-step3-r1",
+            "from_step": 1,
+            "to_step": 7,
+            "last_done": 7,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": true,
+            "spec_sha_before": "2086998a849ede3adafefc8887b99c9a67a5cc7c28f8d96acca8a02c0c3398ae",
+            "spec_sha_after": "b018c12ec6774abc40abc1c9df92f6faf496e8d97da235ac1d508ebbb4b0be33",
+            "repairs": [],
+            "steps": [
+              {
+                "step": 1,
+                "commit": "fa44ccf88042cba4ab71bbbb785f02ec3a6b2463",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 3.034,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 354,
+                  "cache_creation_input_tokens": 309,
+                  "cache_read_input_tokens": 2494
+                }
+              },
+              {
+                "step": 2,
+                "commit": "43e3abf441147a1f2e96764558b693ffa73f3811",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 4.576,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 652,
+                  "cache_creation_input_tokens": 1372,
+                  "cache_read_input_tokens": 3253
+                }
+              },
+              {
+                "step": 3,
+                "commit": "1072cb213dd185ca94e44e929f5aafa87c774185",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 6.117,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1008,
+                  "cache_creation_input_tokens": 4370,
+                  "cache_read_input_tokens": 3009
+                }
+              },
+              {
+                "step": 4,
+                "commit": "530f35c36cf0eaf29f38da2f695318cf99880354",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 10.716,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1610,
+                  "cache_creation_input_tokens": 4878,
+                  "cache_read_input_tokens": 6295
+                }
+              },
+              {
+                "step": 5,
+                "commit": "7a66ab30fcea4448899894902575941c771f30a8",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 4.053,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 366,
+                  "cache_creation_input_tokens": 5525,
+                  "cache_read_input_tokens": 8751
+                }
+              },
+              {
+                "step": 6,
+                "commit": "c15181ca664a30af4fee32b0e31b0cbae27dab97",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 11.064,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1522,
+                  "cache_creation_input_tokens": 7095,
+                  "cache_read_input_tokens": 9599
+                }
+              },
+              {
+                "step": 7,
+                "commit": "a99b967f426cf980edeeef03ecf3b8c5b5a9332a",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 7.948,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 985,
+                  "cache_creation_input_tokens": 7894,
+                  "cache_read_input_tokens": 11725
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": false,
+            "demo_scene": true,
+            "heldout_cave_ring": false,
+            "heldout_hud_text_other": false,
+            "heldout_torch_light_corner": true,
+            "hero_is_yellow": false,
+            "hud_hp_bar": true,
+            "hud_status_text": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": true,
+            "void_tiles_empty": true
+          },
+          "passed": false,
+          "wall_s": 58.639,
+          "timings_ms": {
+            "branch": 238.4,
+            "sandbox": 389.3,
+            "mount": 2325.8
+          }
+        },
+        {
+          "id": "suspects-cave_keeps_shape-control-r1",
+          "route": "control",
+          "kind": "control",
+          "edit": null,
+          "ok": true,
+          "branch": "suspects-cave-keeps-shape-control-r1-fba8f1",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "suspects-cave_keeps_shape-control-r1",
+            "from_step": 1,
+            "to_step": 7,
+            "last_done": 7,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": true,
+            "spec_sha_before": "2086998a849ede3adafefc8887b99c9a67a5cc7c28f8d96acca8a02c0c3398ae",
+            "spec_sha_after": "2086998a849ede3adafefc8887b99c9a67a5cc7c28f8d96acca8a02c0c3398ae",
+            "repairs": [],
+            "steps": [
+              {
+                "step": 1,
+                "commit": "d06445a2f1fa2953566a4180d0d4a05fcf28d075",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 3.113,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 367,
+                  "cache_creation_input_tokens": 329,
+                  "cache_read_input_tokens": 2494
+                }
+              },
+              {
+                "step": 2,
+                "commit": "8734b2cf7255b83f25fa82bcd74b7e95d1c525b5",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 4.389,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 664,
+                  "cache_creation_input_tokens": 1382,
+                  "cache_read_input_tokens": 3266
+                }
+              },
+              {
+                "step": 3,
+                "commit": "361d5471b5bb4b902b492632968154fb31af05f9",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 5.766,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1010,
+                  "cache_creation_input_tokens": 2838,
+                  "cache_read_input_tokens": 4581
+                }
+              },
+              {
+                "step": 4,
+                "commit": "e92b7a2546afb76a4e075b75b6ecb81b2466a588",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 10.426,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1578,
+                  "cache_creation_input_tokens": 5464,
+                  "cache_read_input_tokens": 6320
+                }
+              },
+              {
+                "step": 5,
+                "commit": "9f7cbbc0c15cb44f3989a0a611d5886ed076aa25",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 3.814,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 320,
+                  "cache_creation_input_tokens": 5857,
+                  "cache_read_input_tokens": 9141
+                }
+              },
+              {
+                "step": 6,
+                "commit": "8069c6f22c063696fa3f506d6be6c43d9e7d3916",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 8.758,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1256,
+                  "cache_creation_input_tokens": 7338,
+                  "cache_read_input_tokens": 9937
+                }
+              },
+              {
+                "step": 7,
+                "commit": "3106e56eacd9378e328505ed9e58783b7ef86a33",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 5.771,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 796,
+                  "cache_creation_input_tokens": 8340,
+                  "cache_read_input_tokens": 12018
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": false,
+            "demo_scene": true,
+            "heldout_cave_ring": false,
+            "heldout_hud_text_other": false,
+            "heldout_torch_light_corner": true,
+            "hero_is_yellow": false,
+            "hud_hp_bar": true,
+            "hud_status_text": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": true,
+            "void_tiles_empty": true
+          },
+          "passed": false,
+          "wall_s": 95.805,
+          "timings_ms": {
+            "branch": 318.0,
+            "sandbox": 1511.1,
+            "mount": 2092.0
+          }
+        },
+        {
+          "id": "suspects-cave_keeps_shape-spec-step4-r2",
+          "route": "spec-step4",
+          "kind": "spec_line",
+          "edit": "Every torch lights the floor tiles it can reach in at most 3 steps, walking up, down, left or right through floor tiles only (light does not pass through walls, water or doors).",
+          "ok": true,
+          "branch": "suspects-cave-keeps-shape-spec-step4-r2-5061a6",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "suspects-cave_keeps_shape-spec-step4-r2",
+            "from_step": 1,
+            "to_step": 7,
+            "last_done": 7,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": true,
+            "spec_sha_before": "2086998a849ede3adafefc8887b99c9a67a5cc7c28f8d96acca8a02c0c3398ae",
+            "spec_sha_after": "610aa05aca86b544c8ebfa19a4ffaff0b1681b14cc269fdcee1a4b658408d613",
+            "repairs": [],
+            "steps": [
+              {
+                "step": 1,
+                "commit": "fa44ccf88042cba4ab71bbbb785f02ec3a6b2463",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 3.279,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 365,
+                  "cache_creation_input_tokens": 324,
+                  "cache_read_input_tokens": 2494
+                }
+              },
+              {
+                "step": 2,
+                "commit": "58a8433e3b27f8e8bf6bb121195bc227026707fe",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 4.638,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 681,
+                  "cache_creation_input_tokens": 1382,
+                  "cache_read_input_tokens": 3264
+                }
+              },
+              {
+                "step": 3,
+                "commit": "e9dfc892b5f4ac0fc068f8effeabd1925db688c7",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 6.029,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1022,
+                  "cache_creation_input_tokens": 2794,
+                  "cache_read_input_tokens": 4596
+                }
+              },
+              {
+                "step": 4,
+                "commit": "c06256fc3594fc38d9161f3c911cadbe3aff5f12",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 9.046,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1403,
+                  "cache_creation_input_tokens": 4354,
+                  "cache_read_input_tokens": 6351
+                }
+              },
+              {
+                "step": 5,
+                "commit": "298fc33a35601ed3be89d8b30a78d972d9b48b84",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 3.722,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 351,
+                  "cache_creation_input_tokens": 4956,
+                  "cache_read_input_tokens": 8249
+                }
+              },
+              {
+                "step": 6,
+                "commit": "2400cfa27924d7f8cb6e00103bc4ba28cfef7147",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 9.783,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1376,
+                  "cache_creation_input_tokens": 6665,
+                  "cache_read_input_tokens": 9074
+                }
+              },
+              {
+                "step": 7,
+                "commit": "d5856e39f9cacf8b2976533c8ca1513d69e9ddca",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 6.692,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 830,
+                  "cache_creation_input_tokens": 7675,
+                  "cache_read_input_tokens": 11440
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": false,
+            "demo_scene": true,
+            "heldout_cave_ring": false,
+            "heldout_hud_text_other": false,
+            "heldout_torch_light_corner": true,
+            "hero_is_yellow": false,
+            "hud_hp_bar": true,
+            "hud_status_text": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": true,
+            "void_tiles_empty": true
+          },
+          "passed": false,
+          "wall_s": 54.521,
+          "timings_ms": {
+            "branch": 238.8,
+            "sandbox": 388.9,
+            "mount": 2326.4
+          }
+        },
+        {
+          "id": "suspects-cave_keeps_shape-spec-step1-r2",
+          "route": "spec-step1",
+          "kind": "spec_line",
+          "edit": "Trailing whitespace is removed from each line (leading spaces are kept: they are tiles) and blank lines are skipped;",
+          "ok": true,
+          "branch": "suspects-cave-keeps-shape-spec-step1-r2-1826a6",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "suspects-cave_keeps_shape-spec-step1-r2",
+            "from_step": 1,
+            "to_step": 7,
+            "last_done": 7,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": true,
+            "spec_sha_before": "2086998a849ede3adafefc8887b99c9a67a5cc7c28f8d96acca8a02c0c3398ae",
+            "spec_sha_after": "18e060e041c972e0c2dcbe1a96087f061d3966fc7e85f51496a9043cd1a170e9",
+            "repairs": [],
+            "steps": [
+              {
+                "step": 1,
+                "commit": "db65e3803dd34b4882cb6568d5214f406c2b3c92",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 2.584,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 290,
+                  "cache_creation_input_tokens": 1507,
+                  "cache_read_input_tokens": 1261
+                }
+              },
+              {
+                "step": 2,
+                "commit": "4a5f2d66cbc55cfba4fa195dfe07bd26023236ac",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 4.541,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 653,
+                  "cache_creation_input_tokens": 2701,
+                  "cache_read_input_tokens": 1807
+                }
+              },
+              {
+                "step": 3,
+                "commit": "96355e09fbc54362860592a217205307738a1dc3",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 6.931,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 988,
+                  "cache_creation_input_tokens": 4295,
+                  "cache_read_input_tokens": 2959
+                }
+              },
+              {
+                "step": 4,
+                "commit": "7cd10f30f01ebc2323ebc268071b96504e679437",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 9.688,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1374,
+                  "cache_creation_input_tokens": 6376,
+                  "cache_read_input_tokens": 4545
+                }
+              },
+              {
+                "step": 5,
+                "commit": "8a40b77a5e85a7086264c7f30b87c81cc7ee3be1",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 4.116,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 386,
+                  "cache_creation_input_tokens": 6869,
+                  "cache_read_input_tokens": 6624
+                }
+              },
+              {
+                "step": 6,
+                "commit": "1da1faab7d80c2ce477096b411fd25946abcaa41",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 10.195,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1324,
+                  "cache_creation_input_tokens": 8720,
+                  "cache_read_input_tokens": 7258
+                }
+              },
+              {
+                "step": 7,
+                "commit": "9a257f11820bc6b0a15f53f56e0733e8ff6681bc",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 4.873,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 535,
+                  "cache_creation_input_tokens": 9811,
+                  "cache_read_input_tokens": 9288
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": true,
+            "demo_scene": true,
+            "heldout_cave_ring": true,
+            "heldout_hud_text_other": false,
+            "heldout_torch_light_corner": false,
+            "hero_is_yellow": false,
+            "hud_hp_bar": true,
+            "hud_status_text": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": false,
+            "void_tiles_empty": true
+          },
+          "passed": true,
+          "wall_s": 54.629,
+          "timings_ms": {
+            "branch": 302.2,
+            "sandbox": 475.4,
+            "mount": 2246.4
+          }
+        },
+        {
+          "id": "suspects-cave_keeps_shape-rule-portable-r2",
+          "route": "rule-portable",
+          "kind": "rule_off",
+          "edit": "portable.md",
+          "ok": true,
+          "branch": "suspects-cave-keeps-shape-rule-portable-r2-f43ac3",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "suspects-cave_keeps_shape-rule-portable-r2",
+            "from_step": 1,
+            "to_step": 7,
+            "last_done": 7,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": true,
+            "spec_sha_before": "2086998a849ede3adafefc8887b99c9a67a5cc7c28f8d96acca8a02c0c3398ae",
+            "spec_sha_after": "2086998a849ede3adafefc8887b99c9a67a5cc7c28f8d96acca8a02c0c3398ae",
+            "repairs": [],
+            "steps": [
+              {
+                "step": 1,
+                "commit": "dc02bb96feaec421e0becac8aeae97fd976d8c5c",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 3.718,
+                "model_calls": 3,
+                "usage": {
+                  "input_tokens": 8,
+                  "output_tokens": 362,
+                  "cache_creation_input_tokens": 326,
+                  "cache_read_input_tokens": 3577
+                }
+              },
+              {
+                "step": 2,
+                "commit": "a502fd7217afa31fd89ac05cc2ddfadd38cad9a8",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 4.642,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 652,
+                  "cache_creation_input_tokens": 1383,
+                  "cache_read_input_tokens": 3136
+                }
+              },
+              {
+                "step": 3,
+                "commit": "3a4437aa4cf643405d5ab15f34dfa168fc76798d",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 7.964,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 989,
+                  "cache_creation_input_tokens": 2823,
+                  "cache_read_input_tokens": 4439
+                }
+              },
+              {
+                "step": 4,
+                "commit": "194e25de53c466c4aae0f4fc2114f75883c5629d",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 9.45,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1445,
+                  "cache_creation_input_tokens": 4790,
+                  "cache_read_input_tokens": 6157
+                }
+              },
+              {
+                "step": 5,
+                "commit": "38dd51e8e596e9f6123e0ab9a93c2601b2919a5b",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 3.12,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 199,
+                  "cache_creation_input_tokens": 5688,
+                  "cache_read_input_tokens": 8378
+                }
+              },
+              {
+                "step": 6,
+                "commit": "d9b1179447037762fcc23ece7244664409d58b8a",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 8.003,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1181,
+                  "cache_creation_input_tokens": 7277,
+                  "cache_read_input_tokens": 9577
+                }
+              },
+              {
+                "step": 7,
+                "commit": "8d5942aee2e968a195214e8c6cf76540e5628d64",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 5.241,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 599,
+                  "cache_creation_input_tokens": 8095,
+                  "cache_read_input_tokens": 11717
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": false,
+            "demo_scene": true,
+            "heldout_cave_ring": false,
+            "heldout_hud_text_other": true,
+            "heldout_torch_light_corner": true,
+            "hero_is_yellow": false,
+            "hud_hp_bar": true,
+            "hud_status_text": true,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": true,
+            "void_tiles_empty": true
+          },
+          "passed": false,
+          "wall_s": 98.513,
+          "timings_ms": {
+            "branch": 302.2,
+            "sandbox": 1507.5,
+            "mount": 2258.9
+          }
+        },
+        {
+          "id": "suspects-cave_keeps_shape-spec-step3-r2",
+          "route": "spec-step3",
+          "kind": "spec_line",
+          "edit": "All sprites come after every tile in the SVG, which puts them on top.",
+          "ok": true,
+          "branch": "suspects-cave-keeps-shape-spec-step3-r2-cbd24b",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "suspects-cave_keeps_shape-spec-step3-r2",
+            "from_step": 1,
+            "to_step": 7,
+            "last_done": 7,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": true,
+            "spec_sha_before": "2086998a849ede3adafefc8887b99c9a67a5cc7c28f8d96acca8a02c0c3398ae",
+            "spec_sha_after": "b018c12ec6774abc40abc1c9df92f6faf496e8d97da235ac1d508ebbb4b0be33",
+            "repairs": [],
+            "steps": [
+              {
+                "step": 1,
+                "commit": "dcc3b1621aafd563c3adf3a5776faee326ef251e",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 3.007,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 353,
+                  "cache_creation_input_tokens": 308,
+                  "cache_read_input_tokens": 2494
+                }
+              },
+              {
+                "step": 2,
+                "commit": "0dc4d0ef073d989841433234afe5445194514d35",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 4.044,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 589,
+                  "cache_creation_input_tokens": 972,
+                  "cache_read_input_tokens": 3252
+                }
+              },
+              {
+                "step": 3,
+                "commit": "18be18604e05751ddb0ef5c0172f7dd6288044f1",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 5.464,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 904,
+                  "cache_creation_input_tokens": 1912,
+                  "cache_read_input_tokens": 4176
+                }
+              },
+              {
+                "step": 4,
+                "commit": "8a681e4f9e2e1ccb8d83a58926f362d6cc631e92",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 9.69,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1417,
+                  "cache_creation_input_tokens": 3984,
+                  "cache_read_input_tokens": 5372
+                }
+              },
+              {
+                "step": 5,
+                "commit": "59d9af38ce199af1b31b12c19d8d420f3d50720e",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 3.099,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 254,
+                  "cache_creation_input_tokens": 4829,
+                  "cache_read_input_tokens": 7635
+                }
+              },
+              {
+                "step": 6,
+                "commit": "bccd35839154d65a816c0a5dd585102ea23447e0",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 9.516,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1291,
+                  "cache_creation_input_tokens": 6304,
+                  "cache_read_input_tokens": 8889
+                }
+              },
+              {
+                "step": 7,
+                "commit": "9dc7c25241786f1f6e4fb424f0f318d4c981b93c",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 4.607,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 556,
+                  "cache_creation_input_tokens": 7190,
+                  "cache_read_input_tokens": 11000
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": false,
+            "demo_scene": true,
+            "heldout_cave_ring": false,
+            "heldout_hud_text_other": false,
+            "heldout_torch_light_corner": false,
+            "hero_is_yellow": false,
+            "hud_hp_bar": true,
+            "hud_status_text": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": false,
+            "void_tiles_empty": true
+          },
+          "passed": false,
+          "wall_s": 91.68,
+          "timings_ms": {
+            "branch": 297.5,
+            "sandbox": 485.5,
+            "mount": 2240.7
+          }
+        },
+        {
+          "id": "suspects-cave_keeps_shape-control-r2",
+          "route": "control",
+          "kind": "control",
+          "edit": null,
+          "ok": true,
+          "branch": "suspects-cave-keeps-shape-control-r2-b4c496",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "suspects-cave_keeps_shape-control-r2",
+            "from_step": 1,
+            "to_step": 7,
+            "last_done": 7,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": true,
+            "spec_sha_before": "2086998a849ede3adafefc8887b99c9a67a5cc7c28f8d96acca8a02c0c3398ae",
+            "spec_sha_after": "2086998a849ede3adafefc8887b99c9a67a5cc7c28f8d96acca8a02c0c3398ae",
+            "repairs": [],
+            "steps": [
+              {
+                "step": 1,
+                "commit": "83792a032268ff2fe38241699f7b9dd1f88fab51",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 3.066,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 363,
+                  "cache_creation_input_tokens": 322,
+                  "cache_read_input_tokens": 2494
+                }
+              },
+              {
+                "step": 2,
+                "commit": "28dc32633097be5be4f96332f09638dd8e909794",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 3.801,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 564,
+                  "cache_creation_input_tokens": 981,
+                  "cache_read_input_tokens": 3262
+                }
+              },
+              {
+                "step": 3,
+                "commit": "e10b8f7c8c6f72d72a4bdd215f4b4002c40ae41a",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 5.203,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 840,
+                  "cache_creation_input_tokens": 1839,
+                  "cache_read_input_tokens": 4159
+                }
+              },
+              {
+                "step": 4,
+                "commit": "53f153a5968f481bb0c3f990761cf62c96b73b48",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 8.266,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1171,
+                  "cache_creation_input_tokens": 3844,
+                  "cache_read_input_tokens": 5291
+                }
+              },
+              {
+                "step": 5,
+                "commit": "151fa5c99ccbca29d38f939f72a65fa38d5ef5f2",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 4.085,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 324,
+                  "cache_creation_input_tokens": 4197,
+                  "cache_read_input_tokens": 7502
+                }
+              },
+              {
+                "step": 6,
+                "commit": "4933f8c6094713612eb8421dfa91d2bc4f737b65",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 9.552,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1346,
+                  "cache_creation_input_tokens": 5809,
+                  "cache_read_input_tokens": 8298
+                }
+              },
+              {
+                "step": 7,
+                "commit": "1d472eeffee243cff1adaaf5b39f8059639544f4",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 8.151,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1040,
+                  "cache_creation_input_tokens": 6564,
+                  "cache_read_input_tokens": 10400
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": false,
+            "demo_scene": true,
+            "heldout_cave_ring": false,
+            "heldout_hud_text_other": false,
+            "heldout_torch_light_corner": false,
+            "hero_is_yellow": false,
+            "hud_hp_bar": true,
+            "hud_status_text": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": false,
+            "void_tiles_empty": true
+          },
+          "passed": false,
+          "wall_s": 93.92,
+          "timings_ms": {
+            "branch": 297.5,
+            "sandbox": 476.1,
+            "mount": 2161.8
+          }
+        },
+        {
+          "id": "suspects-cave_keeps_shape-spec-step4-r3",
+          "route": "spec-step4",
+          "kind": "spec_line",
+          "edit": "Every torch lights the floor tiles it can reach in at most 3 steps, walking up, down, left or right through floor tiles only (light does not pass through walls, water or doors).",
+          "ok": true,
+          "branch": "suspects-cave-keeps-shape-spec-step4-r3-a0489a",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "suspects-cave_keeps_shape-spec-step4-r3",
+            "from_step": 1,
+            "to_step": 7,
+            "last_done": 7,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": true,
+            "spec_sha_before": "2086998a849ede3adafefc8887b99c9a67a5cc7c28f8d96acca8a02c0c3398ae",
+            "spec_sha_after": "610aa05aca86b544c8ebfa19a4ffaff0b1681b14cc269fdcee1a4b658408d613",
+            "repairs": [],
+            "steps": [
+              {
+                "step": 1,
+                "commit": "20cae5096295e0d68b4d8f30c6235557652766bd",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 3.17,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 357,
+                  "cache_creation_input_tokens": 312,
+                  "cache_read_input_tokens": 2494
+                }
+              },
+              {
+                "step": 2,
+                "commit": "9afd8750ea7eaeb09918ae708c89177287803828",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 4.087,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 584,
+                  "cache_creation_input_tokens": 984,
+                  "cache_read_input_tokens": 3256
+                }
+              },
+              {
+                "step": 3,
+                "commit": "fc98e8fc148ab32b725f00ae716965a82b65d340",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 5.539,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 911,
+                  "cache_creation_input_tokens": 1922,
+                  "cache_read_input_tokens": 4173
+                }
+              },
+              {
+                "step": 4,
+                "commit": "f1413170ee1bfc09f99218e419e7b416bcdccc79",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 8.562,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1343,
+                  "cache_creation_input_tokens": 5940,
+                  "cache_read_input_tokens": 3732
+                }
+              },
+              {
+                "step": 5,
+                "commit": "bcec38b883e1e3a7068eea20c2345886927b9bc2",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 3.076,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 277,
+                  "cache_creation_input_tokens": 4656,
+                  "cache_read_input_tokens": 8017
+                }
+              },
+              {
+                "step": 6,
+                "commit": "45f427437c37ce083a2173701e7b3c153b45bfd3",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 10.468,
+                "model_calls": 3,
+                "usage": {
+                  "input_tokens": 8,
+                  "output_tokens": 1286,
+                  "cache_creation_input_tokens": 8171,
+                  "cache_read_input_tokens": 14720
+                }
+              },
+              {
+                "step": 7,
+                "commit": "174ef1b2ed3ada1cfe80191db88f58f110323f19",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 4.515,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 595,
+                  "cache_creation_input_tokens": 6834,
+                  "cache_read_input_tokens": 10846
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": false,
+            "demo_scene": true,
+            "heldout_cave_ring": false,
+            "heldout_hud_text_other": false,
+            "heldout_torch_light_corner": true,
+            "hero_is_yellow": false,
+            "hud_hp_bar": true,
+            "hud_status_text": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": true,
+            "void_tiles_empty": true
+          },
+          "passed": false,
+          "wall_s": 50.368,
+          "timings_ms": {
+            "branch": 216.1,
+            "sandbox": 388.5,
+            "mount": 1798.2
+          }
+        },
+        {
+          "id": "suspects-cave_keeps_shape-spec-step1-r3",
+          "route": "spec-step1",
+          "kind": "spec_line",
+          "edit": "Trailing whitespace is removed from each line (leading spaces are kept: they are tiles) and blank lines are skipped;",
+          "ok": true,
+          "branch": "suspects-cave-keeps-shape-spec-step1-r3-1faac0",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "suspects-cave_keeps_shape-spec-step1-r3",
+            "from_step": 1,
+            "to_step": 7,
+            "last_done": 7,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": true,
+            "spec_sha_before": "2086998a849ede3adafefc8887b99c9a67a5cc7c28f8d96acca8a02c0c3398ae",
+            "spec_sha_after": "18e060e041c972e0c2dcbe1a96087f061d3966fc7e85f51496a9043cd1a170e9",
+            "repairs": [],
+            "steps": [
+              {
+                "step": 1,
+                "commit": "cba2e6275f23328af6138fb63a8fd04744f854f8",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 2.438,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 303,
+                  "cache_creation_input_tokens": 250,
+                  "cache_read_input_tokens": 2522
+                }
+              },
+              {
+                "step": 2,
+                "commit": "f5a18ef4e8bbf732850ab5f7970bbe659c9f8837",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 4.752,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 718,
+                  "cache_creation_input_tokens": 1321,
+                  "cache_read_input_tokens": 3230
+                }
+              },
+              {
+                "step": 3,
+                "commit": "e836d9819a5ad941284c6bf48a0d1c1c750c123e",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 5.199,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 639,
+                  "cache_creation_input_tokens": 2367,
+                  "cache_read_input_tokens": 4566
+                }
+              },
+              {
+                "step": 4,
+                "commit": "c44d9586858558003ab174c43f3a8132679a6498",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 9.968,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1309,
+                  "cache_creation_input_tokens": 4050,
+                  "cache_read_input_tokens": 5870
+                }
+              },
+              {
+                "step": 5,
+                "commit": "c08d09a11a5cd55395df22182b593822e2ef0b72",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 2.862,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 280,
+                  "cache_creation_input_tokens": 4473,
+                  "cache_read_input_tokens": 7802
+                }
+              },
+              {
+                "step": 6,
+                "commit": "ed19b8d29cb07c008be1bd3db5691500d3f99831",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 10.095,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1272,
+                  "cache_creation_input_tokens": 5711,
+                  "cache_read_input_tokens": 8556
+                }
+              },
+              {
+                "step": 7,
+                "commit": "c2f147d15b520077e4902e7cdaffb5ae2ec7e474",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 4.412,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 503,
+                  "cache_creation_input_tokens": 6515,
+                  "cache_read_input_tokens": 10491
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": true,
+            "demo_scene": true,
+            "heldout_cave_ring": true,
+            "heldout_hud_text_other": false,
+            "heldout_torch_light_corner": true,
+            "hero_is_yellow": false,
+            "hud_hp_bar": true,
+            "hud_status_text": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": true,
+            "void_tiles_empty": true
+          },
+          "passed": true,
+          "wall_s": 94.228,
+          "timings_ms": {
+            "branch": 301.6,
+            "sandbox": 1507.7,
+            "mount": 2093.6
+          }
+        },
+        {
+          "id": "suspects-cave_keeps_shape-rule-portable-r3",
+          "route": "rule-portable",
+          "kind": "rule_off",
+          "edit": "portable.md",
+          "ok": true,
+          "branch": "suspects-cave-keeps-shape-rule-portable-r3-ee135f",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "suspects-cave_keeps_shape-rule-portable-r3",
+            "from_step": 1,
+            "to_step": 7,
+            "last_done": 7,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": true,
+            "spec_sha_before": "2086998a849ede3adafefc8887b99c9a67a5cc7c28f8d96acca8a02c0c3398ae",
+            "spec_sha_after": "2086998a849ede3adafefc8887b99c9a67a5cc7c28f8d96acca8a02c0c3398ae",
+            "repairs": [],
+            "steps": [
+              {
+                "step": 1,
+                "commit": "8b070c72c9be5deaeb913b27ac45f0d360a7ed07",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 3.398,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 381,
+                  "cache_creation_input_tokens": 1515,
+                  "cache_read_input_tokens": 1180
+                }
+              },
+              {
+                "step": 2,
+                "commit": "c595d6c53892975abda54f877b2ff27bd7157a82",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 4.468,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 658,
+                  "cache_creation_input_tokens": 2726,
+                  "cache_read_input_tokens": 1817
+                }
+              },
+              {
+                "step": 3,
+                "commit": "6ed01efaf4bca0334297331026b91baa12b83b90",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 5.174,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 625,
+                  "cache_creation_input_tokens": 3817,
+                  "cache_read_input_tokens": 2974
+                }
+              },
+              {
+                "step": 4,
+                "commit": "01d7cd7e994ea98fd2e3b1e260019697276febf4",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 8.422,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1153,
+                  "cache_creation_input_tokens": 5325,
+                  "cache_read_input_tokens": 4067
+                }
+              },
+              {
+                "step": 5,
+                "commit": "88e82a664e1f16336c562157fed16d742a9193ad",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 4.156,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 400,
+                  "cache_creation_input_tokens": 5840,
+                  "cache_read_input_tokens": 5619
+                }
+              },
+              {
+                "step": 6,
+                "commit": "be67291c807baa8f0887461103a2538e4972cb0b",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 5.92,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 865,
+                  "cache_creation_input_tokens": 7292,
+                  "cache_read_input_tokens": 6267
+                }
+              },
+              {
+                "step": 7,
+                "commit": "d010622a6015b8aecd88df8ff83ed28477b1dced",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 6.744,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 748,
+                  "cache_creation_input_tokens": 8406,
+                  "cache_read_input_tokens": 7722
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": false,
+            "demo_scene": true,
+            "heldout_cave_ring": false,
+            "heldout_hud_text_other": true,
+            "heldout_torch_light_corner": true,
+            "hero_is_yellow": false,
+            "hud_hp_bar": true,
+            "hud_status_text": true,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": true,
+            "void_tiles_empty": true
+          },
+          "passed": false,
+          "wall_s": 49.813,
+          "timings_ms": {
+            "branch": 217.8,
+            "sandbox": 391.8,
+            "mount": 2325.2
+          }
+        },
+        {
+          "id": "suspects-cave_keeps_shape-spec-step3-r3",
+          "route": "spec-step3",
+          "kind": "spec_line",
+          "edit": "All sprites come after every tile in the SVG, which puts them on top.",
+          "ok": true,
+          "branch": "suspects-cave-keeps-shape-spec-step3-r3-95601f",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "suspects-cave_keeps_shape-spec-step3-r3",
+            "from_step": 1,
+            "to_step": 7,
+            "last_done": 7,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": true,
+            "spec_sha_before": "2086998a849ede3adafefc8887b99c9a67a5cc7c28f8d96acca8a02c0c3398ae",
+            "spec_sha_after": "b018c12ec6774abc40abc1c9df92f6faf496e8d97da235ac1d508ebbb4b0be33",
+            "repairs": [],
+            "steps": [
+              {
+                "step": 1,
+                "commit": "fdc70e2878da29936244de39daef3cb577038733",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 2.683,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 292,
+                  "cache_creation_input_tokens": 247,
+                  "cache_read_input_tokens": 2494
+                }
+              },
+              {
+                "step": 2,
+                "commit": "8559303c5627aa599c537ee877ee7f67d51b9de3",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 4.491,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 656,
+                  "cache_creation_input_tokens": 1306,
+                  "cache_read_input_tokens": 3191
+                }
+              },
+              {
+                "step": 3,
+                "commit": "08fb63fa0105e3f98704b111272a7c4a1e827d26",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 5.917,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 988,
+                  "cache_creation_input_tokens": 4299,
+                  "cache_read_input_tokens": 2951
+                }
+              },
+              {
+                "step": 4,
+                "commit": "09c986dd3b886e0344ae8038089b698cf4aa6c0a",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 9.366,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1424,
+                  "cache_creation_input_tokens": 6297,
+                  "cache_read_input_tokens": 4537
+                }
+              },
+              {
+                "step": 5,
+                "commit": "5b3f8f73815888e6de46a76d141899b2f5d4117a",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 4.067,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 396,
+                  "cache_creation_input_tokens": 6798,
+                  "cache_read_input_tokens": 6510
+                }
+              },
+              {
+                "step": 6,
+                "commit": "2524d36176df270167b1a96e4396c264c97b0227",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 8.531,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1156,
+                  "cache_creation_input_tokens": 8325,
+                  "cache_read_input_tokens": 7154
+                }
+              },
+              {
+                "step": 7,
+                "commit": "276be8d6ce3a0e3ae8111c43ab8357b43a807cd2",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 6.939,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 828,
+                  "cache_creation_input_tokens": 9238,
+                  "cache_read_input_tokens": 8825
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": false,
+            "demo_scene": true,
+            "heldout_cave_ring": false,
+            "heldout_hud_text_other": false,
+            "heldout_torch_light_corner": false,
+            "hero_is_yellow": false,
+            "hud_hp_bar": true,
+            "hud_status_text": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": false,
+            "void_tiles_empty": true
+          },
+          "passed": false,
+          "wall_s": 53.587,
+          "timings_ms": {
+            "branch": 301.4,
+            "sandbox": 476.4,
+            "mount": 2156.6
+          }
+        },
+        {
+          "id": "suspects-cave_keeps_shape-control-r3",
+          "route": "control",
+          "kind": "control",
+          "edit": null,
+          "ok": true,
+          "branch": "suspects-cave-keeps-shape-control-r3-f31264",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "suspects-cave_keeps_shape-control-r3",
+            "from_step": 1,
+            "to_step": 7,
+            "last_done": 7,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": true,
+            "spec_sha_before": "2086998a849ede3adafefc8887b99c9a67a5cc7c28f8d96acca8a02c0c3398ae",
+            "spec_sha_after": "2086998a849ede3adafefc8887b99c9a67a5cc7c28f8d96acca8a02c0c3398ae",
+            "repairs": [],
+            "steps": [
+              {
+                "step": 1,
+                "commit": "3c6b4e2979cb6be228c318f87701fd58f56e0727",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 2.666,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 362,
+                  "cache_creation_input_tokens": 321,
+                  "cache_read_input_tokens": 2494
+                }
+              },
+              {
+                "step": 2,
+                "commit": "171c785295223653b9b9e3cafc1ea1c230e3c310",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 3.744,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 595,
+                  "cache_creation_input_tokens": 990,
+                  "cache_read_input_tokens": 3261
+                }
+              },
+              {
+                "step": 3,
+                "commit": "fc9c0b35abef7c19768482a909941b8c28b4d7bc",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 4.055,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 602,
+                  "cache_creation_input_tokens": 2009,
+                  "cache_read_input_tokens": 4189
+                }
+              },
+              {
+                "step": 4,
+                "commit": "1427fac08b60e69f10f8812562872da091e96fb2",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 7.779,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1180,
+                  "cache_creation_input_tokens": 3504,
+                  "cache_read_input_tokens": 5456
+                }
+              },
+              {
+                "step": 5,
+                "commit": "523eb252f41beb1a3b7656d8c2b95d410e15bdaf",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 4.956,
+                "model_calls": 3,
+                "usage": {
+                  "input_tokens": 8,
+                  "output_tokens": 423,
+                  "cache_creation_input_tokens": 4143,
+                  "cache_read_input_tokens": 12960
+                }
+              },
+              {
+                "step": 6,
+                "commit": "ea0c964e4a552b5f22dd0ebccc82f87fd1e7ca49",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 8.421,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 1267,
+                  "cache_creation_input_tokens": 5450,
+                  "cache_read_input_tokens": 8194
+                }
+              },
+              {
+                "step": 7,
+                "commit": "14d15cf7137c7bf775238bfb905a8dc59d049164",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 5.911,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 770,
+                  "cache_creation_input_tokens": 6390,
+                  "cache_read_input_tokens": 10221
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "cave_keeps_shape": false,
+            "demo_scene": true,
+            "heldout_cave_ring": false,
+            "heldout_hud_text_other": false,
+            "heldout_torch_light_corner": false,
+            "hero_is_yellow": false,
+            "hud_hp_bar": true,
+            "hud_status_text": false,
+            "parse_map_rows": true,
+            "sprites_drawn": true,
+            "sprites_on_top": true,
+            "svg_size": true,
+            "tiles_palette": true,
+            "torch_light_stops_at_walls": false,
+            "void_tiles_empty": true
+          },
+          "passed": false,
+          "wall_s": 94.115,
+          "timings_ms": {
+            "branch": 298.6,
+            "sandbox": 1524.1,
+            "mount": 2079.4
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -18,6 +18,16 @@ export type RunData = {
   sigs: Record<string, string>
   sig: string
 }
+// Static build (GitHub Pages, VITE_STATIC=1): run files are copied next to the page at build time
+// (runs/index.json + runs/<id>/<file>); starting runs needs the local server, so it is off.
+export const STATIC = import.meta.env.VITE_STATIC === '1'
+const BASE = import.meta.env.BASE_URL
+const runsUrl = (id?: string, file?: string): string =>
+  STATIC
+    ? `${BASE}runs/${id ? `${encodeURIComponent(id)}/${file}` : 'index.json'}`
+    : `/api/runs${id ? `/${encodeURIComponent(id)}/${file}` : ''}`
+export const asset = (p: string): string => `${BASE}${p.replace(/^\//, '')}`
+
 const FILES = ['run', 'triage', 'results', 'swarm', 'archil', 'baseline', 'report', 'before_after'] as const
 
 function hash(s: string): string {
@@ -27,17 +37,21 @@ function hash(s: string): string {
 }
 
 export async function listRuns(): Promise<RunInfo[]> {
-  const r = await fetch('/api/runs', { cache: 'no-store' })
+  const r = await fetch(runsUrl(), { cache: 'no-store' })
   if (!r.ok) throw new Error('runs api ' + r.status)
   return r.json()
 }
 
-export const getCaps = (): Promise<Caps> => fetch('/api/caps', { cache: 'no-store' }).then((r) => r.json())
+const STATIC_CAPS: Caps = { python: null, pipeline: false, archilSdk: false,
+  keys: { ARCHIL_API_KEY: false, ANTHROPIC_API_KEY: false }, fixtures: [] }
+export const getCaps = (): Promise<Caps> =>
+  STATIC ? Promise.resolve(STATIC_CAPS) : fetch('/api/caps', { cache: 'no-store' }).then((r) => r.json())
 export const getJob = (): Promise<Job | null> =>
-  fetch('/api/job', { cache: 'no-store' })
+  STATIC ? Promise.resolve(null) : fetch('/api/job', { cache: 'no-store' })
     .then((r) => r.json())
     .then((j) => j.job ?? null)
 export async function startRun(opts: Json): Promise<Job> {
+  if (STATIC) throw new Error('runs can only be started from the machine that serves this page (this is the published copy)')
   const r = await fetch('/api/start', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(opts) })
   const j = await r.json().catch(() => ({}))
   if (!r.ok) throw new Error(j.error || 'could not start the run')
@@ -64,7 +78,7 @@ export async function loadRun(id: string, prev?: RunData | null, files?: string[
   await Promise.all(
     TEXTS.filter(([, name]) => want(name)).map(async ([key, name]) => {
       try {
-        const r = await fetch(`/api/runs/${encodeURIComponent(id)}/${name}`, { cache: 'no-store' })
+        const r = await fetch(runsUrl(id, name), { cache: 'no-store' })
         if (!r.ok) return
         const txt = await r.text()
         ;(out as any)[key] = txt
@@ -77,7 +91,7 @@ export async function loadRun(id: string, prev?: RunData | null, files?: string[
   await Promise.all(
     FILES.filter((f) => want(f + '.json')).map(async (f) => {
       try {
-        const r = await fetch(`/api/runs/${encodeURIComponent(id)}/${f}.json`, { cache: 'no-store' })
+        const r = await fetch(runsUrl(id, `${f}.json`), { cache: 'no-store' })
         if (!r.ok) return
         const txt = await r.text()
         try {

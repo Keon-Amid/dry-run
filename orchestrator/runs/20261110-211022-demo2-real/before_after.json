@@ -1,0 +1,16 @@
+{
+  "probes": [
+    "shorten at day 0, resolve at day 25 (a click), resolve at day 31",
+    "normalize(\"not a url\")"
+  ],
+  "columns": [
+    {
+      "name": "before (original build)",
+      "workspace": "workspaces/build",
+      "results": {
+        "links.Shortlink": "import failed: ModuleNotFoundError: No module named 'links'",
+        "urls.normalize": "import failed: ModuleNotFoundError: No module named 'urls'"
+      }
+    }
+  ]
+}

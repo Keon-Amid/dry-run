@@ -1,0 +1,337 @@
+{
+  "counterfactuals": {
+    "rebuild": "without a checkpoint, each copy replays steps 1..fork_step",
+    "restore": "git clone + dependency install restores code only, not the conversation"
+  },
+  "per_step_avg": {
+    "steps_in_run": 7,
+    "wall_s": 9.100857,
+    "model_calls": 2.0,
+    "usd": 0.024777
+  },
+  "restore_baseline": {
+    "git_clone_plus_install_s": 11.036,
+    "branch_plus_mount_s": 2.298,
+    "source": "spikes/disk_spike.json"
+  },
+  "prices_per_mtok": {
+    "claude-fable-5-2": {
+      "input": 8.0,
+      "output": 40.0,
+      "cache_read": 0.2
+    },
+    "claude-opus-5-5": {
+      "input": 4.0,
+      "output": 20.0,
+      "cache_read": 0.2
+    },
+    "claude-sonnet-5-5": {
+      "input": 2.0,
+      "output": 10.0,
+      "cache_read": 0.1
+    },
+    "claude-haiku-5-5": {
+      "input": 0.1,
+      "output": 0.5,
+      "cache_read": 0.01
+    }
+  },
+  "waves": [
+    {
+      "wave": "natural",
+      "fork_step": 0,
+      "wall_s": 56.1,
+      "copies": [
+        {
+          "id": "natural-natural-r1",
+          "branch_ms": 164.4,
+          "mount_ms": 2017.4,
+          "wall_s": 54.398,
+          "sandbox_ms": 1367.7
+        },
+        {
+          "id": "natural-natural-r2",
+          "branch_ms": 161.2,
+          "mount_ms": 1680.6,
+          "wall_s": 50.066,
+          "sandbox_ms": 463.9
+        },
+        {
+          "id": "natural-natural-r3",
+          "branch_ms": 162.6,
+          "mount_ms": 1681.6,
+          "wall_s": 52.57,
+          "sandbox_ms": 461.1
+        }
+      ],
+      "n_copies": 3,
+      "steps_reused_per_copy": 0,
+      "steps_reused": 0,
+      "sum_copy_s": 157.034,
+      "parallel_speedup": 2.8,
+      "saved": {
+        "steps": 0,
+        "minutes": 0.0,
+        "model_calls": 0.0,
+        "usd": 0.0,
+        "restore_minutes_vs_git": 0.45
+      }
+    },
+    {
+      "wave": "triage-cave_keeps_shape",
+      "fork_step": 4,
+      "wall_s": 18.539,
+      "copies": [
+        {
+          "id": "triage-cave_keeps_shape-rebuild-r1",
+          "branch_ms": 221.6,
+          "mount_ms": 1258.1,
+          "wall_s": 13.497,
+          "sandbox_ms": 337.6
+        },
+        {
+          "id": "triage-cave_keeps_shape-rebuild-r2",
+          "branch_ms": 223.7,
+          "mount_ms": 2118.4,
+          "wall_s": 17.186,
+          "sandbox_ms": 1795.3
+        },
+        {
+          "id": "triage-cave_keeps_shape-rebuild-r3",
+          "branch_ms": 219.9,
+          "mount_ms": 1257.1,
+          "wall_s": 13.099,
+          "sandbox_ms": 340.2
+        }
+      ],
+      "n_copies": 3,
+      "steps_reused_per_copy": 4,
+      "steps_reused": 12,
+      "sum_copy_s": 43.782,
+      "parallel_speedup": 2.36,
+      "saved": {
+        "steps": 12,
+        "minutes": 1.82,
+        "model_calls": 24.0,
+        "usd": 0.2973,
+        "restore_minutes_vs_git": 0.46
+      }
+    },
+    {
+      "wave": "triage-hud_status_text",
+      "fork_step": 5,
+      "wall_s": 20.798,
+      "copies": [
+        {
+          "id": "triage-hud_status_text-rebuild-r1",
+          "branch_ms": 192.6,
+          "mount_ms": 2203.5,
+          "wall_s": 19.092,
+          "sandbox_ms": 499.0
+        },
+        {
+          "id": "triage-hud_status_text-rebuild-r2",
+          "branch_ms": 190.9,
+          "mount_ms": 2202.5,
+          "wall_s": 18.743,
+          "sandbox_ms": 501.7
+        },
+        {
+          "id": "triage-hud_status_text-rebuild-r3",
+          "branch_ms": 189.4,
+          "mount_ms": 2204.4,
+          "wall_s": 19.092,
+          "sandbox_ms": 501.3
+        }
+      ],
+      "n_copies": 3,
+      "steps_reused_per_copy": 5,
+      "steps_reused": 15,
+      "sum_copy_s": 56.927,
+      "parallel_speedup": 2.74,
+      "saved": {
+        "steps": 15,
+        "minutes": 2.28,
+        "model_calls": 30.0,
+        "usd": 0.3717,
+        "restore_minutes_vs_git": 0.43
+      }
+    },
+    {
+      "wave": "triage-torch_light_stops_at_walls",
+      "fork_step": 3,
+      "wall_s": 21.089,
+      "copies": [
+        {
+          "id": "triage-torch_light_stops_at_walls-rebuild-r1",
+          "branch_ms": 449.7,
+          "mount_ms": 2336.5,
+          "wall_s": 18.291,
+          "sandbox_ms": 413.3
+        },
+        {
+          "id": "triage-torch_light_stops_at_walls-rebuild-r2",
+          "branch_ms": 448.8,
+          "mount_ms": 2338.2,
+          "wall_s": 18.979,
+          "sandbox_ms": 412.6
+        },
+        {
+          "id": "triage-torch_light_stops_at_walls-rebuild-r3",
+          "branch_ms": 450.0,
+          "mount_ms": 2338.7,
+          "wall_s": 20.13,
+          "sandbox_ms": 410.7
+        }
+      ],
+      "n_copies": 3,
+      "steps_reused_per_copy": 3,
+      "steps_reused": 9,
+      "sum_copy_s": 57.4,
+      "parallel_speedup": 2.72,
+      "saved": {
+        "steps": 9,
+        "minutes": 1.37,
+        "model_calls": 18.0,
+        "usd": 0.223,
+        "restore_minutes_vs_git": 0.41
+      }
+    },
+    {
+      "wave": "suspects-cave_keeps_shape",
+      "fork_step": 0,
+      "wall_s": 99.683,
+      "copies": [
+        {
+          "id": "suspects-cave_keeps_shape-spec-step4-r1",
+          "branch_ms": 239.3,
+          "mount_ms": 2326.9,
+          "wall_s": 52.686,
+          "sandbox_ms": 388.6
+        },
+        {
+          "id": "suspects-cave_keeps_shape-spec-step1-r1",
+          "branch_ms": 238.4,
+          "mount_ms": 2092.5,
+          "wall_s": 92.873,
+          "sandbox_ms": 1591.5
+        },
+        {
+          "id": "suspects-cave_keeps_shape-rule-portable-r1",
+          "branch_ms": 233.5,
+          "mount_ms": 1799.8,
+          "wall_s": 52.81,
+          "sandbox_ms": 389.2
+        },
+        {
+          "id": "suspects-cave_keeps_shape-spec-step3-r1",
+          "branch_ms": 238.4,
+          "mount_ms": 2325.8,
+          "wall_s": 58.639,
+          "sandbox_ms": 389.3
+        },
+        {
+          "id": "suspects-cave_keeps_shape-control-r1",
+          "branch_ms": 318.0,
+          "mount_ms": 2092.0,
+          "wall_s": 95.805,
+          "sandbox_ms": 1511.1
+        },
+        {
+          "id": "suspects-cave_keeps_shape-spec-step4-r2",
+          "branch_ms": 238.8,
+          "mount_ms": 2326.4,
+          "wall_s": 54.521,
+          "sandbox_ms": 388.9
+        },
+        {
+          "id": "suspects-cave_keeps_shape-spec-step1-r2",
+          "branch_ms": 302.2,
+          "mount_ms": 2246.4,
+          "wall_s": 54.629,
+          "sandbox_ms": 475.4
+        },
+        {
+          "id": "suspects-cave_keeps_shape-rule-portable-r2",
+          "branch_ms": 302.2,
+          "mount_ms": 2258.9,
+          "wall_s": 98.513,
+          "sandbox_ms": 1507.5
+        },
+        {
+          "id": "suspects-cave_keeps_shape-spec-step3-r2",
+          "branch_ms": 297.5,
+          "mount_ms": 2240.7,
+          "wall_s": 91.68,
+          "sandbox_ms": 485.5
+        },
+        {
+          "id": "suspects-cave_keeps_shape-control-r2",
+          "branch_ms": 297.5,
+          "mount_ms": 2161.8,
+          "wall_s": 93.92,
+          "sandbox_ms": 476.1
+        },
+        {
+          "id": "suspects-cave_keeps_shape-spec-step4-r3",
+          "branch_ms": 216.1,
+          "mount_ms": 1798.2,
+          "wall_s": 50.368,
+          "sandbox_ms": 388.5
+        },
+        {
+          "id": "suspects-cave_keeps_shape-spec-step1-r3",
+          "branch_ms": 301.6,
+          "mount_ms": 2093.6,
+          "wall_s": 94.228,
+          "sandbox_ms": 1507.7
+        },
+        {
+          "id": "suspects-cave_keeps_shape-rule-portable-r3",
+          "branch_ms": 217.8,
+          "mount_ms": 2325.2,
+          "wall_s": 49.813,
+          "sandbox_ms": 391.8
+        },
+        {
+          "id": "suspects-cave_keeps_shape-spec-step3-r3",
+          "branch_ms": 301.4,
+          "mount_ms": 2156.6,
+          "wall_s": 53.587,
+          "sandbox_ms": 476.4
+        },
+        {
+          "id": "suspects-cave_keeps_shape-control-r3",
+          "branch_ms": 298.6,
+          "mount_ms": 2079.4,
+          "wall_s": 94.115,
+          "sandbox_ms": 1524.1
+        }
+      ],
+      "n_copies": 15,
+      "steps_reused_per_copy": 0,
+      "steps_reused": 0,
+      "sum_copy_s": 1088.187,
+      "parallel_speedup": 10.92,
+      "saved": {
+        "steps": 0,
+        "minutes": 0.0,
+        "model_calls": 0.0,
+        "usd": 0.0,
+        "restore_minutes_vs_git": 2.15
+      }
+    }
+  ],
+  "totals_saved": {
+    "steps": 36,
+    "minutes": 5.47,
+    "model_calls": 72.0,
+    "usd": 0.892,
+    "restore_minutes_vs_git": 3.9,
+    "copies": 27,
+    "wall_s": 216.209,
+    "sum_copy_s": 1403.33
+  },
+  "spent": null,
+  "stages_s": {}
+}

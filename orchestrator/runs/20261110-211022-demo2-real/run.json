@@ -1,0 +1,278 @@
+{
+  "run_id": "20261110-211022-demo2-real",
+  "disk_id": "dsk-00000000001919d8",
+  "store": "archil",
+  "builder": "builder/ (real)",
+  "checks_source": "demo2_checks.py",
+  "n_steps": 7,
+  "model": "claude-sonnet-5-5",
+  "simulated_slip": null,
+  "checkpoints": {
+    "0": "dsk-00000000001919d8/c0",
+    "1": "dsk-00000000001919d8/c1",
+    "2": "dsk-00000000001919d8/c2",
+    "3": "dsk-00000000001919d8/c3",
+    "4": "dsk-00000000001919d8/c4",
+    "5": "dsk-00000000001919d8/c5",
+    "6": "dsk-00000000001919d8/c6",
+    "7": "dsk-00000000001919d8/c7"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "wall_s": 4.782,
+      "wrote": [
+        "conversation.jsonl",
+        "routes/build.md",
+        "state.json",
+        "workspace/tiles.py"
+      ],
+      "checks": {
+        "parse_map_rows": true
+      },
+      "checks_hidden_during_build": true,
+      "checkpoint_ms": 1094.5,
+      "model_calls": 2,
+      "usage": {
+        "input_tokens": 6,
+        "output_tokens": 379,
+        "cache_creation_input_tokens": 338,
+        "cache_read_input_tokens": 2494
+      },
+      "tool_calls": 1,
+      "commit": "d80c12487112de8754964747454028ecab94f830"
+    },
+    {
+      "step": 2,
+      "wall_s": 5.195,
+      "wrote": [
+        "conversation.jsonl",
+        "routes/build.md",
+        "state.json",
+        "workspace/__pycache__/painter.cpython-313.pyc",
+        "workspace/__pycache__/tiles.cpython-313.pyc",
+        "workspace/painter.py"
+      ],
+      "checks": {
+        "parse_map_rows": true,
+        "svg_size": true,
+        "tiles_palette": true
+      },
+      "checks_hidden_during_build": true,
+      "checkpoint_ms": 1401.3,
+      "model_calls": 2,
+      "usage": {
+        "input_tokens": 6,
+        "output_tokens": 645,
+        "cache_creation_input_tokens": 1389,
+        "cache_read_input_tokens": 3278
+      },
+      "tool_calls": 2,
+      "commit": "df1a0c4f33e038f1aa6a9695ee26ee8394509a1c"
+    },
+    {
+      "step": 3,
+      "wall_s": 5.431,
+      "wrote": [
+        "conversation.jsonl",
+        "routes/build.md",
+        "state.json",
+        "workspace/__pycache__/painter.cpython-313.pyc",
+        "workspace/painter.py"
+      ],
+      "checks": {
+        "hero_is_yellow": false,
+        "parse_map_rows": true,
+        "sprites_drawn": true,
+        "sprites_on_top": true,
+        "svg_size": true,
+        "tiles_palette": true
+      },
+      "checks_hidden_during_build": true,
+      "checkpoint_ms": 1156.6,
+      "model_calls": 2,
+      "usage": {
+        "input_tokens": 6,
+        "output_tokens": 671,
+        "cache_creation_input_tokens": 2437,
+        "cache_read_input_tokens": 4574
+      },
+      "tool_calls": 1,
+      "commit": "3d10fecb93cfd346decff96ba538ad3838661d78"
+    },
+    {
+      "step": 4,
+      "wall_s": 9.704,
+      "wrote": [
+        "conversation.jsonl",
+        "routes/build.md",
+        "state.json",
+        "workspace/__pycache__/light.cpython-313.pyc",
+        "workspace/__pycache__/painter.cpython-313.pyc",
+        "workspace/light.py",
+        "workspace/painter.py"
+      ],
+      "checks": {
+        "heldout_torch_light_corner": false,
+        "hero_is_yellow": false,
+        "parse_map_rows": true,
+        "sprites_drawn": true,
+        "sprites_on_top": true,
+        "svg_size": true,
+        "tiles_palette": true,
+        "torch_light_stops_at_walls": false
+      },
+      "checks_hidden_during_build": true,
+      "checkpoint_ms": 969.9,
+      "model_calls": 2,
+      "usage": {
+        "input_tokens": 6,
+        "output_tokens": 1247,
+        "cache_creation_input_tokens": 4168,
+        "cache_read_input_tokens": 5910
+      },
+      "tool_calls": 2,
+      "commit": "caacfbcc54f1ea644266650ad1d889c056907e97"
+    },
+    {
+      "step": 5,
+      "wall_s": 5.48,
+      "wrote": [
+        "conversation.jsonl",
+        "routes/build.md",
+        "state.json"
+      ],
+      "checks": {
+        "cave_keeps_shape": false,
+        "heldout_cave_ring": false,
+        "heldout_torch_light_corner": false,
+        "hero_is_yellow": false,
+        "parse_map_rows": true,
+        "sprites_drawn": true,
+        "sprites_on_top": true,
+        "svg_size": true,
+        "tiles_palette": true,
+        "torch_light_stops_at_walls": false,
+        "void_tiles_empty": true
+      },
+      "checks_hidden_during_build": true,
+      "checkpoint_ms": 1711.9,
+      "model_calls": 2,
+      "usage": {
+        "input_tokens": 6,
+        "output_tokens": 310,
+        "cache_creation_input_tokens": 4548,
+        "cache_read_input_tokens": 7809
+      },
+      "tool_calls": 1,
+      "commit": "26c5537f339cf0e5bdd36a201fe3952749b8b9bf"
+    },
+    {
+      "step": 6,
+      "wall_s": 24.131,
+      "wrote": [
+        "conversation.jsonl",
+        "routes/build.md",
+        "state.json",
+        "workspace/__pycache__/hud.cpython-313.pyc",
+        "workspace/__pycache__/painter.cpython-313.pyc",
+        "workspace/hud.py",
+        "workspace/painter.py"
+      ],
+      "checks": {
+        "cave_keeps_shape": false,
+        "heldout_cave_ring": false,
+        "heldout_hud_text_other": false,
+        "heldout_torch_light_corner": false,
+        "hero_is_yellow": false,
+        "hud_hp_bar": true,
+        "hud_status_text": false,
+        "parse_map_rows": true,
+        "sprites_drawn": true,
+        "sprites_on_top": true,
+        "svg_size": true,
+        "tiles_palette": true,
+        "torch_light_stops_at_walls": false,
+        "void_tiles_empty": true
+      },
+      "checks_hidden_during_build": true,
+      "checkpoint_ms": 1060.8,
+      "model_calls": 2,
+      "usage": {
+        "input_tokens": 6,
+        "output_tokens": 3397,
+        "cache_creation_input_tokens": 11306,
+        "cache_read_input_tokens": 6617
+      },
+      "tool_calls": 2,
+      "commit": "7c31ae375d1f9635fe055809b607dfd719bb5ef5"
+    },
+    {
+      "step": 7,
+      "wall_s": 8.983,
+      "wrote": [
+        "conversation.jsonl",
+        "routes/build.md",
+        "state.json",
+        "workspace/__pycache__/scene.cpython-313.pyc",
+        "workspace/scene.py"
+      ],
+      "checks": {
+        "cave_keeps_shape": false,
+        "demo_scene": true,
+        "heldout_cave_ring": false,
+        "heldout_hud_text_other": false,
+        "heldout_torch_light_corner": false,
+        "hero_is_yellow": false,
+        "hud_hp_bar": true,
+        "hud_status_text": false,
+        "parse_map_rows": true,
+        "sprites_drawn": true,
+        "sprites_on_top": true,
+        "svg_size": true,
+        "tiles_palette": true,
+        "torch_light_stops_at_walls": false,
+        "void_tiles_empty": true
+      },
+      "checks_hidden_during_build": true,
+      "checkpoint_ms": 1926.0,
+      "model_calls": 2,
+      "usage": {
+        "input_tokens": 6,
+        "output_tokens": 1012,
+        "cache_creation_input_tokens": 12809,
+        "cache_read_input_tokens": 11895
+      },
+      "tool_calls": 2,
+      "commit": "18fb25708e37e057fc220db3e65a85650100ed4f"
+    }
+  ],
+  "final_checks": {
+    "cave_keeps_shape": false,
+    "demo_scene": true,
+    "heldout_cave_ring": false,
+    "heldout_hud_text_other": false,
+    "heldout_torch_light_corner": false,
+    "hero_is_yellow": false,
+    "hud_hp_bar": true,
+    "hud_status_text": false,
+    "parse_map_rows": true,
+    "sprites_drawn": true,
+    "sprites_on_top": true,
+    "svg_size": true,
+    "tiles_palette": true,
+    "torch_light_stops_at_walls": false,
+    "void_tiles_empty": true
+  },
+  "final_messages": {
+    "cave_keeps_shape": "cave tiles [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2), (3, 1), (4, 1)]: the round cave lost its shape (leading spaces dropped?)",
+    "heldout_cave_ring": "walls [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (1, 0), (1, 4), (3, 1), (3, 3), (5, 2)], want [(0, 2), (1, 1), (1, 3), (2, 0), (2, 4), (3, 0), (3, 4), (4, 1), (4, 3), (5, 2)]",
+    "heldout_hud_text_other": "texts [], want 'HP 3/12 Gold 3'",
+    "heldout_torch_light_corner": "lit [(1, 1), (1, 2), (1, 3), (2, 3), (3, 1), (3, 2)], want [(1, 1), (1, 2), (1, 3), (2, 3)] (3 steps around the corner, not through it)",
+    "hero_is_yellow": "hero fill ['#ffffff'], want ['#ffff00']",
+    "hud_status_text": "status bar texts [], want 'HP 7/10 Gold 2'",
+    "torch_light_stops_at_walls": "floor (5,2) behind the wall is '#8a6d2f': light passes through the wall"
+  },
+  "workspace_export": "workspaces/build",
+  "label": "Dungeon Painter: real run (Sonnet 5.5, Archil; partial, stopped at swarm)"
+}

@@ -1,0 +1,71 @@
+{
+  "run_id": "20261110-211022-demo2-real",
+  "checks": [
+    {
+      "check": "cave_keeps_shape",
+      "surfaced_step": 5,
+      "origin_step": 1,
+      "heldout_checks": [
+        "heldout_cave_ring"
+      ],
+      "fails_on_golden": false,
+      "rebuild": {
+        "checkpoint_id": "dsk-00000000001919d8/c4",
+        "step": 5,
+        "fails": "3/3",
+        "errors": 0,
+        "invalid": 0,
+        "wave": "triage-cave_keeps_shape"
+      },
+      "verdict": "real_problem",
+      "fork_checkpoint_id": "dsk-00000000001919d8/c0"
+    },
+    {
+      "check": "hero_is_yellow",
+      "surfaced_step": 3,
+      "origin_step": 2,
+      "heldout_checks": [],
+      "fails_on_golden": true,
+      "verdict": "test_wrong",
+      "rebuild": null
+    },
+    {
+      "check": "hud_status_text",
+      "surfaced_step": 6,
+      "origin_step": 6,
+      "heldout_checks": [
+        "heldout_hud_text_other"
+      ],
+      "fails_on_golden": false,
+      "rebuild": {
+        "checkpoint_id": "dsk-00000000001919d8/c5",
+        "step": 6,
+        "fails": "3/3",
+        "errors": 0,
+        "invalid": 0,
+        "wave": "triage-hud_status_text"
+      },
+      "verdict": "real_problem",
+      "fork_checkpoint_id": "dsk-00000000001919d8/c5"
+    },
+    {
+      "check": "torch_light_stops_at_walls",
+      "surfaced_step": 4,
+      "origin_step": 4,
+      "heldout_checks": [
+        "heldout_torch_light_corner"
+      ],
+      "fails_on_golden": false,
+      "rebuild": {
+        "checkpoint_id": "dsk-00000000001919d8/c3",
+        "step": 4,
+        "fails": "3/3",
+        "errors": 0,
+        "invalid": 0,
+        "wave": "triage-torch_light_stops_at_walls"
+      },
+      "verdict": "real_problem",
+      "fork_checkpoint_id": "dsk-00000000001919d8/c3"
+    }
+  ]
+}

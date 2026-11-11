@@ -1,6 +1,6 @@
 // The dungeon. One canvas, a 640x360 logical grid scaled by an integer factor, sprites cut from the Gemini art.
 import { W, H, FY, GATE_X, actorAt, type Timeline, type Actor, type LaneSet } from './timeline'
-import { frac } from './data'
+import { asset, frac } from './data'
 
 export const PAL = {
   shadow: '#07060C',
@@ -47,9 +47,9 @@ export class Scene {
 
   async loadAtlas() {
     try {
-      const j = await (await fetch('/sprites/atlas.json', { cache: 'no-store' })).json()
+      const j = await (await fetch(asset('sprites/atlas.json'), { cache: 'no-store' })).json()
       const img = new Image()
-      img.src = '/sprites/atlas.png'
+      img.src = asset('sprites/atlas.png')
       await img.decode()
       this.frames = j.frames || {}
       this.atlas = img

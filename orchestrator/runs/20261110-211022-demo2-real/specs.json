@@ -1,0 +1,7 @@
+{
+  "spec_files": {
+    "original": "spec.original.md",
+    "fixed": "spec.fixed.md"
+  },
+  "culprits": []
+}

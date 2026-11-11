@@ -1,0 +1,27 @@
+{
+  "culprit": "Each line is stripped of surrounding whitespace and blank lines are skipped;",
+  "check": "cave_keeps_shape",
+  "mode": "fix",
+  "rewrites": [
+    {
+      "text": "",
+      "kind": "delete"
+    },
+    {
+      "text": "Blank lines are skipped;",
+      "kind": "shorten"
+    },
+    {
+      "text": "Blank lines are skipped and leading spaces on each row are preserved;",
+      "kind": "disambiguate"
+    },
+    {
+      "text": "Each line has trailing whitespace stripped and blank lines are skipped;",
+      "kind": "disambiguate"
+    },
+    {
+      "text": "Each line is stripped of its trailing newline and blank lines are skipped;",
+      "kind": "rephrase"
+    }
+  ]
+}

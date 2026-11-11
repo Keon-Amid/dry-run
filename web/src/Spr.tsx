@@ -1,3 +1,4 @@
+import { asset } from './data'
 import { useEffect, useRef, useState } from 'react'
 
 // One sprite from the atlas, drawn at an integer scale with hard pixels.
@@ -7,9 +8,9 @@ function atlas() {
     atlasP ||
     (async () => {
       try {
-        const j = await (await fetch('/sprites/atlas.json')).json()
+        const j = await (await fetch(asset('sprites/atlas.json'))).json()
         const img = new Image()
-        img.src = '/sprites/atlas.png'
+        img.src = asset('sprites/atlas.png')
         await img.decode()
         return { frames: j.frames || {}, img }
       } catch {
