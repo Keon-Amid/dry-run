@@ -1,6 +1,8 @@
 // The page reads only the orchestrator's run files (shapes: CONTRACT.md > Roles). Nothing here invents a number.
 export type Json = any
-export type RunInfo = { id: string; files: string[]; mtime: number; sizes?: Record<string, number> }
+export type RunInfo = { id: string; files: string[]; mtime: number; sizes?: Record<string, number>; meta?: Json; label?: string }
+export type Caps = { python: string | null; pipeline: boolean; archilSdk: boolean; keys: { ARCHIL_API_KEY: boolean; ANTHROPIC_API_KEY: boolean }; fixtures: string[] }
+export type Job = { id: string; command: string; opts: Json; startedAt: number; endedAt: number | null; exitCode: number | null; running: boolean; runId: string | null; tail: string[] }
 export type RunData = {
   id: string
   run?: Json
@@ -10,6 +12,8 @@ export type RunData = {
   archil?: Json
   baseline?: Json
   report?: Json
+  specOriginal?: string
+  specFixed?: string
   sigs: Record<string, string>
   sig: string
 }
@@ -27,11 +31,44 @@ export async function listRuns(): Promise<RunInfo[]> {
   return r.json()
 }
 
-export async function loadRun(id: string, prev?: RunData | null): Promise<RunData> {
+export const getCaps = (): Promise<Caps> => fetch('/api/caps', { cache: 'no-store' }).then((r) => r.json())
+export const getJob = (): Promise<Job | null> =>
+  fetch('/api/job', { cache: 'no-store' })
+    .then((r) => r.json())
+    .then((j) => j.job ?? null)
+export async function startRun(opts: Json): Promise<Job> {
+  const r = await fetch('/api/start', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(opts) })
+  const j = await r.json().catch(() => ({}))
+  if (!r.ok) throw new Error(j.error || 'could not start the run')
+  return j.job
+}
+export const stopRun = () => fetch('/api/stop', { method: 'POST' }).then((r) => r.json())
+
+const TEXTS: [keyof RunData, string][] = [
+  ['specOriginal', 'spec.original.md'],
+  ['specFixed', 'spec.fixed.md'],
+]
+
+// `files` (from the run list) lets us skip files the folder doesn't have yet.
+export async function loadRun(id: string, prev?: RunData | null, files?: string[]): Promise<RunData> {
   const out: RunData = { id, sigs: {}, sig: '' }
   const keep = prev && prev.id === id ? prev : null
+  const want = (name: string) => !files || files.includes(name)
   await Promise.all(
-    FILES.map(async (f) => {
+    TEXTS.filter(([, name]) => !!files && files.includes(name)).map(async ([key, name]) => {
+      try {
+        const r = await fetch(`/api/runs/${encodeURIComponent(id)}/${name}`, { cache: 'no-store' })
+        if (!r.ok) return
+        const txt = await r.text()
+        ;(out as any)[key] = txt
+        out.sigs[name] = txt.length + ':' + hash(txt)
+      } catch {
+        /* optional */
+      }
+    }),
+  )
+  await Promise.all(
+    FILES.filter((f) => want(f + '.json')).map(async (f) => {
       try {
         const r = await fetch(`/api/runs/${encodeURIComponent(id)}/${f}.json`, { cache: 'no-store' })
         if (!r.ok) return
@@ -51,7 +88,7 @@ export async function loadRun(id: string, prev?: RunData | null): Promise<RunDat
       }
     }),
   )
-  out.sig = FILES.map((f) => f + '=' + (out.sigs[f] || '-')).join('|')
+  out.sig = FILES.map((f) => f + '=' + (out.sigs[f] || '-')).join('|') + '|' + TEXTS.map(([, n]) => out.sigs[n] || '-').join('|')
   return out
 }
 

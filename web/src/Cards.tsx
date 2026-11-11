@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { frac, show, type RunData } from './data'
 import { Spr } from './Spr'
 
@@ -23,6 +23,61 @@ export function headline(c: any): string {
   if (c.verdict === 'model_slip') return 'THE MODEL SLIPPED'
   if (c.verdict === 'inconclusive') return 'INCONCLUSIVE'
   return 'VERDICT PENDING'
+}
+
+type DiffRow = { l: string | null; r: string | null; kind: 'same' | 'chg' | 'del' | 'add' }
+function diffLines(a: string[], b: string[]): DiffRow[] {
+  const n = a.length
+  const m = b.length
+  const L = Array.from({ length: n + 1 }, () => new Int32Array(m + 1))
+  for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--) L[i][j] = a[i] === b[j] ? L[i + 1][j + 1] + 1 : Math.max(L[i + 1][j], L[i][j + 1])
+  const rows: DiffRow[] = []
+  let i = 0
+  let j = 0
+  while (i < n && j < m) {
+    if (a[i] === b[j]) rows.push({ l: a[i++], r: b[j++], kind: 'same' })
+    else if (L[i + 1][j] >= L[i][j + 1]) rows.push({ l: a[i++], r: null, kind: 'del' })
+    else rows.push({ l: null, r: b[j++], kind: 'add' })
+  }
+  while (i < n) rows.push({ l: a[i++], r: null, kind: 'del' })
+  while (j < m) rows.push({ l: null, r: b[j++], kind: 'add' })
+  const out: DiffRow[] = []
+  for (let k = 0; k < rows.length; k++) {
+    const r = rows[k]
+    const nx = rows[k + 1]
+    if (r.kind === 'del' && nx?.kind === 'add') {
+      out.push({ l: r.l, r: nx.r, kind: 'chg' })
+      k++
+    } else out.push(r)
+  }
+  return out
+}
+
+// The spec, before and after the fix, side by side (spec.original.md / spec.fixed.md in the run folder).
+function SpecDiff({ data }: { data: RunData }) {
+  const rows = diffLines((data.specOriginal ?? '').split(/\r?\n/), (data.specFixed ?? '').split(/\r?\n/))
+  const changed = rows.filter((r) => r.kind !== 'same').length
+  const first = rows.findIndex((r) => r.kind !== 'same')
+  return (
+    <div className="scroll diff" onClick={(e) => e.stopPropagation()}>
+      <h2>THE SPEC, BEFORE AND AFTER</h2>
+      <div className="check">
+        {changed === 0 ? 'The two files are identical.' : `${changed} line${changed === 1 ? '' : 's'} changed.`}
+      </div>
+      <div className="difftable">
+        <div className="diffhead">
+          <span>ORIGINAL SPEC</span>
+          <span>FIXED SPEC</span>
+        </div>
+        {rows.map((r, i) => (
+          <div key={i} className={'diffrow ' + r.kind} ref={i === first ? (el) => el?.scrollIntoView({ block: 'center' }) : undefined}>
+            <span className="l">{r.l ?? ''}</span>
+            <span className="r">{r.r ?? ''}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
 }
 
 // The final screen: before / after / baseline pass rates, straight from report.json.
@@ -104,24 +159,38 @@ export function Cards({ data, onClose }: { data: RunData; onClose: () => void })
   const checks: any[] = data.triage?.checks ?? []
   const swarms: any[] = data.swarm?.swarms ?? []
   const hasResult = Object.keys(data.report?.checks ?? {}).length > 0
-  const [view, setView] = useState<'result' | 'cards'>(hasResult ? 'result' : 'cards')
+  const hasDiff = typeof data.specOriginal === 'string' && typeof data.specFixed === 'string'
+  const asked = new URLSearchParams(location.search).get('view')
+  const [view, setView] = useState<'result' | 'cards' | 'diff'>(asked === 'diff' && hasDiff ? 'diff' : hasResult ? 'result' : 'cards')
+  useEffect(() => {
+    if (hasResult) setView((v) => (v === 'diff' ? v : 'result'))
+  }, [hasResult])
   const why = (name: string) => {
     const m = data.run?.final_messages?.[name]
     return typeof m === 'string' && m ? (m.length > 220 ? m.slice(0, 220) + '…' : m) : null
   }
   return (
     <div className="cards" onClick={onClose}>
-      {hasResult && (
+      {(hasResult || hasDiff) && (
         <div className="tabs" onClick={(e) => e.stopPropagation()}>
-          <button className={'btn' + (view === 'result' ? ' on' : '')} onClick={() => setView('result')}>
-            BEFORE / AFTER
-          </button>
+          {hasResult && (
+            <button className={'btn' + (view === 'result' ? ' on' : '')} onClick={() => setView('result')}>
+              BEFORE / AFTER
+            </button>
+          )}
+          {hasDiff && (
+            <button className={'btn' + (view === 'diff' ? ' on' : '')} onClick={() => setView('diff')}>
+              SPEC DIFF
+            </button>
+          )}
           <button className={'btn' + (view === 'cards' ? ' on' : '')} onClick={() => setView('cards')}>
             DEATH CARDS
           </button>
         </div>
       )}
-      {hasResult && view === 'result' ? (
+      {hasDiff && view === 'diff' ? (
+        <SpecDiff data={data} />
+      ) : hasResult && view === 'result' ? (
         <ResultPanel data={data} />
       ) : (
       <div className="cardrow" onClick={(e) => e.stopPropagation()}>

@@ -15,13 +15,13 @@ body { background: var(--shadow); color: var(--bone); font-family: var(--body); 
 .btn:hover { border-color: var(--parch); }
 .btn.on { background: var(--gold); color: var(--shadow); border-color: var(--fire); }
 .btn:disabled { opacity: 0.4; cursor: default; }
-select.btn { max-width: 250px; }
+select.btn { max-width: 290px; }
 .scrub { flex: 1 1 140px; min-width: 120px; accent-color: var(--ember); }
 
 .hud { display: flex; gap: 6px; padding: 5px 12px; background: var(--shadow); border-bottom: 2px solid var(--stoneD); overflow: hidden; }
-.stat { display: flex; flex-direction: column; gap: 2px; padding: 4px 10px 2px; border: 2px solid var(--stoneD); background: var(--bg); min-width: 0; flex: 1 1 0; }
+.stat { display: flex; flex-direction: column; gap: 2px; padding: 4px 8px 2px; border: 2px solid var(--stoneD); background: var(--bg); min-width: 0; flex: 1 1 0; }
 .stat b { font-family: var(--px); font-size: 7px; line-height: 9px; font-weight: normal; color: var(--cyan); white-space: nowrap; }
-.stat span { font-size: 22px; line-height: 20px; color: var(--bone); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stat span { font-size: 20px; line-height: 20px; color: var(--bone); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .stat.gold { border-color: var(--stoneL); }
 .stat.gold b { color: var(--gold); }
 
@@ -90,7 +90,7 @@ td { padding: 1px 8px 1px 0; border-top: 2px dotted var(--stoneL); }
 .qr img { width: 150px; height: 150px; image-rendering: pixelated; border: 4px solid var(--shadow); }
 .qr b { display: block; font-family: var(--px); font-size: 9px; line-height: 14px; font-weight: normal; margin-bottom: 6px; }
 .qr span { word-break: break-all; color: var(--stoneL); }
-@media (max-width: 1380px) { .tagline { display: none; } }
+@media (max-width: 1560px) { .tagline { display: none; } }
 @media (max-width: 1100px) { .hud .stat:first-child { display: none; } }
 @media (max-width: 700px) { .sheet { font-size: 20px; } }
 
@@ -118,3 +118,26 @@ table.arms td { vertical-align: middle; padding: 3px 10px 3px 0; }
 td.cost { color: var(--stoneL); white-space: nowrap; }
 table.arms th { font-family: var(--body); font-size: 18px; color: var(--stoneL); text-transform: uppercase; }
 .btn.new { border-color: var(--cyan); color: var(--cyan); }
+
+.stat.warn { border-color: var(--ember); } .stat.warn b { color: var(--ember); }
+.stat.run { border-color: var(--cyan); } .stat.ok b { color: var(--green); }
+.mini { font-family: var(--px); font-size: 7px; margin-left: 8px; padding: 3px 5px; background: var(--red); color: var(--shadow); border: 0; cursor: pointer; vertical-align: middle; }
+.optrow { display: flex; align-items: stretch; gap: 6px; margin: 6px 0; flex-wrap: wrap; }
+.optrow > b { font-family: var(--px); font-size: 8px; font-weight: normal; width: 92px; align-self: center; color: var(--stoneL); }
+.opt { font-family: var(--body); font-size: 20px; line-height: 18px; text-align: left; padding: 5px 9px; background: rgba(7, 6, 12, 0.06); color: var(--shadow); border: 2px solid var(--stoneL); cursor: pointer; border-radius: 0; flex: 1 1 0; min-width: 130px; }
+.opt small { display: block; font-size: 16px; color: var(--stoneL); }
+.opt.on { background: var(--shadow); color: var(--gold); border-color: var(--shadow); }
+.opt.on small { color: var(--parch); }
+.opt:disabled { opacity: 0.5; cursor: not-allowed; }
+.own { margin-top: 10px; border-top: 2px dotted var(--stoneL); padding-top: 6px; }
+.own summary { cursor: pointer; color: var(--stoneL); }
+
+.scroll.diff { width: 1180px; max-width: 97%; padding-top: 14px; }
+.scroll.diff h2 { color: var(--fire); margin-top: 0; }
+.difftable { max-height: 52vh; overflow: auto; border: 2px solid var(--shadow); background: var(--bone); margin-top: 6px; }
+.diffhead, .diffrow { display: grid; grid-template-columns: 1fr 1fr; }
+.diffhead { position: sticky; top: 0; background: var(--shadow); color: var(--parch); font-family: var(--px); font-size: 8px; }
+.diffhead span { padding: 6px 8px; }
+.diffrow span { padding: 0 8px; white-space: pre-wrap; word-break: break-word; font-size: 19px; line-height: 19px; min-height: 19px; border-right: 2px solid var(--parch); }
+.diffrow.chg .l, .diffrow.del .l { background: rgba(214, 69, 93, 0.35); text-decoration: line-through; }
+.diffrow.chg .r, .diffrow.add .r { background: rgba(111, 207, 98, 0.45); }

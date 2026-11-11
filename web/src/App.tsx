@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { listRuns, loadRun, show, type RunData, type RunInfo } from './data'
+import { getJob, listRuns, loadRun, show, stopRun, type Job, type RunData, type RunInfo } from './data'
 import { buildTimeline, captionAt, hudAt, W, H, type Caption, type Hud, type Timeline } from './timeline'
 import { Scene } from './scene'
 import { Cards } from './Cards'
@@ -46,7 +46,8 @@ function Main({ reportOpen, preferRun }: { reportOpen: boolean; preferRun: strin
   const [live, setLive] = useState(qs.get('live') === '1')
   const [showCards, setShowCards] = useState(qs.get('cards') === '1')
   const [showUpload, setShowUpload] = useState(qs.get('upload') === '1')
-  const [ui, setUi] = useState<{ t: number; cap: Caption | null; hud: Hud | null; ended: boolean }>({ t: 0, cap: null, hud: null, ended: false })
+  const [ui, setUi] = useState<{ t: number; cap: Caption | null; hud: Hud | null; ended: boolean; finished: boolean }>({ t: 0, cap: null, hud: null, ended: false, finished: false })
+  const [job, setJob] = useState<Job | null>(null)
   const [tip, setTip] = useState<{ x: number; y: number; text: string } | null>(null)
   const [err, setErr] = useState<string | null>(null)
 
@@ -56,35 +57,48 @@ function Main({ reportOpen, preferRun }: { reportOpen: boolean; preferRun: strin
   const tRef = useRef(Number(qs.get('t')) || 0)
   const firstLoad = useRef(true)
   const tl = useMemo<Timeline | null>(() => (data ? buildTimeline(data) : null), [data])
-  const st = useRef({ playing, speed, reportOpen, live, tl, data, runId, cardsFor: '' })
-  Object.assign(st.current, { playing, speed, reportOpen, live, tl, data, runId })
+  const st = useRef({ playing, speed, reportOpen, live, tl, data, runId, job, runs, cardsFor: '', lastChange: Date.now(), lastSig: '' })
+  Object.assign(st.current, { playing, speed, reportOpen, live, tl, data, runId, job, runs })
+  if (data && st.current.lastSig !== data.id + data.sig) {
+    st.current.lastSig = data.id + data.sig
+    st.current.lastChange = Date.now()
+  }
   if (sceneRef.current) sceneRef.current.tl = tl
   // keep the HUD and caption in step with freshly loaded data, even while paused
   useEffect(() => {
     if (!tl) return
     const t = Math.min(tRef.current, tl.duration)
-    setUi({ t, cap: captionAt(tl, t), hud: hudAt(tl, t), ended: t >= tl.duration - 0.001 })
+    setUi((u) => ({ ...u, t, cap: captionAt(tl, t), hud: hudAt(tl, t), ended: t >= tl.duration - 0.001 }))
   }, [tl])
 
-  // run list + live polling (every 2 s)
+  // run list, the pipeline job, and live polling (every 2 s)
   useEffect(() => {
     let stop = false
     const poll = async () => {
       try {
-        const rs = await listRuns()
+        const [rs, jb] = await Promise.all([listRuns(), getJob().catch(() => null)])
         if (stop) return
-        setRuns((prev) => (prev.map((r) => r.id).join() === rs.map((r) => r.id).join() ? prev : rs))
+        setRuns((prev) => (JSON.stringify(prev.map((r) => [r.id, r.label, r.files.length])) === JSON.stringify(rs.map((r) => [r.id, r.label, r.files.length])) ? prev : rs))
+        setJob((prev) => (JSON.stringify(prev) === JSON.stringify(jb) ? prev : jb))
         setErr(null)
         const s = st.current
-        // default: the newest run that has triage results to show; otherwise simply the newest
-        if (!s.runId && rs.length) setRunId((rs.find((r) => (r.sizes?.['triage.json'] ?? 0) > 120) ?? rs[0]).id)
-        else if (s.live && rs.length && rs[0].id !== s.runId) {
-          tRef.current = 0
-          setRunId(rs[0].id)
-          return
+        const has = (id: string | null | undefined) => !!id && rs.some((r) => r.id === id)
+        // default: the newest real run with triage results, else the newest with triage results, else the newest
+        const withTriage = rs.filter((r) => (r.sizes?.['triage.json'] ?? 0) > 120)
+        const preferred = withTriage.find((r) => /real/i.test(String(r.meta?.builder ?? ''))) ?? withTriage[0] ?? rs[0]
+        if (!s.runId && rs.length) setRunId(preferred.id)
+        else if (s.live && rs.length) {
+          // LIVE follows the run the pipeline is writing, otherwise the newest folder
+          const target = jb?.running && has(jb.runId) ? jb.runId! : rs[0].id
+          if (target !== s.runId) {
+            tRef.current = 0
+            st.current.cardsFor = ''
+            setRunId(target)
+            return
+          }
         }
         if (s.live && s.runId && s.data) {
-          const d = await loadRun(s.runId, s.data)
+          const d = await loadRun(s.runId, s.data, rs.find((r) => r.id === s.runId)?.files)
           if (!stop && st.current.runId === d.id && d.sig !== st.current.data?.sig) setData(d)
         }
       } catch (e) {
@@ -106,7 +120,7 @@ function Main({ reportOpen, preferRun }: { reportOpen: boolean; preferRun: strin
     if (!firstLoad.current) tRef.current = 0
     firstLoad.current = false
     if (qs.get('cards') !== '1') setShowCards(false)
-    loadRun(runId, null)
+    loadRun(runId, null, st.current.runs.find((r) => r.id === runId)?.files)
       .then((d) => !stop && setData(d))
       .catch((e) => setErr(String(e)))
     return () => {
@@ -149,13 +163,16 @@ function Main({ reportOpen, preferRun }: { reportOpen: boolean; preferRun: strin
         const cap = captionAt(T, tRef.current)
         const hud = hudAt(T, tRef.current)
         const ended = tRef.current >= T.duration - 0.001
-        const k = Math.round(tRef.current * 5) + '|' + (cap?.t ?? '') + '|' + JSON.stringify(hud) + '|' + ended + '|' + T.duration
+        // A run is finished when its files are complete and nothing is still writing them.
+        const jobHere = s.job && s.job.runId === s.data?.id ? s.job : null
+        const finished = T.complete && !jobHere?.running && (!s.live || !!s.data?.report || !!jobHere || Date.now() - s.lastChange > 12000)
+        const k = Math.round(tRef.current * 5) + '|' + (cap?.t ?? '') + '|' + JSON.stringify(hud) + '|' + ended + '|' + finished + '|' + T.duration
         if (k !== key) {
           key = k
-          setUi({ t: tRef.current, cap, hud, ended })
+          setUi({ t: tRef.current, cap, hud, ended, finished })
         }
-        const sig = (s.data?.id ?? '') + (s.data?.sig ?? '')
-        if (ended && T.complete && T.hasCards && s.playing && s.cardsFor !== sig) {
+        const sig = s.data?.id ?? ''
+        if (ended && finished && T.hasCards && s.playing && s.cardsFor !== sig) {
           s.cardsFor = sig
           setShowCards(true)
         }
@@ -225,17 +242,24 @@ function Main({ reportOpen, preferRun }: { reportOpen: boolean; preferRun: strin
   const hud = ui.hud
   const arch = data?.archil
   const run = data?.run
-  const waiting = !!tl && ui.ended && !tl.complete
+  const waiting = !!tl && ui.ended && !ui.finished
+  const jobHere = job && (job.runId === runId || (job.running && !job.runId)) ? job : null
+  const jobFailed = !!job && !job.running && job.exitCode !== 0 && job.exitCode !== null && (job.runId === runId || !job.runId)
+  const localStore = !!run?.store && run.store !== 'archil'
   const usd = arch?.spent?.total?.usd
   const capText = err
     ? err
-    : !runId
+    : jobFailed
+      ? `The pipeline stopped with exit code ${job!.exitCode}: ${job!.tail[job!.tail.length - 1] ?? 'no output'}`
+      : !runId
       ? 'No runs found in orchestrator/runs/ yet.'
       : !tl
         ? 'Loading the run files…'
         : waiting
           ? live
-            ? `Following run ${runId} live. Waiting for the orchestrator to write more.`
+            ? jobHere?.running
+              ? `The pipeline is running (${Math.max(0, Math.round((Date.now() - jobHere.startedAt) / 1000))} s). ${jobHere.tail[jobHere.tail.length - 1] ?? ''}`
+              : `Following this run live. Waiting for the orchestrator to write more.`
             : `This run's files end here. Turn on LIVE to follow it as the orchestrator writes more.`
           : (ui.cap?.text ?? '')
   return (
@@ -253,8 +277,8 @@ function Main({ reportOpen, preferRun }: { reportOpen: boolean; preferRun: strin
           }}
         >
           {runs.map((r) => (
-            <option key={r.id} value={r.id}>
-              run {r.id}
+            <option key={r.id} value={r.id} title={r.id}>
+              {r.label ?? 'run ' + r.id}
             </option>
           ))}
         </select>
@@ -292,7 +316,11 @@ function Main({ reportOpen, preferRun }: { reportOpen: boolean; preferRun: strin
         </button>
       </header>
       <div className="hud">
-        <Stat k="ARCHIL DISK" v={run?.disk_id ? String(run.disk_id).replace(/^(dsk-)0+/, '$1…') : 'unknown'} />
+        {localStore ? (
+          <Stat k="STORE" tone="warn" v="local, not Archil" />
+        ) : (
+          <Stat k="ARCHIL DISK" v={run?.disk_id ? String(run.disk_id).replace(/^(dsk-)0+/, '$1…') : 'unknown'} />
+        )}
         <Stat k="CHECKPOINTS" v={`${hud?.checkpoints ?? 0}/${tl?.n ?? '?'} · last ${show(hud?.checkpointMs, ' ms')}`} />
         <Stat k="BRANCHES" v={`${hud?.branches ?? 0} made · ${hud?.live ?? 0} running`} />
         <Stat k="BRANCH · SANDBOX · MOUNT" v={hud?.branchMs == null && hud?.sandboxMs == null ? '—' : `${show(hud?.branchMs)} · ${show(hud?.sandboxMs)} · ${show(hud?.mountMs)} ms`} />
@@ -304,16 +332,47 @@ function Main({ reportOpen, preferRun }: { reportOpen: boolean; preferRun: strin
         />
         <Stat
           k="SPENT"
-          v={arch?.spent?.total ? `${show(arch.spent.total.model_calls)} calls · ${typeof usd === 'number' ? '$' + (usd < 1 ? usd.toFixed(4) : usd.toFixed(2)) : 'cost unknown'}` : 'unknown'}
+          v={
+            arch?.spent?.total && (typeof arch.spent.total.model_calls === 'number' || typeof usd === 'number')
+              ? `${show(arch.spent.total.model_calls)} calls · ${typeof usd === 'number' ? '$' + (usd < 1 ? usd.toFixed(4) : usd.toFixed(2)) : 'cost unknown'}`
+              : 'unknown'
+          }
         />
+        {job && (
+          <div className={'stat ' + (job.running ? 'run' : job.exitCode === 0 ? 'ok' : 'warn')}>
+            <b>PIPELINE</b>
+            <span>
+              {job.running ? `running ${Math.max(0, Math.round((Date.now() - job.startedAt) / 1000))} s` : job.exitCode === 0 ? `finished in ${(((job.endedAt ?? job.startedAt) - job.startedAt) / 1000).toFixed(1)} s` : `failed (exit ${job.exitCode})`}
+              {job.running && (
+                <button className="mini" onClick={() => stopRun()}>
+                  STOP
+                </button>
+              )}
+            </span>
+          </div>
+        )}
       </div>
       <div className="stage" ref={stageRef}>
         <canvas ref={canvasRef} onMouseMove={onMove} onMouseLeave={() => setTip(null)} onClick={onClick} />
         {showCards && data && <Cards data={data} onClose={() => setShowCards(false)} />}
-        {showUpload && <Upload onClose={() => setShowUpload(false)} />}
+        {showUpload && (
+          <Upload
+            job={job}
+            onClose={() => setShowUpload(false)}
+            onStarted={(j) => {
+              setJob(j)
+              setShowUpload(false)
+              setShowCards(false)
+              st.current.cardsFor = ''
+              tRef.current = 0
+              setLive(true)
+              setPlaying(true)
+            }}
+          />
+        )}
       </div>
-      <footer className={'caption ' + (waiting ? 'archil' : (ui.cap?.tone ?? 'info'))}>
-        <span className="phase">{waiting ? (live ? 'LIVE' : 'END OF FILES') : (ui.cap?.phase ?? '…')}</span>
+      <footer className={'caption ' + (jobFailed ? 'bad' : waiting ? 'archil' : (ui.cap?.tone ?? 'info'))}>
+        <span className="phase">{jobFailed ? 'FAILED' : waiting ? (live ? 'LIVE' : 'END OF FILES') : (ui.cap?.phase ?? '…')}</span>
         <span className="captext">{capText}</span>
         <span className="jumps">
           {phases.map((p) => (
