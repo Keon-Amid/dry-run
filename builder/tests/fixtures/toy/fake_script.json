@@ -1,0 +1,22 @@
+{
+  "steps": {
+    "1": [
+      {"content": [{"type": "text", "text": "Writing hello.py"},
+                   {"type": "tool_use", "name": "write_file", "input": {"path": "hello.py", "content": "print('hello')\n"}}],
+       "stop_reason": "tool_use", "usage": {"input_tokens": 100, "output_tokens": 20, "cache_creation_input_tokens": 50, "cache_read_input_tokens": 0}},
+      {"content": [{"type": "tool_use", "name": "bash", "input": {"command": "python3 hello.py"}}],
+       "stop_reason": "tool_use", "usage": {"input_tokens": 10, "output_tokens": 5, "cache_creation_input_tokens": 0, "cache_read_input_tokens": 150}},
+      {"content": [{"type": "text", "text": "Step 1 done."}], "stop_reason": "end_turn",
+       "usage": {"input_tokens": 10, "output_tokens": 5, "cache_creation_input_tokens": 0, "cache_read_input_tokens": 160}}
+    ],
+    "2": [
+      {"content": [{"type": "tool_use", "name": "write_file", "input": {"path": "code.py", "content": "def make_code() -> str:\n    return '123456'\n"}}],
+       "stop_reason": "tool_use"},
+      {"content": [{"type": "tool_use", "name": "read_file", "input": {"path": "../spec.md"}}], "stop_reason": "tool_use"}
+    ],
+    "3": [
+      {"content": [{"type": "tool_use", "name": "write_file", "input": {"path": "README.md", "content": "# toy\n"}}],
+       "stop_reason": "tool_use"}
+    ]
+  }
+}
