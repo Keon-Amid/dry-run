@@ -61,13 +61,24 @@ export class Scene {
 
   resize(cssW: number, cssH: number) {
     const dpr = window.devicePixelRatio || 1
-    const S = Math.max(1, Math.floor(Math.min((cssW * dpr) / W, (cssH * dpr) / H)))
+    const fit = Math.min((cssW * dpr) / W, (cssH * dpr) / H)
+    // Hard pixels at an integer scale when that fills most of the stage; otherwise draw one size up and let the
+    // browser scale it down smoothly, so the scene never sits tiny in a big window.
+    let S = Math.max(1, Math.floor(fit))
+    let css = S / dpr
+    let smooth = false
+    if (S / fit < 0.85) {
+      S = Math.ceil(fit)
+      css = fit / dpr
+      smooth = true
+    }
+    this.canvas.style.width = W * css + 'px'
+    this.canvas.style.height = H * css + 'px'
+    this.canvas.style.imageRendering = smooth ? 'auto' : 'pixelated'
     if (S === this.S && this.canvas.width === W * S) return
     this.S = S
     this.canvas.width = W * S
     this.canvas.height = H * S
-    this.canvas.style.width = (W * S) / dpr + 'px'
-    this.canvas.style.height = (H * S) / dpr + 'px'
     this.fitCache.clear()
   }
 

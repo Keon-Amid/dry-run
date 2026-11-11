@@ -189,6 +189,7 @@ function Main({ reportOpen, preferRun }: { reportOpen: boolean; preferRun: strin
       else if (e.key === '3') setSpeed(16)
       else if (e.key === 'l' || e.key === 'L') setLive((l) => !l)
       else if (e.key === 'c' || e.key === 'C') setShowCards((c) => !c)
+      else if (e.key === 'n' || e.key === 'N') setShowUpload((u) => !u)
       else if (e.key === 'ArrowRight') tRef.current += 2
       else if (e.key === 'ArrowLeft') tRef.current = Math.max(0, tRef.current - 2)
     }
@@ -286,8 +287,8 @@ function Main({ reportOpen, preferRun }: { reportOpen: boolean; preferRun: strin
         <button className={'btn' + (showCards ? ' on' : '')} disabled={!tl?.hasCards} onClick={() => setShowCards((s) => !s)}>
           CARDS
         </button>
-        <button className="btn" onClick={() => setShowUpload(true)}>
-          NEW RUN
+        <button className="btn new" onClick={() => setShowUpload(true)} title="upload a spec bundle (N)">
+          + NEW RUN
         </button>
       </header>
       <div className="hud">
