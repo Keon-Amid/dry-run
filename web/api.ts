@@ -240,6 +240,29 @@ export function makeApi(repoRoot: string, RUNS: string) {
 
   return async (req: any, res: any, next: any) => {
     const url = String(req.url || '').split('?')[0]
+    // /play/<run>/<workspace>/<file>: open a built web project. Served sandboxed (opaque origin) so code the agent
+    // wrote can't reach this page's API.
+    if (url.startsWith('/play/')) {
+      const parts = url.split('/').filter(Boolean).slice(1).map(decodeURIComponent)
+      if (parts.length < 2 || !NAME.test(parts[0]) || !NAME.test(parts[1])) return send(res, 400, { error: 'bad request' })
+      const root = path.join(RUNS, parts[0], 'workspaces', parts[1])
+      const rel = parts.slice(2)
+      if (!rel.length) {
+        res.statusCode = 302
+        res.setHeader('Location', `/play/${encodeURIComponent(parts[0])}/${encodeURIComponent(parts[1])}/index.html`)
+        return res.end()
+      }
+      if (!rel.every((seg) => /^[\w][\w .-]*$/.test(seg))) return send(res, 400, { error: 'bad path' })
+      const f = path.join(root, ...rel)
+      if (!f.startsWith(root + path.sep) || !fs.existsSync(f) || !fs.statSync(f).isFile()) return send(res, 404, { error: 'not found' })
+      const ext = path.extname(f).toLowerCase()
+      const types: Record<string, string> = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png' }
+      res.setHeader('Content-Type', types[ext] || 'text/plain; charset=utf-8')
+      res.setHeader('Content-Security-Policy', 'sandbox allow-scripts')
+      res.setHeader('Access-Control-Allow-Origin', '*')
+      res.setHeader('Cache-Control', 'no-store')
+      return res.end(fs.readFileSync(f))
+    }
     if (!url.startsWith('/api/')) return next()
     res.setHeader('Cache-Control', 'no-store')
     try {

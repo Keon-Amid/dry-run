@@ -142,6 +142,11 @@ function Product({ data, spaces }: { data: RunData; spaces: Workspace[] }) {
               <>
                 {drawable(w) && <img className="render" src={workspaceSvg(data.id, w.name)} alt={label} />}
                 <div className="prodbar">
+                  {w.files.some((f: any) => f.path === 'index.html') && (
+                    <a className="btn on" href={`/play/${encodeURIComponent(data.id)}/${encodeURIComponent(w.name)}/index.html`} target="_blank" rel="noreferrer">
+                      OPEN IT ▶
+                    </a>
+                  )}
                   <button className="btn" onClick={() => setWs(w.name)}>
                     VIEW CODE
                   </button>
