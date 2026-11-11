@@ -1,0 +1,75 @@
+{
+  "run_id": "20261110-200432",
+  "swarms": [
+    {
+      "check": "expiry_from_last_click",
+      "culprit": {
+        "route": "spec-step3",
+        "kind": "spec_line",
+        "step": 3,
+        "old": "Links expire after 30 days.",
+        "new": "Links expire 30 days after the last click.",
+        "rule": null,
+        "score": "3/3"
+      },
+      "fork_checkpoint_id": "dsk-0000000000190e99/c2",
+      "wave": "swarm-expiry_from_last_click",
+      "heldout_checks": [
+        "heldout_expiry_keeps_30_days"
+      ],
+      "n_branches": 15,
+      "n_rewrites": 5,
+      "rewrites": [
+        {
+          "route": "rw1",
+          "text": "Links expire 30 days after their last click.",
+          "visible": "3/3",
+          "heldout": "3/3",
+          "regressions": [],
+          "errors": 0,
+          "winner": true
+        },
+        {
+          "route": "rw2",
+          "text": "Links expire 30 days after they are created.",
+          "visible": "0/3",
+          "heldout": "0/3",
+          "regressions": [],
+          "errors": 0,
+          "winner": false
+        },
+        {
+          "route": "rw3",
+          "text": "Links expire at the last click.",
+          "visible": "3/3",
+          "heldout": "0/3",
+          "regressions": [],
+          "errors": 0,
+          "winner": false
+        },
+        {
+          "route": "rw4",
+          "text": "Links expire after 30 days, counted from the last click.",
+          "visible": "3/3",
+          "heldout": "3/3",
+          "regressions": [],
+          "errors": 0,
+          "winner": true
+        },
+        {
+          "route": "rw5",
+          "text": "Links never expire.",
+          "visible": "0/3",
+          "heldout": "0/3",
+          "regressions": [],
+          "errors": 0,
+          "winner": false
+        }
+      ],
+      "winners": [
+        "rw1",
+        "rw4"
+      ]
+    }
+  ]
+}

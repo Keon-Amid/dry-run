@@ -1,0 +1,1510 @@
+{
+  "run_id": "20261110-200432",
+  "waves": [
+    {
+      "wave": "triage-expiry_from_last_click",
+      "purpose": "triage",
+      "check": "expiry_from_last_click",
+      "targets": [
+        "expiry_from_last_click"
+      ],
+      "checkpoint_id": "dsk-0000000000190e99/c2",
+      "fork_step": 2,
+      "to_step": 3,
+      "n": 3,
+      "wall_s": 6.018,
+      "routes": [
+        {
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "runs": 3,
+          "passed": 0,
+          "errors": 0,
+          "score": "0/3"
+        }
+      ],
+      "copies": [
+        {
+          "id": "triage-expiry_from_last_click-rebuild-r1",
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "ok": true,
+          "branch": "triage-expiry-from-last-click-rebuild-r1-4dd95c",
+          "builder": {
+            "route": "triage-expiry_from_last_click-rebuild-r1",
+            "from_step": 2,
+            "to_step": 3,
+            "built": [
+              3
+            ],
+            "wrote": [
+              "workspace/step_3.txt"
+            ],
+            "patch_applied": false,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false,
+            "heldout_expiry_keeps_30_days": false
+          },
+          "passed": false,
+          "wall_s": 4.88,
+          "timings_ms": {
+            "branch": 118.7,
+            "sandbox": 435.2,
+            "mount": 1319.3
+          }
+        },
+        {
+          "id": "triage-expiry_from_last_click-rebuild-r2",
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "ok": true,
+          "branch": "triage-expiry-from-last-click-rebuild-r2-e7ff7f",
+          "builder": {
+            "route": "triage-expiry_from_last_click-rebuild-r2",
+            "from_step": 2,
+            "to_step": 3,
+            "built": [
+              3
+            ],
+            "wrote": [
+              "workspace/step_3.txt"
+            ],
+            "patch_applied": false,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false,
+            "heldout_expiry_keeps_30_days": false
+          },
+          "passed": false,
+          "wall_s": 4.821,
+          "timings_ms": {
+            "branch": 132.1,
+            "sandbox": 329.7,
+            "mount": 1355.5
+          }
+        },
+        {
+          "id": "triage-expiry_from_last_click-rebuild-r3",
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "ok": true,
+          "branch": "triage-expiry-from-last-click-rebuild-r3-29a827",
+          "builder": {
+            "route": "triage-expiry_from_last_click-rebuild-r3",
+            "from_step": 2,
+            "to_step": 3,
+            "built": [
+              3
+            ],
+            "wrote": [
+              "workspace/step_3.txt"
+            ],
+            "patch_applied": false,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false,
+            "heldout_expiry_keeps_30_days": false
+          },
+          "passed": false,
+          "wall_s": 5.076,
+          "timings_ms": {
+            "branch": 120.3,
+            "sandbox": 384.0,
+            "mount": 1313.9
+          }
+        }
+      ]
+    },
+    {
+      "wave": "triage-redirect_counts_click",
+      "purpose": "triage",
+      "check": "redirect_counts_click",
+      "targets": [
+        "redirect_counts_click"
+      ],
+      "checkpoint_id": "dsk-0000000000190e99/c3",
+      "fork_step": 3,
+      "to_step": 4,
+      "n": 3,
+      "wall_s": 7.565,
+      "routes": [
+        {
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "runs": 3,
+          "passed": 3,
+          "errors": 0,
+          "score": "3/3"
+        }
+      ],
+      "copies": [
+        {
+          "id": "triage-redirect_counts_click-rebuild-r1",
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "ok": true,
+          "branch": "triage-redirect-counts-click-rebuild-r1-354be7",
+          "builder": {
+            "route": "triage-redirect_counts_click-rebuild-r1",
+            "from_step": 3,
+            "to_step": 4,
+            "built": [
+              4
+            ],
+            "wrote": [
+              "workspace/step_4.txt"
+            ],
+            "patch_applied": false,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false,
+            "redirect_counts_click": true,
+            "heldout_expiry_keeps_30_days": false
+          },
+          "passed": true,
+          "wall_s": 6.681,
+          "timings_ms": {
+            "branch": 123.2,
+            "sandbox": 2966.8,
+            "mount": 1213.4
+          }
+        },
+        {
+          "id": "triage-redirect_counts_click-rebuild-r2",
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "ok": true,
+          "branch": "triage-redirect-counts-click-rebuild-r2-5ed02f",
+          "builder": {
+            "route": "triage-redirect_counts_click-rebuild-r2",
+            "from_step": 3,
+            "to_step": 4,
+            "built": [
+              4
+            ],
+            "wrote": [
+              "workspace/step_4.txt"
+            ],
+            "patch_applied": false,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false,
+            "redirect_counts_click": true,
+            "heldout_expiry_keeps_30_days": false
+          },
+          "passed": true,
+          "wall_s": 4.591,
+          "timings_ms": {
+            "branch": 195.4,
+            "sandbox": 324.9,
+            "mount": 1405.2
+          }
+        },
+        {
+          "id": "triage-redirect_counts_click-rebuild-r3",
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "ok": true,
+          "branch": "triage-redirect-counts-click-rebuild-r3-73ae89",
+          "builder": {
+            "route": "triage-redirect_counts_click-rebuild-r3",
+            "from_step": 3,
+            "to_step": 4,
+            "built": [
+              4
+            ],
+            "wrote": [
+              "workspace/step_4.txt"
+            ],
+            "patch_applied": false,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false,
+            "redirect_counts_click": true,
+            "heldout_expiry_keeps_30_days": false
+          },
+          "passed": true,
+          "wall_s": 4.117,
+          "timings_ms": {
+            "branch": 192.8,
+            "sandbox": 334.3,
+            "mount": 1230.0
+          }
+        }
+      ]
+    },
+    {
+      "wave": "suspects-expiry_from_last_click",
+      "purpose": "suspects",
+      "check": "expiry_from_last_click",
+      "targets": [
+        "expiry_from_last_click"
+      ],
+      "checkpoint_id": "dsk-0000000000190e99/c2",
+      "fork_step": 2,
+      "to_step": 7,
+      "n": 9,
+      "wall_s": 30.637,
+      "routes": [
+        {
+          "route": "spec-step3",
+          "kind": "spec_line",
+          "edit": "Links expire 30 days after the last click.",
+          "runs": 3,
+          "passed": 3,
+          "errors": 0,
+          "score": "3/3"
+        },
+        {
+          "route": "rule-short-answers",
+          "kind": "rule_off",
+          "edit": "short-answers.md",
+          "runs": 3,
+          "passed": 0,
+          "errors": 0,
+          "score": "0/3"
+        },
+        {
+          "route": "control",
+          "kind": "control",
+          "edit": null,
+          "runs": 3,
+          "passed": 0,
+          "errors": 0,
+          "score": "0/3"
+        }
+      ],
+      "copies": [
+        {
+          "id": "suspects-expiry_from_last_click-spec-step3-r1",
+          "route": "spec-step3",
+          "kind": "spec_line",
+          "edit": "Links expire 30 days after the last click.",
+          "ok": true,
+          "branch": "suspects-expiry-from-last-click-spec-step3-r1-da0222",
+          "builder": {
+            "route": "suspects-expiry_from_last_click-spec-step3-r1",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": true,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": true
+          },
+          "passed": true,
+          "wall_s": 6.318,
+          "timings_ms": {
+            "branch": 141.3,
+            "sandbox": 1202.0,
+            "mount": 1334.0
+          }
+        },
+        {
+          "id": "suspects-expiry_from_last_click-rule-short-answers-r1",
+          "route": "rule-short-answers",
+          "kind": "rule_off",
+          "edit": "short-answers.md",
+          "ok": true,
+          "branch": "suspects-expiry-from-last-click-rule-short-answers-r1-36e6dd",
+          "builder": {
+            "route": "suspects-expiry_from_last_click-rule-short-answers-r1",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": false
+          },
+          "passed": false,
+          "wall_s": 5.25,
+          "timings_ms": {
+            "branch": 151.6,
+            "sandbox": 507.6,
+            "mount": 1211.5
+          }
+        },
+        {
+          "id": "suspects-expiry_from_last_click-control-r1",
+          "route": "control",
+          "kind": "control",
+          "edit": null,
+          "ok": true,
+          "branch": "suspects-expiry-from-last-click-control-r1-bc1f22",
+          "builder": {
+            "route": "suspects-expiry_from_last_click-control-r1",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": false
+          },
+          "passed": false,
+          "wall_s": 6.199,
+          "timings_ms": {
+            "branch": 242.4,
+            "sandbox": 1135.0,
+            "mount": 1298.8
+          }
+        },
+        {
+          "id": "suspects-expiry_from_last_click-spec-step3-r2",
+          "route": "spec-step3",
+          "kind": "spec_line",
+          "edit": "Links expire 30 days after the last click.",
+          "ok": true,
+          "branch": "suspects-expiry-from-last-click-spec-step3-r2-9e7f70",
+          "builder": {
+            "route": "suspects-expiry_from_last_click-spec-step3-r2",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": true,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": true
+          },
+          "passed": true,
+          "wall_s": 5.807,
+          "timings_ms": {
+            "branch": 145.4,
+            "sandbox": 511.2,
+            "mount": 1265.8
+          }
+        },
+        {
+          "id": "suspects-expiry_from_last_click-rule-short-answers-r2",
+          "route": "rule-short-answers",
+          "kind": "rule_off",
+          "edit": "short-answers.md",
+          "ok": true,
+          "branch": "suspects-expiry-from-last-click-rule-short-answers-r2-bfd804",
+          "builder": {
+            "route": "suspects-expiry_from_last_click-rule-short-answers-r2",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": false
+          },
+          "passed": false,
+          "wall_s": 29.795,
+          "timings_ms": {
+            "branch": 242.9,
+            "sandbox": 24959.1,
+            "mount": 1457.6
+          }
+        },
+        {
+          "id": "suspects-expiry_from_last_click-control-r2",
+          "route": "control",
+          "kind": "control",
+          "edit": null,
+          "ok": true,
+          "branch": "suspects-expiry-from-last-click-control-r2-f4fda7",
+          "builder": {
+            "route": "suspects-expiry_from_last_click-control-r2",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": false
+          },
+          "passed": false,
+          "wall_s": 5.846,
+          "timings_ms": {
+            "branch": 249.5,
+            "sandbox": 548.5,
+            "mount": 1647.9
+          }
+        },
+        {
+          "id": "suspects-expiry_from_last_click-spec-step3-r3",
+          "route": "spec-step3",
+          "kind": "spec_line",
+          "edit": "Links expire 30 days after the last click.",
+          "ok": true,
+          "branch": "suspects-expiry-from-last-click-spec-step3-r3-a35507",
+          "builder": {
+            "route": "suspects-expiry_from_last_click-spec-step3-r3",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": true,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": true
+          },
+          "passed": true,
+          "wall_s": 5.945,
+          "timings_ms": {
+            "branch": 253.6,
+            "sandbox": 398.1,
+            "mount": 1519.4
+          }
+        },
+        {
+          "id": "suspects-expiry_from_last_click-rule-short-answers-r3",
+          "route": "rule-short-answers",
+          "kind": "rule_off",
+          "edit": "short-answers.md",
+          "ok": true,
+          "branch": "suspects-expiry-from-last-click-rule-short-answers-r3-f4c57d",
+          "builder": {
+            "route": "suspects-expiry_from_last_click-rule-short-answers-r3",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": false
+          },
+          "passed": false,
+          "wall_s": 5.249,
+          "timings_ms": {
+            "branch": 147.7,
+            "sandbox": 508.1,
+            "mount": 1263.8
+          }
+        },
+        {
+          "id": "suspects-expiry_from_last_click-control-r3",
+          "route": "control",
+          "kind": "control",
+          "edit": null,
+          "ok": true,
+          "branch": "suspects-expiry-from-last-click-control-r3-0782ca",
+          "builder": {
+            "route": "suspects-expiry_from_last_click-control-r3",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": false
+          },
+          "passed": false,
+          "wall_s": 7.036,
+          "timings_ms": {
+            "branch": 254.7,
+            "sandbox": 1321.1,
+            "mount": 1532.9
+          }
+        }
+      ]
+    },
+    {
+      "wave": "swarm-expiry_from_last_click",
+      "purpose": "swarm",
+      "check": "expiry_from_last_click",
+      "targets": [
+        "expiry_from_last_click"
+      ],
+      "checkpoint_id": "dsk-0000000000190e99/c2",
+      "fork_step": 2,
+      "to_step": 7,
+      "n": 15,
+      "wall_s": 9.983,
+      "routes": [
+        {
+          "route": "rw1",
+          "kind": "spec_line",
+          "edit": "Links expire 30 days after their last click.",
+          "runs": 3,
+          "passed": 3,
+          "errors": 0,
+          "score": "3/3"
+        },
+        {
+          "route": "rw2",
+          "kind": "spec_line",
+          "edit": "Links expire 30 days after they are created.",
+          "runs": 3,
+          "passed": 0,
+          "errors": 0,
+          "score": "0/3"
+        },
+        {
+          "route": "rw3",
+          "kind": "spec_line",
+          "edit": "Links expire at the last click.",
+          "runs": 3,
+          "passed": 3,
+          "errors": 0,
+          "score": "3/3"
+        },
+        {
+          "route": "rw4",
+          "kind": "spec_line",
+          "edit": "Links expire after 30 days, counted from the last click.",
+          "runs": 3,
+          "passed": 3,
+          "errors": 0,
+          "score": "3/3"
+        },
+        {
+          "route": "rw5",
+          "kind": "spec_line",
+          "edit": "Links never expire.",
+          "runs": 3,
+          "passed": 0,
+          "errors": 0,
+          "score": "0/3"
+        }
+      ],
+      "copies": [
+        {
+          "id": "swarm-expiry_from_last_click-rw1-r1",
+          "route": "rw1",
+          "kind": "spec_line",
+          "edit": "Links expire 30 days after their last click.",
+          "ok": true,
+          "branch": "swarm-expiry-from-last-click-rw1-r1-3138a8",
+          "builder": {
+            "route": "swarm-expiry_from_last_click-rw1-r1",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": true,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": true
+          },
+          "passed": true,
+          "wall_s": 7.45,
+          "timings_ms": {
+            "branch": 150.8,
+            "sandbox": 547.1,
+            "mount": 1487.9
+          }
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw2-r1",
+          "route": "rw2",
+          "kind": "spec_line",
+          "edit": "Links expire 30 days after they are created.",
+          "ok": true,
+          "branch": "swarm-expiry-from-last-click-rw2-r1-bd7b30",
+          "builder": {
+            "route": "swarm-expiry_from_last_click-rw2-r1",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": false
+          },
+          "passed": false,
+          "wall_s": 7.621,
+          "timings_ms": {
+            "branch": 293.9,
+            "sandbox": 435.6,
+            "mount": 1662.1
+          }
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw3-r1",
+          "route": "rw3",
+          "kind": "spec_line",
+          "edit": "Links expire at the last click.",
+          "ok": true,
+          "branch": "swarm-expiry-from-last-click-rw3-r1-009ce3",
+          "builder": {
+            "route": "swarm-expiry_from_last_click-rw3-r1",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": true,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": false
+          },
+          "passed": true,
+          "wall_s": 7.448,
+          "timings_ms": {
+            "branch": 269.1,
+            "sandbox": 455.8,
+            "mount": 1459.4
+          }
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw4-r1",
+          "route": "rw4",
+          "kind": "spec_line",
+          "edit": "Links expire after 30 days, counted from the last click.",
+          "ok": true,
+          "branch": "swarm-expiry-from-last-click-rw4-r1-008752",
+          "builder": {
+            "route": "swarm-expiry_from_last_click-rw4-r1",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": true,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": true
+          },
+          "passed": true,
+          "wall_s": 7.448,
+          "timings_ms": {
+            "branch": 151.3,
+            "sandbox": 546.2,
+            "mount": 1486.8
+          }
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw5-r1",
+          "route": "rw5",
+          "kind": "spec_line",
+          "edit": "Links never expire.",
+          "ok": true,
+          "branch": "swarm-expiry-from-last-click-rw5-r1-1d1922",
+          "builder": {
+            "route": "swarm-expiry_from_last_click-rw5-r1",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": false
+          },
+          "passed": false,
+          "wall_s": 7.447,
+          "timings_ms": {
+            "branch": 271.4,
+            "sandbox": 421.0,
+            "mount": 1385.8
+          }
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw1-r2",
+          "route": "rw1",
+          "kind": "spec_line",
+          "edit": "Links expire 30 days after their last click.",
+          "ok": true,
+          "branch": "swarm-expiry-from-last-click-rw1-r2-1905e5",
+          "builder": {
+            "route": "swarm-expiry_from_last_click-rw1-r2",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": true,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": true
+          },
+          "passed": true,
+          "wall_s": 7.447,
+          "timings_ms": {
+            "branch": 278.3,
+            "sandbox": 423.3,
+            "mount": 1480.9
+          }
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw2-r2",
+          "route": "rw2",
+          "kind": "spec_line",
+          "edit": "Links expire 30 days after they are created.",
+          "ok": true,
+          "branch": "swarm-expiry-from-last-click-rw2-r2-895e53",
+          "builder": {
+            "route": "swarm-expiry_from_last_click-rw2-r2",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": false
+          },
+          "passed": false,
+          "wall_s": 7.578,
+          "timings_ms": {
+            "branch": 299.6,
+            "sandbox": 512.8,
+            "mount": 1566.8
+          }
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw3-r2",
+          "route": "rw3",
+          "kind": "spec_line",
+          "edit": "Links expire at the last click.",
+          "ok": true,
+          "branch": "swarm-expiry-from-last-click-rw3-r2-fac6bb",
+          "builder": {
+            "route": "swarm-expiry_from_last_click-rw3-r2",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": true,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": false
+          },
+          "passed": true,
+          "wall_s": 6.987,
+          "timings_ms": {
+            "branch": 268.6,
+            "sandbox": 423.9,
+            "mount": 1408.0
+          }
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw4-r2",
+          "route": "rw4",
+          "kind": "spec_line",
+          "edit": "Links expire after 30 days, counted from the last click.",
+          "ok": true,
+          "branch": "swarm-expiry-from-last-click-rw4-r2-af2ff5",
+          "builder": {
+            "route": "swarm-expiry_from_last_click-rw4-r2",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": true,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": true
+          },
+          "passed": true,
+          "wall_s": 7.608,
+          "timings_ms": {
+            "branch": 293.8,
+            "sandbox": 517.0,
+            "mount": 1567.7
+          }
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw5-r2",
+          "route": "rw5",
+          "kind": "spec_line",
+          "edit": "Links never expire.",
+          "ok": true,
+          "branch": "swarm-expiry-from-last-click-rw5-r2-5ade42",
+          "builder": {
+            "route": "swarm-expiry_from_last_click-rw5-r2",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": false
+          },
+          "passed": false,
+          "wall_s": 7.435,
+          "timings_ms": {
+            "branch": 286.4,
+            "sandbox": 409.2,
+            "mount": 1404.8
+          }
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw1-r3",
+          "route": "rw1",
+          "kind": "spec_line",
+          "edit": "Links expire 30 days after their last click.",
+          "ok": true,
+          "branch": "swarm-expiry-from-last-click-rw1-r3-7d4da0",
+          "builder": {
+            "route": "swarm-expiry_from_last_click-rw1-r3",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": true,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": true
+          },
+          "passed": true,
+          "wall_s": 7.945,
+          "timings_ms": {
+            "branch": 273.9,
+            "sandbox": 1228.9,
+            "mount": 1403.1
+          }
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw2-r3",
+          "route": "rw2",
+          "kind": "spec_line",
+          "edit": "Links expire 30 days after they are created.",
+          "ok": true,
+          "branch": "swarm-expiry-from-last-click-rw2-r3-8037dd",
+          "builder": {
+            "route": "swarm-expiry_from_last_click-rw2-r3",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": false
+          },
+          "passed": false,
+          "wall_s": 8.363,
+          "timings_ms": {
+            "branch": 273.4,
+            "sandbox": 1790.1,
+            "mount": 1573.4
+          }
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw3-r3",
+          "route": "rw3",
+          "kind": "spec_line",
+          "edit": "Links expire at the last click.",
+          "ok": true,
+          "branch": "swarm-expiry-from-last-click-rw3-r3-1538fc",
+          "builder": {
+            "route": "swarm-expiry_from_last_click-rw3-r3",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": true,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": false
+          },
+          "passed": true,
+          "wall_s": 7.573,
+          "timings_ms": {
+            "branch": 275.8,
+            "sandbox": 438.8,
+            "mount": 1455.5
+          }
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw4-r3",
+          "route": "rw4",
+          "kind": "spec_line",
+          "edit": "Links expire after 30 days, counted from the last click.",
+          "ok": true,
+          "branch": "swarm-expiry-from-last-click-rw4-r3-cbbfa8",
+          "builder": {
+            "route": "swarm-expiry_from_last_click-rw4-r3",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": true,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": true
+          },
+          "passed": true,
+          "wall_s": 6.845,
+          "timings_ms": {
+            "branch": 244.3,
+            "sandbox": 428.4,
+            "mount": 1391.9
+          }
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw5-r3",
+          "route": "rw5",
+          "kind": "spec_line",
+          "edit": "Links never expire.",
+          "ok": true,
+          "branch": "swarm-expiry-from-last-click-rw5-r3-4e5f9d",
+          "builder": {
+            "route": "swarm-expiry_from_last_click-rw5-r3",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "wrote": [
+              "workspace/step_3.txt",
+              "workspace/step_4.txt",
+              "workspace/step_5.txt",
+              "workspace/step_6.txt",
+              "workspace/step_7.txt"
+            ],
+            "patch_applied": true,
+            "simulated_slip_step": null,
+            "builder": "fake",
+            "checks_hidden_during_build": true
+          },
+          "checks": {
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false,
+            "redirect_counts_click": true,
+            "stats_returns_json": false,
+            "all_steps_built": true,
+            "heldout_expiry_keeps_30_days": false
+          },
+          "passed": false,
+          "wall_s": 7.942,
+          "timings_ms": {
+            "branch": 284.0,
+            "sandbox": 1219.5,
+            "mount": 1606.4
+          }
+        }
+      ]
+    }
+  ]
+}

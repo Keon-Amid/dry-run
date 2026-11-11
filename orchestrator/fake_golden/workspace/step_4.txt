@@ -1,0 +1,1 @@
+GET /<code> redirects and counts the click.

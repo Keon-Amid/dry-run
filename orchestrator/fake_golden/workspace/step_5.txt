@@ -1,0 +1,1 @@
+Users may pick an alias instead of a generated code.

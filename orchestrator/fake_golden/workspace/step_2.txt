@@ -1,0 +1,1 @@
+POST /links creates a short link; codes are 6 digits.

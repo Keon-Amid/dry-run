@@ -1,0 +1,1 @@
+GET /links/<code>/stats returns the click count.

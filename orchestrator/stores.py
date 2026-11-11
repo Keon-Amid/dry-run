@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import base64
 import os
+import re
 import shutil
 import subprocess
 import time
@@ -20,6 +21,13 @@ from pathlib import Path
 
 MNT, TOOLS = "/mnt/agent", "/opt/dryrun"
 IMAGE = dict(base_image="python:3.13", vcpu_count=1, mem_size_mib=1024)
+
+
+def safe_name(name: str) -> str:
+    """Archil sandbox/branch name: <= 63 lowercase letters, digits, hyphens; a random suffix keeps it unique
+    (branches can't be deleted, so a rerun on the same disk must not reuse a name)."""
+    base = re.sub(r"-+", "-", re.sub(r"[^a-z0-9-]", "-", name.lower())).strip("-")[:55].strip("-") or "x"
+    return f"{base}-{uuid.uuid4().hex[:6]}"
 
 
 def _ms(t0: float) -> float:
@@ -81,7 +89,7 @@ class ArchilStore:
     def start_build(self, name: str) -> ArchilWorker:
         from archil._models import SandboxMountSpec
         t0 = time.perf_counter()
-        sb = self.client.sandboxes.create(name=name, idle_ttl_seconds=900, **IMAGE,
+        sb = self.client.sandboxes.create(name=safe_name(name), idle_ttl_seconds=900, **IMAGE,
                                           mounts=[SandboxMountSpec(disk=self.disk, path=MNT)])
         self.build = ArchilWorker(sb, MNT, None, {"sandbox": _ms(t0)})
         return self.build
@@ -95,12 +103,12 @@ class ArchilStore:
         """A fresh sandbox with a new branch of the disk at checkpoint_id mounted at MNT."""
         disk_id, ckpt = checkpoint_id.split("/", 1)
         assert disk_id == self.disk.id, f"checkpoint {checkpoint_id} is not on disk {self.disk.id}"
-        branch = f"{name}-{uuid.uuid4().hex[:6]}"
+        branch = safe_name(name)
         t0 = time.perf_counter()
         self.disk.create_branch(branch, ckpt)
         timings = {"branch": _ms(t0)}
         t0 = time.perf_counter()
-        sb = self.client.sandboxes.create(name=branch[:60], idle_ttl_seconds=900, **IMAGE)
+        sb = self.client.sandboxes.create(name=branch, idle_ttl_seconds=900, **IMAGE)
         timings["sandbox"] = _ms(t0)
         w = ArchilWorker(sb, MNT, branch, timings)
         try:
@@ -158,7 +166,7 @@ class LocalStore:
 
     def resume(self, checkpoint_id: str, name: str) -> LocalWorker:
         ckpt = checkpoint_id.rsplit("/", 1)[1]
-        branch = f"{name}-{uuid.uuid4().hex[:6]}"
+        branch = safe_name(name)  # same names as Archil, so local runs catch bad names too
         t0 = time.perf_counter()
         shutil.copytree(self.root / "checkpoints" / ckpt, self.root / "branches" / branch)
         return LocalWorker(self.root / "branches" / branch, self.root / "tools" / branch, branch,

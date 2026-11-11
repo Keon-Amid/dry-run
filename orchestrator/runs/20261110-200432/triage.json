@@ -1,0 +1,83 @@
+{
+  "run_id": "20261110-200432",
+  "checks": [
+    {
+      "check": "expiry_from_last_click",
+      "surfaced_step": 3,
+      "origin_step": 3,
+      "fails_on_golden": false,
+      "rebuild": {
+        "checkpoint_id": "dsk-0000000000190e99/c2",
+        "step": 3,
+        "fails": "3/3",
+        "errors": 0,
+        "wave": "triage-expiry_from_last_click"
+      },
+      "verdict": "real_problem",
+      "fork_checkpoint_id": "dsk-0000000000190e99/c2",
+      "suspects": {
+        "wave": "suspects-expiry_from_last_click",
+        "control": "0/3",
+        "suspects": [
+          {
+            "route": "spec-step3",
+            "kind": "spec_line",
+            "step": 3,
+            "old": "Links expire after 30 days.",
+            "new": "Links expire 30 days after the last click.",
+            "rule": null,
+            "score": "3/3"
+          },
+          {
+            "route": "rule-short-answers",
+            "kind": "rule_off",
+            "step": null,
+            "old": null,
+            "new": null,
+            "rule": "short-answers.md",
+            "score": "0/3"
+          }
+        ]
+      },
+      "culprit": {
+        "route": "spec-step3",
+        "kind": "spec_line",
+        "step": 3,
+        "old": "Links expire after 30 days.",
+        "new": "Links expire 30 days after the last click.",
+        "rule": null,
+        "score": "3/3"
+      },
+      "swarm": {
+        "branches": 15,
+        "rewrites": 5,
+        "winners": 2
+      },
+      "card": "Cause: spec step 3, \"Links expire after 30 days.\". Surfaced at step 3, origin step 3. Suspect test: 3/3 vs control 0/3. Swarm: 15 branches tried 5 rewrites, 2 pass 3/3 + held-out."
+    },
+    {
+      "check": "redirect_counts_click",
+      "surfaced_step": 4,
+      "origin_step": 4,
+      "fails_on_golden": false,
+      "rebuild": {
+        "checkpoint_id": "dsk-0000000000190e99/c3",
+        "step": 4,
+        "fails": "0/3",
+        "errors": 0,
+        "wave": "triage-redirect_counts_click"
+      },
+      "verdict": "model_slip",
+      "card": "redirect_counts_click: the model slipped. Rebuilding step 4 3 times fails 0/3."
+    },
+    {
+      "check": "stats_returns_json",
+      "surfaced_step": 6,
+      "origin_step": 6,
+      "fails_on_golden": true,
+      "verdict": "test_wrong",
+      "rebuild": null,
+      "card": "stats_returns_json: your test is wrong (it fails on golden/ too). The spec wasn't touched."
+    }
+  ]
+}

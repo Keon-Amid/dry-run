@@ -1,0 +1,337 @@
+{
+  "counterfactuals": {
+    "rebuild": "without a checkpoint, each copy replays steps 1..fork_step",
+    "restore": "git clone + dependency install restores code only, not the conversation"
+  },
+  "per_step_avg": {
+    "steps_in_run": 7,
+    "wall_s": 0.748,
+    "model_calls": "unknown",
+    "usd": "unknown"
+  },
+  "restore_baseline": {
+    "git_clone_plus_install_s": 11.036,
+    "branch_plus_mount_s": 2.298,
+    "source": "spikes/disk_spike.json"
+  },
+  "prices_per_mtok": {
+    "claude-fable-5-2": {
+      "input": 8.0,
+      "output": 40.0,
+      "cache_read": 0.2
+    },
+    "claude-opus-5-5": {
+      "input": 4.0,
+      "output": 20.0,
+      "cache_read": 0.2
+    },
+    "claude-sonnet-5-5": {
+      "input": 2.0,
+      "output": 10.0,
+      "cache_read": 0.1
+    },
+    "claude-haiku-5-5": {
+      "input": 0.1,
+      "output": 0.5,
+      "cache_read": 0.01
+    }
+  },
+  "waves": [
+    {
+      "wave": "triage-expiry_from_last_click",
+      "fork_step": 2,
+      "wall_s": 6.018,
+      "copies": [
+        {
+          "id": "triage-expiry_from_last_click-rebuild-r1",
+          "branch_ms": 118.7,
+          "mount_ms": 1319.3,
+          "wall_s": 4.88,
+          "sandbox_ms": 435.2
+        },
+        {
+          "id": "triage-expiry_from_last_click-rebuild-r2",
+          "branch_ms": 132.1,
+          "mount_ms": 1355.5,
+          "wall_s": 4.821,
+          "sandbox_ms": 329.7
+        },
+        {
+          "id": "triage-expiry_from_last_click-rebuild-r3",
+          "branch_ms": 120.3,
+          "mount_ms": 1313.9,
+          "wall_s": 5.076,
+          "sandbox_ms": 384.0
+        }
+      ],
+      "n_copies": 3,
+      "steps_reused_per_copy": 2,
+      "steps_reused": 6,
+      "sum_copy_s": 14.777,
+      "parallel_speedup": 2.46,
+      "saved": {
+        "steps": 6,
+        "minutes": 0.07,
+        "model_calls": "unknown",
+        "usd": "unknown",
+        "restore_minutes_vs_git": 0.48
+      }
+    },
+    {
+      "wave": "triage-redirect_counts_click",
+      "fork_step": 3,
+      "wall_s": 7.565,
+      "copies": [
+        {
+          "id": "triage-redirect_counts_click-rebuild-r1",
+          "branch_ms": 123.2,
+          "mount_ms": 1213.4,
+          "wall_s": 6.681,
+          "sandbox_ms": 2966.8
+        },
+        {
+          "id": "triage-redirect_counts_click-rebuild-r2",
+          "branch_ms": 195.4,
+          "mount_ms": 1405.2,
+          "wall_s": 4.591,
+          "sandbox_ms": 324.9
+        },
+        {
+          "id": "triage-redirect_counts_click-rebuild-r3",
+          "branch_ms": 192.8,
+          "mount_ms": 1230.0,
+          "wall_s": 4.117,
+          "sandbox_ms": 334.3
+        }
+      ],
+      "n_copies": 3,
+      "steps_reused_per_copy": 3,
+      "steps_reused": 9,
+      "sum_copy_s": 15.389,
+      "parallel_speedup": 2.03,
+      "saved": {
+        "steps": 9,
+        "minutes": 0.11,
+        "model_calls": "unknown",
+        "usd": "unknown",
+        "restore_minutes_vs_git": 0.48
+      }
+    },
+    {
+      "wave": "suspects-expiry_from_last_click",
+      "fork_step": 2,
+      "wall_s": 30.637,
+      "copies": [
+        {
+          "id": "suspects-expiry_from_last_click-spec-step3-r1",
+          "branch_ms": 141.3,
+          "mount_ms": 1334.0,
+          "wall_s": 6.318,
+          "sandbox_ms": 1202.0
+        },
+        {
+          "id": "suspects-expiry_from_last_click-rule-short-answers-r1",
+          "branch_ms": 151.6,
+          "mount_ms": 1211.5,
+          "wall_s": 5.25,
+          "sandbox_ms": 507.6
+        },
+        {
+          "id": "suspects-expiry_from_last_click-control-r1",
+          "branch_ms": 242.4,
+          "mount_ms": 1298.8,
+          "wall_s": 6.199,
+          "sandbox_ms": 1135.0
+        },
+        {
+          "id": "suspects-expiry_from_last_click-spec-step3-r2",
+          "branch_ms": 145.4,
+          "mount_ms": 1265.8,
+          "wall_s": 5.807,
+          "sandbox_ms": 511.2
+        },
+        {
+          "id": "suspects-expiry_from_last_click-rule-short-answers-r2",
+          "branch_ms": 242.9,
+          "mount_ms": 1457.6,
+          "wall_s": 29.795,
+          "sandbox_ms": 24959.1
+        },
+        {
+          "id": "suspects-expiry_from_last_click-control-r2",
+          "branch_ms": 249.5,
+          "mount_ms": 1647.9,
+          "wall_s": 5.846,
+          "sandbox_ms": 548.5
+        },
+        {
+          "id": "suspects-expiry_from_last_click-spec-step3-r3",
+          "branch_ms": 253.6,
+          "mount_ms": 1519.4,
+          "wall_s": 5.945,
+          "sandbox_ms": 398.1
+        },
+        {
+          "id": "suspects-expiry_from_last_click-rule-short-answers-r3",
+          "branch_ms": 147.7,
+          "mount_ms": 1263.8,
+          "wall_s": 5.249,
+          "sandbox_ms": 508.1
+        },
+        {
+          "id": "suspects-expiry_from_last_click-control-r3",
+          "branch_ms": 254.7,
+          "mount_ms": 1532.9,
+          "wall_s": 7.036,
+          "sandbox_ms": 1321.1
+        }
+      ],
+      "n_copies": 9,
+      "steps_reused_per_copy": 2,
+      "steps_reused": 18,
+      "sum_copy_s": 77.445,
+      "parallel_speedup": 2.53,
+      "saved": {
+        "steps": 18,
+        "minutes": 0.22,
+        "model_calls": "unknown",
+        "usd": "unknown",
+        "restore_minutes_vs_git": 1.42
+      }
+    },
+    {
+      "wave": "swarm-expiry_from_last_click",
+      "fork_step": 2,
+      "wall_s": 9.983,
+      "copies": [
+        {
+          "id": "swarm-expiry_from_last_click-rw1-r1",
+          "branch_ms": 150.8,
+          "mount_ms": 1487.9,
+          "wall_s": 7.45,
+          "sandbox_ms": 547.1
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw2-r1",
+          "branch_ms": 293.9,
+          "mount_ms": 1662.1,
+          "wall_s": 7.621,
+          "sandbox_ms": 435.6
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw3-r1",
+          "branch_ms": 269.1,
+          "mount_ms": 1459.4,
+          "wall_s": 7.448,
+          "sandbox_ms": 455.8
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw4-r1",
+          "branch_ms": 151.3,
+          "mount_ms": 1486.8,
+          "wall_s": 7.448,
+          "sandbox_ms": 546.2
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw5-r1",
+          "branch_ms": 271.4,
+          "mount_ms": 1385.8,
+          "wall_s": 7.447,
+          "sandbox_ms": 421.0
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw1-r2",
+          "branch_ms": 278.3,
+          "mount_ms": 1480.9,
+          "wall_s": 7.447,
+          "sandbox_ms": 423.3
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw2-r2",
+          "branch_ms": 299.6,
+          "mount_ms": 1566.8,
+          "wall_s": 7.578,
+          "sandbox_ms": 512.8
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw3-r2",
+          "branch_ms": 268.6,
+          "mount_ms": 1408.0,
+          "wall_s": 6.987,
+          "sandbox_ms": 423.9
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw4-r2",
+          "branch_ms": 293.8,
+          "mount_ms": 1567.7,
+          "wall_s": 7.608,
+          "sandbox_ms": 517.0
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw5-r2",
+          "branch_ms": 286.4,
+          "mount_ms": 1404.8,
+          "wall_s": 7.435,
+          "sandbox_ms": 409.2
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw1-r3",
+          "branch_ms": 273.9,
+          "mount_ms": 1403.1,
+          "wall_s": 7.945,
+          "sandbox_ms": 1228.9
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw2-r3",
+          "branch_ms": 273.4,
+          "mount_ms": 1573.4,
+          "wall_s": 8.363,
+          "sandbox_ms": 1790.1
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw3-r3",
+          "branch_ms": 275.8,
+          "mount_ms": 1455.5,
+          "wall_s": 7.573,
+          "sandbox_ms": 438.8
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw4-r3",
+          "branch_ms": 244.3,
+          "mount_ms": 1391.9,
+          "wall_s": 6.845,
+          "sandbox_ms": 428.4
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw5-r3",
+          "branch_ms": 284.0,
+          "mount_ms": 1606.4,
+          "wall_s": 7.942,
+          "sandbox_ms": 1219.5
+        }
+      ],
+      "n_copies": 15,
+      "steps_reused_per_copy": 2,
+      "steps_reused": 30,
+      "sum_copy_s": 113.137,
+      "parallel_speedup": 11.33,
+      "saved": {
+        "steps": 30,
+        "minutes": 0.37,
+        "model_calls": "unknown",
+        "usd": "unknown",
+        "restore_minutes_vs_git": 2.32
+      }
+    }
+  ],
+  "totals_saved": {
+    "steps": 63,
+    "minutes": 0.77,
+    "model_calls": "unknown",
+    "usd": "unknown",
+    "restore_minutes_vs_git": 4.7,
+    "copies": 30,
+    "wall_s": 54.203,
+    "sum_copy_s": 220.748
+  }
+}

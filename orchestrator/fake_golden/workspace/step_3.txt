@@ -1,0 +1,1 @@
+Links expire 30 days after their last click.

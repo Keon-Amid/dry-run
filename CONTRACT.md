@@ -86,21 +86,30 @@ verdicts before the first run. Fallback `spec-b.md`: ambiguity + decoy + control
 - **P3 Builder & page:** builder loop (conversation saved to disk), triage, swarm rewrite prompt, cards page, pitch.
 
 Run files between areas: `run.json`, `triage.json`, `results.json`, `swarm.json`, `archil.json`. The page is built
-against fakes first.
+against fakes first. `python -m orchestrator.pipeline [--local]` writes all five to `orchestrator/runs/<stamp>/`
+(P1); `orchestrator/runs/20261110-200432/` is a real Archil run with the stub builder and checks.
 
-- **`run.json`** optional fields, per build step: `{"step", "wall_s", "model_calls", "usage"}`, where `usage` is the
-  sum of the API's `usage` objects for that step (`input_tokens`, `output_tokens`, `cache_creation_input_tokens`,
-  `cache_read_input_tokens`), plus a top-level `"model"`. `archil.json` averages them; any that are missing make the
-  matching savings `"unknown"`, nothing breaks.
-- **`archil.json`** (P1, `orchestrator/archil_log.py`, rewritten after each wave): what branching saved.
-  `waves[]`: `{wave, fork_step, wall_s, copies[{id, branch_ms, sandbox_ms, mount_ms, wall_s}], steps_reused, sum_copy_s,
-  parallel_speedup, saved{steps, minutes, model_calls, usd, restore_minutes_vs_git}}`; `totals_saved` (same keys,
-  plus `copies`); `per_step_avg` (from `run.json`); `restore_baseline` (git clone + install vs branch + mount, from
-  `spikes/disk_spike.json`). "Saved" = each copy would otherwise replay steps `1..fork_step`.
-- **`results.json`** (P1, `orchestrator/wave.py`, one entry appended per wave): `waves[]`: `{wave, checkpoint_id,
-  fork_step, to_step, n, wall_s, routes[{route, edit, runs, passed, errors, score: "3/3"}], copies[{id, route, kind,
-  edit, branch, ok, passed, checks{name: bool}, builder{...the worker's JSON line}, wall_s, timings_ms, error?}]}`.
-  Run files live in `orchestrator/runs/<stamp>/` next to `run.json` and `archil.json`.
+- **`run.json`** (the build): `{run_id, disk_id, store, builder, n_steps, model, simulated_slip, checkpoints{"k":
+  checkpoint_id}, final_checks{name: bool}, steps[{step, wall_s, wrote[files], checks{name: bool},
+  checks_hidden_during_build, checkpoint_ms}]}`. Optional per step, filled by the builder when it can:
+  `model_calls`, `usage` (the sum of the API's `usage` objects: `input_tokens`, `output_tokens`,
+  `cache_creation_input_tokens`, `cache_read_input_tokens`); missing ones make the matching savings `"unknown"`.
+- **`triage.json`**: `checks[{check, verdict: test_wrong|model_slip|real_problem|inconclusive, surfaced_step,
+  origin_step, fails_on_golden, rebuild{checkpoint_id, step, fails: "3/3", errors, wave}|null, fork_checkpoint_id?,
+  suspects{wave, control: "0/3", suspects[{route, kind, step, old, new, rule, score}]}?, culprit{...one suspect}|null?,
+  swarm{branches, rewrites, winners}?, card}]`. `card` is the one-line card text, built from these fields.
+- **`results.json`** (every wave, appended): `waves[{wave, purpose: triage|suspects|swarm, check, targets,
+  checkpoint_id, fork_step, to_step, n, wall_s, routes[{route, kind, edit, runs, passed, errors, score}],
+  copies[{id, route, kind, edit, branch, ok, passed, checks{name: bool}, builder{...the worker's JSON line},
+  wall_s, timings_ms{branch, sandbox, mount}, error?}]}]`.
+- **`swarm.json`**: `swarms[{check, culprit, fork_checkpoint_id, wave, heldout_checks, n_branches, n_rewrites,
+  rewrites[{route, text, visible: "3/3", heldout: "3/3", regressions[checks], errors, winner}], winners[routes]}]`.
+  A winner passes the visible check and its held-out checks 3/3 with no regression against the control.
+- **`archil.json`**: what branching saved. `waves[{wave, fork_step, wall_s, copies[{id, branch_ms, sandbox_ms,
+  mount_ms, wall_s}], steps_reused, sum_copy_s, parallel_speedup, saved{steps, minutes, model_calls, usd,
+  restore_minutes_vs_git}}]`, `totals_saved` (same keys plus `copies`), `per_step_avg` (from `run.json`),
+  `restore_baseline` (git clone + install, from `spikes/disk_spike.json`). "Saved" = each copy would otherwise
+  replay steps `1..fork_step`.
 
 ## Clock (0:00 = 7:00 PM)
 
