@@ -97,19 +97,22 @@ against fakes first. `python -m orchestrator.pipeline [--local]` writes all five
 - **`triage.json`**: `checks[{check, verdict: test_wrong|model_slip|real_problem|inconclusive, surfaced_step,
   origin_step, fails_on_golden, rebuild{checkpoint_id, step, fails: "3/3", errors, invalid, wave}|null, fork_checkpoint_id?,
   suspects{wave, control: "0/3", suspects[{route, kind, step, old, new, rule, score}]}?, culprit{...one suspect}|null?,
-  swarm{branches, rewrites, winners}?, card}]`. `card` is the one-line card text, built from these fields.
-- **`results.json`** (every wave, appended): `waves[{wave, purpose: triage|suspects|swarm, check, targets,
+  swarm{branches, rewrites, winners}?, confirm{passed, text}?, card}]`. `card` is the one-line card text, built from these fields.
+- **`results.json`** (every wave, appended): `waves[{wave, purpose: triage|suspects|swarm|confirm|smoke, check, targets,
   checkpoint_id, fork_step, to_step, n, wall_s, routes[{route, kind, edit, runs, graded, passed, errors, invalid,
   score: "passed/graded"}],
   copies[{id, route, kind, edit, branch, ok, invalid?, passed, checks{name: bool}, builder{...RESULT json + exit_code},
   wall_s, timings_ms{branch, sandbox, mount}, error?}]}]`.
 - **`swarm.json`**: `swarms[{check, culprit, fork_checkpoint_id, wave, heldout_checks, n_branches, n_rewrites,
-  rewrites[{route, text, visible: "3/3", heldout: "3/3", regressions[checks], errors, winner}], winners[routes]}]`.
+  rewrites[{route, text, visible: "3/3", heldout: "3/3", regressions[checks], errors, winner}], winners[routes],
+  confirm{wave, route, text, ok, passed, regressions, checks, error}|null}]`. CONFIRM = one fresh build from `c0` with
+  the shortest winner.
   A winner passes the visible check and its held-out checks 3/3 with no regression against the control.
 - **`archil.json`**: what branching saved. `waves[{wave, fork_step, wall_s, copies[{id, branch_ms, sandbox_ms,
   mount_ms, wall_s}], steps_reused, sum_copy_s, parallel_speedup, saved{steps, minutes, model_calls, usd,
   restore_minutes_vs_git}}]`, `totals_saved` (same keys plus `copies`), `per_step_avg` (from `run.json`),
-  `restore_baseline` (git clone + install, from `spikes/disk_spike.json`). "Saved" = each copy would otherwise
+  `restore_baseline` (git clone + install, from `spikes/disk_spike.json`), `spent{model, build, waves{name}, total}`
+  (`{model_calls, usd}` each, from the builder's per-step usage), `stages_s` (wall seconds per pipeline stage). "Saved" = each copy would otherwise
   replay steps `1..fork_step`.
 
 ## Clock (0:00 = 7:00 PM)

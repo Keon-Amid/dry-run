@@ -98,6 +98,12 @@ class ArchilLog:
         self.avg = step_averages(run)
         self.restore = restore_baseline(json.loads(Path(spike_json).read_text())) if spike_json else None
         self.waves: list[dict] = []
+        self.spent: dict | None = None   # what the run itself cost: model calls and dollars, build and waves
+        self.stages_s: dict = {}         # wall seconds per pipeline stage
+
+    def set_spent(self, spent: dict, stages_s: dict) -> None:
+        self.spent, self.stages_s = spent, stages_s
+        self.write()
 
     def wave(self, w: Wave) -> dict:
         n = len(w.copies)
@@ -148,6 +154,8 @@ class ArchilLog:
             "prices_per_mtok": PRICES,
             "waves": self.waves,
             "totals_saved": self.totals(),
+            "spent": self.spent,
+            "stages_s": self.stages_s,
         }
         tmp = self.out.with_suffix(".json.tmp")
         tmp.write_text(json.dumps(doc, indent=2) + "\n")
@@ -169,3 +177,32 @@ if __name__ == "__main__":  # python -m orchestrator.archil_log RUN_DIR
     import sys
     doc = relog(Path(sys.argv[1]), Path(__file__).resolve().parent.parent / "spikes" / "disk_spike.json")
     print(json.dumps(doc["totals_saved"], indent=1))
+
+
+def spent(run: dict, results: dict) -> dict:
+    """Model calls and dollars the run spent, from the builder's per-step usage in run.json and results.json."""
+    model = run.get("model")
+
+    def tally(step_lists) -> dict:
+        calls, usd, have, priced = 0, 0.0, False, True
+        for steps in step_lists:
+            for s in steps or []:
+                if "model_calls" not in s:
+                    continue
+                have = True
+                calls += s["model_calls"]
+                try:
+                    usd += usage_usd(s.get("model") or model, s.get("usage") or {})
+                except KeyError:  # a model with no price in PRICES
+                    priced = False
+        if not have:
+            return {"model_calls": UNKNOWN, "usd": UNKNOWN}
+        return {"model_calls": calls, "usd": round(usd, 4) if priced else UNKNOWN}
+
+    out = {"model": model, "build": tally([run.get("steps")]), "waves": {}}
+    for w in results.get("waves", []):
+        out["waves"][w["wave"]] = tally([(c.get("builder") or {}).get("steps") for c in w["copies"]])
+    parts = [out["build"], *out["waves"].values()]
+    out["total"] = {k: (UNKNOWN if any(p[k] == UNKNOWN for p in parts) else round(sum(p[k] for p in parts), 4))
+                    for k in ("model_calls", "usd")}
+    return out

@@ -1,13 +1,19 @@
 """The whole pipeline on LocalStore (plain folders, fake builder, fake checks). No Archil, no API."""
+import hashlib
 import json
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
+
+import orchestrator.wave as wave_mod
 
 from orchestrator.archil_log import ArchilLog
 from orchestrator.pipeline import pipeline
 from orchestrator.stores import LocalStore
-from orchestrator.wave import GUARD_EXIT, HERE, install_builder, outcome, parse_result, run_builder
+from orchestrator.wave import GUARD_EXIT, HERE, Kit, install_builder, outcome, parse_result, run_builder, run_wave
 
 
 class PipelineTest(unittest.TestCase):
@@ -37,11 +43,22 @@ class PipelineTest(unittest.TestCase):
         rw3 = next(r for r in sw["rewrites"] if r["route"] == "rw3")
         self.assertEqual((rw3["visible"], rw3["heldout"], rw3["winner"]), ("3/3", "0/3", False))  # held-out stops it
         self.assertIn("Swarm: 15 branches tried 5 rewrites, 2 pass 3/3 + held-out.", t["card"])
+        self.assertIn("Confirmed: a fresh build from step 0 with it passes.", t["card"])
+
+    def test_confirm_is_a_fresh_build_with_the_shortest_winner(self):
+        sw = self.files["swarm"]["swarms"][0]
+        self.assertEqual(sw["confirm"]["route"], "rw1")  # rw1 is shorter than rw4
+        self.assertTrue(sw["confirm"]["passed"])
+        cw = next(w for w in self.files["results"]["waves"] if w["purpose"] == "confirm")
+        self.assertEqual((cw["fork_step"], cw["n"]), (0, 1))
+        self.assertEqual(cw["copies"][0]["builder"]["built"], [1, 2, 3, 4, 5, 6, 7])  # from step 0, all 7 steps
 
     def test_run_files(self):
         purposes = [w["purpose"] for w in self.files["results"]["waves"]]
-        self.assertEqual(purposes, ["triage", "triage", "suspects", "swarm"])  # the decoy needs no wave
-        self.assertEqual(len(self.files["archil"]["waves"]), 4)
+        self.assertEqual(purposes, ["triage", "triage", "suspects", "swarm", "confirm"])  # the decoy needs no wave
+        self.assertEqual(len(self.files["archil"]["waves"]), 5)
+        self.assertEqual(self.files["archil"]["spent"]["total"]["model_calls"], "unknown")  # stub: no model calls
+        self.assertIn("build", self.files["archil"]["stages_s"])
         self.assertTrue(all(c["ok"] for w in self.files["results"]["waves"] for c in w["copies"]))
         self.assertEqual(self.files["run"]["simulated_slip"]["step"], 4)
 
@@ -118,6 +135,109 @@ class BuilderHandoffTest(unittest.TestCase):
             "sys.exit(2)\n")
         res = run_builder(w, 1, 1, "copy")
         self.assertEqual((res["exit_code"], outcome(res)), (2, "invalid"))
+
+
+class BrendanPatchTest(unittest.TestCase):
+    def test_every_patch_the_pipeline_sends_passes_brendans_validator(self):
+        from builder.patch import load_patch
+        tmp = Path(tempfile.mkdtemp())
+        store, run_dir = LocalStore(tmp / "store"), tmp / "run"
+        pipeline(store, run_dir)
+        sent = list(store.root.rglob("patch.json"))
+        self.assertGreater(len(sent), 20)
+        for p in sent:
+            load_patch(str(p))  # raises PatchError on any field it rejects (e.g. a control patch without a step)
+
+
+class SecretsTest(unittest.TestCase):
+    def test_key_reaches_the_builder_env_but_never_a_file(self):
+        secret = "sk-ant-test-NEVER-ON-DISK-1234"
+        tmp = Path(tempfile.mkdtemp())
+        pkg = tmp / "pkg" / "builder"
+        pkg.mkdir(parents=True)
+        (pkg / "__init__.py").write_text("")
+        digest = hashlib.sha256(secret.encode()).hexdigest()  # the fake builder knows only the hash
+        (pkg / "run.py").write_text(
+            "import hashlib,json,os\nk=os.environ.get('ANTHROPIC_API_KEY','').encode()\n"
+            "print('RESULT ' + json.dumps({'ok': hashlib.sha256(k).hexdigest() == %r}))\n" % digest)
+        store = LocalStore(tmp / "store")
+        w = store.start_build("sec")
+        install_builder(w, pkg)
+        res = run_builder(w, 1, 1, "build", kit=Kit(builder_src=pkg, env={"ANTHROPIC_API_KEY": secret}))
+        self.assertTrue(res["ok"])  # the builder saw the key
+        for f in tmp.rglob("*"):
+            if f.is_file():
+                self.assertNotIn(secret, f.read_text(errors="ignore"), f)
+
+
+class ConcurrencyAndRateLimitTest(unittest.TestCase):
+    def _pkg(self, tmp: Path, body: str) -> Path:
+        pkg = tmp / "pkg" / "builder"
+        pkg.mkdir(parents=True)
+        (pkg / "__init__.py").write_text("")
+        (pkg / "run.py").write_text(body)
+        return pkg
+
+    def test_max_builders_caps_concurrent_builder_processes(self):
+        tmp = Path(tempfile.mkdtemp())
+        log_path = tmp / "spans.log"
+        pkg = self._pkg(tmp, "import json,os,time\nf=os.environ['SPANS']\nopen(f,'a').write(f'+ {time.time()}\\n')\n"
+                             "time.sleep(0.3)\nopen(f,'a').write(f'- {time.time()}\\n')\n"
+                             "print('RESULT ' + json.dumps({'ok': True}))\n")
+        checks = tmp / "nochecks.py"
+        checks.write_text("import json\nprint(json.dumps({}))\n")
+        store = LocalStore(tmp / "store")
+        w = store.start_build("cap")
+        w.put(f"{w.mnt}/state.json", "{}")
+        ck = store.save(0)
+        kit = Kit(builder_src=pkg, checks_src=checks, env={"SPANS": str(log_path)}, max_builders=2)
+        log = ArchilLog(None, tmp / "archil.json")
+        rec = run_wave(store, ck, [{"route": "x", "kind": "none"}], 6, wave="cap", to_step=1, run_dir=tmp,
+                       log=log, targets=[], purpose="test", kit=kit)
+        self.assertTrue(all(c["ok"] for c in rec["copies"]), [c.get("error") for c in rec["copies"]])
+        running = peak = 0
+        events = sorted((float(l.split()[1]), l.split()[0]) for l in log_path.read_text().splitlines())
+        for _, kind in events:
+            running += 1 if kind == "+" else -1
+            peak = max(peak, running)
+        self.assertEqual(peak, 2)
+
+    def test_rate_limited_copy_backs_off_and_resumes_from_its_last_step(self):
+        calls = []
+        replies = [{"ok": False, "error": "APIError: 429 rate_limit_error", "last_done": 3, "steps": [{"step": 3}]},
+                   {"ok": True, "last_done": 7, "steps": [{"step": s} for s in range(4, 8)]}]
+
+        def fake_run_builder(w, frm, to, route, patch, env, kit, max_calls=None):
+            calls.append((frm, to, patch))
+            return replies[len(calls) - 1]
+
+        sleeps = []
+        with mock.patch.object(wave_mod, "run_builder", fake_run_builder):
+            res = wave_mod.run_steps(None, 3, 7, "r", {"kind": "spec_line"}, Kit(), sleep=sleeps.append)
+        self.assertEqual(calls, [(3, 7, {"kind": "spec_line"}), (4, 7, None)])  # resumed at 4, patch not resent
+        self.assertEqual((res["ok"], res["rate_limit_resumes"], len(sleeps)), (True, 1, 1))
+        self.assertEqual([s["step"] for s in res["steps"]], [3, 4, 5, 6, 7])
+
+
+class AssertChecksAdapterTest(unittest.TestCase):
+    def test_toy_canaries_become_checks(self):
+        from orchestrator.assert_checks import build_checks_file
+        from orchestrator.pipeline import TOY
+        tmp = Path(tempfile.mkdtemp())
+        f = build_checks_file(TOY, tmp / "toy_checks.py")
+        ws = tmp / "disk" / "workspace"
+        ws.mkdir(parents=True)
+        (ws / "hello.py").write_text('print("hello")\n')
+        run = lambda *a: json.loads(subprocess.run([sys.executable, str(f), *a], capture_output=True, text=True,
+                                                   check=True).stdout)
+        self.assertEqual(run("--disk", str(tmp / "disk"), "--at-step", "1"), {})  # make_code not defined yet
+        (ws / "code.py").write_text("def make_code() -> str:\n    return '123456'\n")
+        self.assertEqual(run("--disk", str(tmp / "disk"), "--at-step", "2"), {"CHECK-SOURCE-91bc": True})
+        (ws / "code.py").write_text("def make_code() -> str:\n    return '123'\n")
+        self.assertEqual(run("--disk", str(tmp / "disk"), "--at-step", "2"), {"CHECK-SOURCE-91bc": False})
+        meta = run("--meta")
+        self.assertFalse(meta["HELDOUT-SECRET-7f3a"]["supported"])  # prose, not an assert: never graded
+        self.assertTrue(meta["HELDOUT-SECRET-7f3a"]["heldout"])
 
 
 class SafeNameTest(unittest.TestCase):

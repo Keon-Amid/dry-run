@@ -76,6 +76,7 @@ def _args():
     ap.add_argument("--to-step", type=int, required=True, help="last step to run")
     ap.add_argument("--patch")
     ap.add_argument("--route", required=True)
+    ap.add_argument("--max-calls", type=int, default=25, help="accepted like brendan's builder; the stub makes no calls")
     return (ap.parse_args(),)
 
 

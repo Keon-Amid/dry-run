@@ -1,20 +1,26 @@
 """Build with a checkpoint per step, then waves of branches from a checkpoint.
 
-build(store, spec, rules, steps, run_dir)        -> run.json (checkpoint ids, per-step wall time and checks)
-run_wave(store, checkpoint_id, edits, n, ...)    -> one wave appended to results.json, logged to archil.json
+build(store, spec, rules, steps, run_dir, kit)              -> run.json (checkpoints, per-step time, checks, usage)
+run_wave(store, checkpoint_id, edits, n, ..., kit=kit)      -> one wave appended to results.json, logged to archil.json
 
 Each copy: resume (branch + sandbox + mount) -> builder with its edit -> grade -> delete the sandbox.
 Checks never sit where the agent can read them: they are copied into the sandbox only after the builder exits,
 removed right after grading, and every builder run starts behind a guard that fails if any check is visible.
+Secrets (ANTHROPIC_API_KEY) reach the builder only through the exec environment (Kit.env), never a file.
+Model calls: at most Kit.max_builders builder processes run at once across all waves (each makes its calls one at a
+time); the builder retries 429s itself, and a copy that still dies on a rate limit is resumed from its last step.
 """
 from __future__ import annotations
 
 import base64
 import json
 import os
+import random
 import shlex
+import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass, field
 from pathlib import Path
 
 from orchestrator.archil_log import ArchilLog, Copy, Wave
@@ -22,8 +28,30 @@ from orchestrator.archil_log import ArchilLog, Copy, Wave
 HERE = Path(__file__).resolve().parent
 STUB_BUILDER = HERE / "stub_builder" / "builder"     # same CLI and RESULT line as brendan's builder/
 REAL_BUILDER = HERE.parent / "builder"               # brendan's package, used with --builder real
-CHECKS = "fake_checks.py"                            # swap for P2's checks when they land
+STUB_CHECKS = HERE / "fake_checks.py"                # swap for P2's checks when they land
 GUARD_EXIT = 97
+RATE_LIMIT_RETRIES = 3
+
+
+@dataclass
+class Kit:
+    builder_src: Path = STUB_BUILDER
+    checks_src: Path = STUB_CHECKS
+    env: dict = field(default_factory=dict, repr=False)  # exec env for the builder only (keys); never written
+    max_builders: int = 64                               # builder processes running at once, across all waves
+    branch_max_calls: int | None = None                  # --max-calls for wave copies (brendan: 8-12); None = default
+    _sem: threading.BoundedSemaphore = field(init=False, repr=False)
+
+    def __post_init__(self):
+        self._sem = threading.BoundedSemaphore(self.max_builders)
+
+    @property
+    def checks_name(self) -> str:
+        return Path(self.checks_src).name
+
+    @property
+    def builder_label(self) -> str:
+        return "stub" if Path(self.builder_src) == STUB_BUILDER else "builder/ (real)"
 
 
 def _write_json(path: Path, doc) -> None:
@@ -56,19 +84,24 @@ def checks_dir(w) -> str:
 
 
 def run_builder(w, from_step: int, to_step: int, route: str, patch: dict | None = None,
-                env: dict | None = None) -> dict:
+                env: dict | None = None, kit: Kit | None = None, max_calls: int | None = None) -> dict:
     """Run steps from_step..to_step (from_step runs first; steps 1..from_step-1 must already be on the disk).
     Behind a guard: no checks dir, and no check file anywhere on the agent's disk.
     Returns the builder's RESULT json whatever the exit code (brendan's: 0 ok, 2 capped/invalid, 1 error);
     raises only when there is no RESULT line."""
+    kit = kit or Kit()
     patch_arg = ""
     if patch and patch.get("kind", "none") != "none":
         w.put(f"{w.tools}/patch.json", json.dumps(patch))
         patch_arg = f" --patch {w.tools}/patch.json"
-    guard = (f"if [ -e {checks_dir(w)} ] || find {w.mnt} -name {CHECKS} -print 2>/dev/null | grep -q .; "
+    if max_calls:
+        patch_arg += f" --max-calls {max_calls}"
+    guard = (f"if [ -e {checks_dir(w)} ] || find {w.mnt} -name {kit.checks_name} -print 2>/dev/null | grep -q .; "
              f"then echo 'checks visible to the builder' >&2; exit {GUARD_EXIT}; fi")
-    code, out, err = w.exec(f"{guard}; cd {pkg_dir(w)} && python3 -m builder.run --disk {w.mnt}"
-                            f" --from-step {from_step} --to-step {to_step} --route {route}{patch_arg}", env=env)
+    with kit._sem:  # caps concurrent model-calling processes
+        code, out, err = w.exec(f"{guard}; cd {pkg_dir(w)} && python3 -m builder.run --disk {w.mnt}"
+                                f" --from-step {from_step} --to-step {to_step} --route {route}{patch_arg}",
+                                env={**kit.env, **(env or {})} or None)
     if code == GUARD_EXIT:
         raise RuntimeError(f"exit {GUARD_EXIT}: checks visible to the builder")
     try:
@@ -85,6 +118,28 @@ def outcome(res: dict) -> str:
     return "invalid" if res.get("invalid") or res.get("capped") else "error"
 
 
+def rate_limited(res: dict) -> bool:
+    e = str(res.get("error") or "").lower()
+    return outcome(res) == "error" and ("429" in e or "rate_limit" in e or "rate limit" in e or "529" in e)
+
+
+def run_steps(w, from_step: int, to_step: int, route: str, patch: dict | None, kit: Kit,
+              env: dict | None = None, sleep=time.sleep, max_calls: int | None = None) -> dict:
+    """run_builder, plus: if the builder still dies on a rate limit after its own retries, back off and resume
+    from its last finished step (the patch has landed by then, so it isn't sent again). `retries` is recorded."""
+    res = run_builder(w, from_step, to_step, route, patch, env, kit, max_calls)
+    retries, steps = 0, list(res.get("steps") or [])
+    while rate_limited(res) and retries < RATE_LIMIT_RETRIES:
+        retries += 1
+        sleep(min(60.0, 5.0 * 2 ** retries) * (0.5 + random.random() / 2))
+        nxt = (res.get("last_done") or from_step - 1) + 1
+        if nxt > to_step:
+            break
+        res = run_builder(w, nxt, to_step, route, None, env, kit, max_calls)
+        steps += list(res.get("steps") or [])
+    return {**res, "steps": steps, "rate_limit_resumes": retries}
+
+
 SNAPSHOT = ("import hashlib,json,os,sys;r=sys.argv[1];o={}\n"
             "for d,ds,fs in os.walk(r):\n"
             " ds[:]=[x for x in ds if x!='.git']\n"
@@ -98,43 +153,45 @@ def snapshot(w) -> dict:
     return json.loads(w.must(f"python3 -c {shlex.quote(SNAPSHOT)} {w.mnt}"))
 
 
-def grade(w, at_step: int) -> dict:
+def grade(w, at_step: int, kit: Kit | None = None) -> dict:
     """Copy the checks in (builder has exited), grade, remove them, all in one exec."""
-    d, b64 = checks_dir(w), base64.b64encode((HERE / CHECKS).read_text().encode()).decode()
-    out = w.must(f"mkdir -p {d} && echo {b64} | base64 -d > {d}/{CHECKS} && "
-                 f"python3 {d}/{CHECKS} --disk {w.mnt} --at-step {at_step}; rc=$?; rm -rf {d}; exit $rc")
+    kit = kit or Kit()
+    d, name = checks_dir(w), kit.checks_name
+    b64 = base64.b64encode(Path(kit.checks_src).read_bytes()).decode()
+    out = w.must(f"mkdir -p {d} && echo {b64} | base64 -d > {d}/{name} && "
+                 f"python3 {d}/{name} --disk {w.mnt} --at-step {at_step}; rc=$?; rm -rf {d}; exit $rc")
     return json.loads(out)
 
 
 def build(store, spec: str, rules: dict[str, str], steps: int, run_dir: Path, *,
-          slip_step: int | None = None, name: str = "build", builder_src: Path = STUB_BUILDER) -> dict:
+          slip_step: int | None = None, name: str = "build", kit: Kit | None = None) -> dict:
     """One builder process per step, graded after each step, save(k) between turns. Writes run.json."""
+    kit = kit or Kit()
     run_dir.mkdir(parents=True, exist_ok=True)
     w = store.start_build(f"{name}-{int(time.time())}")
     try:
-        install_builder(w, builder_src)
+        install_builder(w, kit.builder_src)
         w.put(f"{w.mnt}/spec.md", spec)
         for fname, text in rules.items():
             w.put(f"{w.mnt}/rules/{fname}", text)
         w.put(f"{w.mnt}/state.json", json.dumps({"last_done": 0, "steps": []}))
-        run = {"run_id": run_dir.name, "disk_id": store.disk_id, "store": store.kind,
-               "builder": "stub" if builder_src == STUB_BUILDER else str(builder_src),
-               "checks_source": CHECKS, "n_steps": steps, "model": None,
-               "simulated_slip": {"step": slip_step, "label": "simulated model slip (fake builder)"}
+        run = {"run_id": run_dir.name, "disk_id": store.disk_id, "store": store.kind, "builder": kit.builder_label,
+               "checks_source": kit.checks_name, "n_steps": steps, "model": None,
+               "simulated_slip": {"step": slip_step, "label": "simulated model slip (stub builder)"}
                if slip_step else None,
                "checkpoints": {"0": store.save(0)}, "steps": []}
         env = {"FAKE_SLIP_STEP": str(slip_step)} if slip_step else None
         before = snapshot(w)
         for k in range(1, steps + 1):
             t0 = time.perf_counter()
-            res = run_builder(w, k, k, "build", env=env)  # one step per process, then save(k)
+            res = run_steps(w, k, k, "build", None, kit, env)  # one step per process, then save(k)
             wall = time.perf_counter() - t0
             if outcome(res) != "ok":
                 raise RuntimeError(f"build step {k} {outcome(res)}: {res.get('error')}")
             after = snapshot(w)
             wrote = sorted(f for f in after if after[f] != before.get(f))
             before = after
-            checks = grade(w, k)
+            checks = grade(w, k, kit)
             t0 = time.perf_counter()
             run["checkpoints"][str(k)] = store.save(k)
             rec = {"step": k, "wall_s": round(wall, 3), "wrote": wrote, "checks": checks,
@@ -155,9 +212,10 @@ def build(store, spec: str, rules: dict[str, str], steps: int, run_dir: Path, *,
 
 def run_wave(store, checkpoint_id: str, edits: list[dict], n: int, *, wave: str, to_step: int, run_dir: Path,
              log: ArchilLog, targets: list[str], purpose: str, check: str | None = None,
-             builder_src: Path = STUB_BUILDER) -> dict:
+             kit: Kit | None = None) -> dict:
     """Branch n copies of checkpoint_id = c_{k-1} in parallel; each runs steps k..to_step with
     edits[i % len(edits)] applied first. A copy `passed` when every check in `targets` is true at to_step."""
+    kit = kit or Kit()
     fork_step = int(checkpoint_id.rsplit("/c", 1)[1])  # steps 1..fork_step are on the branch already
 
     def one(i: int) -> dict:
@@ -170,15 +228,16 @@ def run_wave(store, checkpoint_id: str, edits: list[dict], n: int, *, wave: str,
         try:
             w = store.resume(checkpoint_id, rid)
             rec["branch"] = w.branch
-            install_builder(w, builder_src)
-            rec["builder"] = run_builder(w, fork_step + 1, to_step, rid, {**edit, "route": rid})
+            install_builder(w, kit.builder_src)
+            rec["builder"] = run_steps(w, fork_step + 1, to_step, rid, {**edit, "route": rid}, kit,
+                                       max_calls=kit.branch_max_calls)
             out = outcome(rec["builder"])
             if out == "invalid":
                 rec["invalid"] = True  # capped: reported as invalid, never graded, never a fail
             elif out == "error":
                 rec["error"] = f"builder: {rec['builder'].get('error')}"[:600]
             else:
-                rec["checks"] = grade(w, to_step)
+                rec["checks"] = grade(w, to_step, kit)
                 rec["passed"] = all(rec["checks"].get(t, False) for t in targets)
                 rec["ok"] = True
         except Exception as e:
@@ -208,8 +267,8 @@ def run_wave(store, checkpoint_id: str, edits: list[dict], n: int, *, wave: str,
         r["score"] = f"{r['passed']}/{r['graded']}"  # only graded copies count; invalid/errored shown separately
 
     rec = {"wave": wave, "purpose": purpose, "check": check, "targets": targets, "checkpoint_id": checkpoint_id,
-           "fork_step": fork_step, "to_step": to_step, "n": n, "wall_s": wall, "routes": list(by_route.values()),
-           "copies": copies}
+           "fork_step": fork_step, "to_step": to_step, "n": n, "wall_s": wall, "max_builders": kit.max_builders,
+           "routes": list(by_route.values()), "copies": copies}
     res_path = run_dir / "results.json"
     results = json.loads(res_path.read_text()) if res_path.exists() else {"run_id": run_dir.name, "waves": []}
     results["waves"].append(rec)
