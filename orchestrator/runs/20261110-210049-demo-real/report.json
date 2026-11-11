@@ -89,6 +89,13 @@
           "cost": "15 calls, $0.0142"
         },
         {
+          "arm": "after_both",
+          "label": "After: both fixes, fresh build from step 0 with spec.fixed.md",
+          "visible": "1/1",
+          "heldout": "1/1",
+          "cost": "15 calls, $0.0167"
+        },
+        {
           "arm": "baseline",
           "label": "Baseline: one claude-haiku-5-5 call rewrites the spec, built from step 0",
           "visible": "3/3",
@@ -131,6 +138,13 @@
           "cost": "142 calls, $0.1315"
         },
         {
+          "arm": "after_both",
+          "label": "After: both fixes, fresh build from step 0 with spec.fixed.md",
+          "visible": "1/1",
+          "heldout": "1/1",
+          "cost": "15 calls, $0.0167"
+        },
+        {
           "arm": "baseline",
           "label": "Baseline: one claude-haiku-5-5 call rewrites the spec, built from step 0",
           "visible": "3/3",
@@ -161,10 +175,10 @@
     "minutes": 14.92,
     "model_calls": 162.0,
     "usd": 0.1971,
-    "restore_minutes_vs_git": 7.55,
-    "copies": 49,
-    "wall_s": 633.587,
-    "sum_copy_s": 3007.497
+    "restore_minutes_vs_git": 7.7,
+    "copies": 50,
+    "wall_s": 709.612,
+    "sum_copy_s": 3082.508
   },
   "spent": {
     "model": "claude-haiku-5-5",
@@ -208,11 +222,15 @@
       "baseline-rejects_bad_urls": {
         "model_calls": 44,
         "usd": 0.0454
+      },
+      "confirm-both": {
+        "model_calls": 15,
+        "usd": 0.0167
       }
     },
     "total": {
-      "model_calls": 518,
-      "usd": 0.5843
+      "model_calls": 533,
+      "usd": 0.601
     },
     "orchestrator_calls": {
       "model_calls": 3,
@@ -230,6 +248,27 @@
     "total": 756.49
   },
   "source": "built from run.json, results.json, triage.json, swarm.json, baseline.json and archil.json in this folder",
+  "after_both": {
+    "wave": "confirm-both",
+    "checks": {
+      "alias_resolves": true,
+      "clicks_counted": true,
+      "codes_6_digits": true,
+      "delete_link": true,
+      "expiry_from_last_click": true,
+      "heldout_alias_digits_hyphens": true,
+      "heldout_expiry_keeps_alive": true,
+      "heldout_shorten_rejects_bad_url": true,
+      "rejects_bad_urls": true,
+      "same_url_same_code": true,
+      "shorten_resolve": true,
+      "stats_json": false,
+      "unknown_code_is_none": true,
+      "urls_normalized": true
+    },
+    "passed": 13,
+    "total": 14
+  },
   "spec_files": {
     "original": "spec.original.md",
     "fixed": "spec.fixed.md"

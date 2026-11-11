@@ -434,6 +434,11 @@ def write_report(run_dir: Path) -> Path:
                 v = cf.get("checks") or {}
                 rows.append((f"After: CONFIRM, fresh build from step 0 with {cf['route']}", f"{int(bool(v.get(c)))}/1",
                              f"{int(all(v.get(h, False) for h in held))}/1", cost(cf["wave"])))
+        bw = next((w for w in waves if w["purpose"] == "confirm_both"), None)
+        if bw:
+            v, h = frac(bw["copies"], c, held)
+            rows.append(("After: both fixes, fresh build from step 0 with spec.fixed.md", v, h if held else "n/a",
+                         cost(bw["wave"])))
         b = baselines.get(c)
         if b:
             label = f"Baseline: one {b['fixer']} call rewrites the spec, built from step 0"
@@ -465,6 +470,13 @@ def write_report(run_dir: Path) -> Path:
             lines += ["", "<details><summary>Baseline's spec change</summary>", "", "```diff", b["diff"].rstrip(),
                       "```", "</details>"]
         lines.append("")
+    bw = next((w for w in waves if w["purpose"] == "confirm_both"), None)
+    if bw and bw["copies"][0].get("checks"):
+        ch = bw["copies"][0]["checks"]
+        rj["after_both"] = {"wave": bw["wave"], "checks": ch, "passed": sum(ch.values()), "total": len(ch)}
+        lines += ["## After: both fixes (one fresh build from step 0, every check)", "",
+                  f"{sum(ch.values())}/{len(ch)} checks pass. Failing: "
+                  f"{', '.join(f'`{k}`' for k, v in ch.items() if not v) or 'none'}.", ""]
     sp, st, tot = arch.get("spent") or {}, arch.get("stages_s") or {}, arch.get("totals_saved") or {}
     lines += ["## Cost and Archil", "",
               f"- Spent: {sp.get('total', {}).get('model_calls')} model calls, ${sp.get('total', {}).get('usd')} "
@@ -540,7 +552,7 @@ def write_before_after(run_dir: Path) -> str | None:
 def _arm_key(label: str) -> str:
     for prefix, key in (("Before: the checkpointed", "before_build"), ("Before: original spec", "before_natural"),
                         ("Before: control", "before_control"), ("After: the culprit", "after_culprit_edit"),
-                        ("After: swarm", "after_swarm"), ("After: CONFIRM", "after_confirm"),
+                        ("After: swarm", "after_swarm"), ("After: CONFIRM", "after_confirm"), ("After: both", "after_both"),
                         ("Baseline", "baseline")):
         if label.startswith(prefix):
             return key

@@ -24,6 +24,7 @@ Held-out checks: `heldout_expiry_keeps_alive`.
 | After: swarm rw4 "Expiry is 30 days after the last click." | 3/3 | 3/3 | 125 calls, $0.1821 |
 | After: swarm rw5 "Links expire 30 days after their last click." | 3/3 | 3/3 | 125 calls, $0.1821 |
 | After: CONFIRM, fresh build from step 0 with rw3 | 1/1 | 1/1 | 15 calls, $0.0142 |
+| After: both fixes, fresh build from step 0 with spec.fixed.md | 1/1 | 1/1 | 15 calls, $0.0167 |
 | Baseline: one claude-haiku-5-5 call rewrites the spec, built from step 0 | 3/3 | 3/3 | 45 calls, $0.0463 + fix call $0.000771 |
 
 All swarm rewrites (losers included):
@@ -68,6 +69,7 @@ Held-out checks: `heldout_shorten_rejects_bad_url`.
 | Before: original spec, 3 fresh builds from step 0 | 0/3 | 0/3 | 43 calls, $0.0381 |
 | Before: control branches (no change) | 0/3 | 0/3 | 142 calls, $0.1315 |
 | After: the culprit's suspect edit (rule errors.md off) | 3/3 | 3/3 | 142 calls, $0.1315 |
+| After: both fixes, fresh build from step 0 with spec.fixed.md | 1/1 | 1/1 | 15 calls, $0.0167 |
 | Baseline: one claude-haiku-5-5 call rewrites the spec, built from step 0 | 3/3 | 0/3 | 44 calls, $0.0454 + fix call $0.000553 |
 
 <details><summary>Baseline's spec change</summary>
@@ -89,8 +91,12 @@ Held-out checks: `heldout_shorten_rejects_bad_url`.
 ```
 </details>
 
+## After: both fixes (one fresh build from step 0, every check)
+
+13/14 checks pass. Failing: `stats_json`.
+
 ## Cost and Archil
 
-- Spent: 518 model calls, $0.5843 (build {'model_calls': 14, 'usd': 0.017}; orchestrator calls {'model_calls': 3, 'usd': 0.0017}).
+- Spent: 533 model calls, $0.601 (build {'model_calls': 14, 'usd': 0.017}; orchestrator calls {'model_calls': 3, 'usd': 0.0017}).
 - Wall: 756.49 s; stages {'build': 107.009, 'natural': 64.748, 'triage': 43.192, 'suspects': 210.412, 'swarm': 104.115, 'confirm': 68.23, 'baseline': 158.768, 'total': 756.49}.
-- Branching saved (archil.json totals): {'steps': 81, 'minutes': 14.92, 'model_calls': 162.0, 'usd': 0.1971, 'restore_minutes_vs_git': 7.55, 'copies': 49, 'wall_s': 633.587, 'sum_copy_s': 3007.497}.
+- Branching saved (archil.json totals): {'steps': 81, 'minutes': 14.92, 'model_calls': 162.0, 'usd': 0.1971, 'restore_minutes_vs_git': 7.7, 'copies': 50, 'wall_s': 709.612, 'sum_copy_s': 3082.508}.

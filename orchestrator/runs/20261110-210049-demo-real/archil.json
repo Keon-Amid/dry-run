@@ -550,6 +550,32 @@
         "usd": 0.0,
         "restore_minutes_vs_git": 0.49
       }
+    },
+    {
+      "wave": "confirm-both",
+      "fork_step": 0,
+      "wall_s": 76.025,
+      "copies": [
+        {
+          "id": "confirm-both-both-fixes-r1",
+          "branch_ms": 187.3,
+          "mount_ms": 1594.9,
+          "wall_s": 75.011,
+          "sandbox_ms": 360.2
+        }
+      ],
+      "n_copies": 1,
+      "steps_reused_per_copy": 0,
+      "steps_reused": 0,
+      "sum_copy_s": 75.011,
+      "parallel_speedup": 0.99,
+      "saved": {
+        "steps": 0,
+        "minutes": 0.0,
+        "model_calls": 0.0,
+        "usd": 0.0,
+        "restore_minutes_vs_git": 0.15
+      }
     }
   ],
   "totals_saved": {
@@ -557,10 +583,10 @@
     "minutes": 14.92,
     "model_calls": 162.0,
     "usd": 0.1971,
-    "restore_minutes_vs_git": 7.55,
-    "copies": 49,
-    "wall_s": 633.587,
-    "sum_copy_s": 3007.497
+    "restore_minutes_vs_git": 7.7,
+    "copies": 50,
+    "wall_s": 709.612,
+    "sum_copy_s": 3082.508
   },
   "spent": {
     "model": "claude-haiku-5-5",
@@ -604,11 +630,15 @@
       "baseline-rejects_bad_urls": {
         "model_calls": 44,
         "usd": 0.0454
+      },
+      "confirm-both": {
+        "model_calls": 15,
+        "usd": 0.0167
       }
     },
     "total": {
-      "model_calls": 518,
-      "usd": 0.5843
+      "model_calls": 533,
+      "usd": 0.601
     },
     "orchestrator_calls": {
       "model_calls": 3,

@@ -259,6 +259,8 @@ def run_wave(store, checkpoint_id: str, edits: list[dict], n: int, *, wave: str,
             patch = {**edit, "route": rid}
             if edit.get("kind") == "spec_replace":  # a whole new spec (baseline arm): written before the builder
                 w.put(f"{w.mnt}/spec.md", edit["spec"])  # starts; the builder's patch kinds only edit one step
+                for r in edit.get("rules_off") or []:    # and rules switched off (combined CONFIRM)
+                    w.must(f"rm {w.mnt}/rules/{shlex.quote(r)} && test ! -e {w.mnt}/rules/{shlex.quote(r)}")
                 patch = None
             rec["builder"] = run_steps(w, fork_step + 1, to_step, rid, patch, kit,
                                        max_calls=kit.branch_max_calls)

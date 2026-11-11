@@ -6192,6 +6192,184 @@
           }
         }
       ]
+    },
+    {
+      "wave": "confirm-both",
+      "purpose": "confirm_both",
+      "check": null,
+      "targets": [],
+      "checkpoint_id": "dsk-000000000019172a/c0",
+      "fork_step": 0,
+      "to_step": 7,
+      "n": 1,
+      "wall_s": 76.025,
+      "max_builders": 8,
+      "routes": [
+        {
+          "route": "both-fixes",
+          "kind": "spec_replace",
+          "edit": "whole spec, 1760 chars",
+          "runs": 1,
+          "passed": 1,
+          "errors": 0,
+          "invalid": 0,
+          "graded": 1,
+          "score": "1/1"
+        }
+      ],
+      "copies": [
+        {
+          "id": "confirm-both-both-fixes-r1",
+          "route": "both-fixes",
+          "kind": "spec_replace",
+          "edit": "whole spec, 1760 chars",
+          "ok": true,
+          "branch": "confirm-both-both-fixes-r1-e6cb65",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "confirm-both-both-fixes-r1",
+            "from_step": 1,
+            "to_step": 7,
+            "last_done": 7,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": false,
+            "spec_sha_before": null,
+            "spec_sha_after": null,
+            "repairs": [],
+            "steps": [
+              {
+                "step": 1,
+                "commit": "c3bf29a0882986d1d086debf1fc86b788c5163d0",
+                "tool_calls": 4,
+                "capped": false,
+                "wall_s": 11.392,
+                "model_calls": 3,
+                "usage": {
+                  "input_tokens": 8,
+                  "output_tokens": 2329,
+                  "cache_creation_input_tokens": 3859,
+                  "cache_read_input_tokens": 2541
+                }
+              },
+              {
+                "step": 2,
+                "commit": "69e27ef8abd8027e8b756c870e76fd48974e987d",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 5.264,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 895,
+                  "cache_creation_input_tokens": 4957,
+                  "cache_read_input_tokens": 4053
+                }
+              },
+              {
+                "step": 3,
+                "commit": "603c9302021c60eef14994487712cf912c84c446",
+                "tool_calls": 2,
+                "capped": false,
+                "wall_s": 4.699,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 984,
+                  "cache_creation_input_tokens": 6212,
+                  "cache_read_input_tokens": 5203
+                }
+              },
+              {
+                "step": 4,
+                "commit": "c8c1a23d527f952588601047c029f5b06280be1e",
+                "tool_calls": 3,
+                "capped": false,
+                "wall_s": 8.459,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 2012,
+                  "cache_creation_input_tokens": 8297,
+                  "cache_read_input_tokens": 6402
+                }
+              },
+              {
+                "step": 5,
+                "commit": "144b89e80ffaa43ae959f73912c8b87fb12d9a8b",
+                "tool_calls": 3,
+                "capped": false,
+                "wall_s": 22.179,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 5350,
+                  "cache_creation_input_tokens": 14171,
+                  "cache_read_input_tokens": 8643
+                }
+              },
+              {
+                "step": 6,
+                "commit": "59685216387b5bd133182ec7c29f46b6bd122544",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 8.764,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 2094,
+                  "cache_creation_input_tokens": 16570,
+                  "cache_read_input_tokens": 14632
+                }
+              },
+              {
+                "step": 7,
+                "commit": "8f325d6591b7a77f630e59ae5f2561cc0dc79161",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 3.784,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 651,
+                  "cache_creation_input_tokens": 17439,
+                  "cache_read_input_tokens": 16875
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-haiku-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "alias_resolves": true,
+            "clicks_counted": true,
+            "codes_6_digits": true,
+            "delete_link": true,
+            "expiry_from_last_click": true,
+            "heldout_alias_digits_hyphens": true,
+            "heldout_expiry_keeps_alive": true,
+            "heldout_shorten_rejects_bad_url": true,
+            "rejects_bad_urls": true,
+            "same_url_same_code": true,
+            "shorten_resolve": true,
+            "stats_json": false,
+            "unknown_code_is_none": true,
+            "urls_normalized": true
+          },
+          "passed": true,
+          "wall_s": 75.011,
+          "timings_ms": {
+            "branch": 187.3,
+            "sandbox": 360.2,
+            "mount": 1594.9
+          }
+        }
+      ]
     }
   ]
 }
