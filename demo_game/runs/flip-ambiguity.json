@@ -1,0 +1,840 @@
+{
+  "params": {
+    "runs": 3,
+    "to_step": 4,
+    "matrix": true,
+    "template": "/Users/edan/dev/dry-run-p2/demo_game/disk",
+    "fake_llm": null,
+    "check_cmd": "python3 demo_game/grade.py",
+    "plants": [
+      {
+        "id": "ambiguity",
+        "check": "pit_stays_back"
+      }
+    ]
+  },
+  "runs": [
+    {
+      "plant": "ambiguity",
+      "arm": "with",
+      "run": 1,
+      "check": "pit_stays_back",
+      "valid": true,
+      "pass": false,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "actions_uppercase": {
+          "pass": false,
+          "msg": "ValueError: unknown action: 'E'"
+        },
+        "bad_action_raises": {
+          "pass": true,
+          "msg": "ValueError"
+        },
+        "budget_ends_game": {
+          "pass": false,
+          "msg": "KeyError: 'moves_left'"
+        },
+        "heldout_branching_states": {
+          "pass": true,
+          "msg": "branches independent"
+        },
+        "heldout_pit_from_above": {
+          "pass": false,
+          "msg": "first fall: lives 2, pos [3, 3]"
+        },
+        "key_opens_exit": {
+          "pass": true,
+          "msg": "key opens exit"
+        },
+        "level_loads": {
+          "pass": true,
+          "msg": "positions parsed"
+        },
+        "moves_and_walls": {
+          "pass": true,
+          "msg": "moves, walls and edges"
+        },
+        "pit_stays_back": {
+          "pass": false,
+          "msg": "after the pit the player is at [1, 3], not back on [1, 2]"
+        },
+        "render_shows_player": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'render'"
+        },
+        "step_returns_new_state": {
+          "pass": true,
+          "msg": "input untouched"
+        },
+        "zero_lives_loses": {
+          "pass": false,
+          "msg": "lives 0, status 'playing'"
+        }
+      },
+      "wall_s": 32.42,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-xpcfrrl7/disk",
+        "route": null,
+        "from_step": 1,
+        "to_step": 4,
+        "last_done": 4,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": false,
+        "spec_sha_before": null,
+        "spec_sha_after": null,
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "387a64fad10ac83aba7707ffdd20b28c5ce92b99",
+            "tool_calls": 4,
+            "capped": false,
+            "wall_s": 6.534,
+            "model_calls": 3,
+            "usage": {
+              "input_tokens": 8,
+              "output_tokens": 1070,
+              "cache_creation_input_tokens": 2687,
+              "cache_read_input_tokens": 2848
+            }
+          },
+          {
+            "step": 2,
+            "commit": "dd2c2aa80b82cb367221e15b10ef90c72979144e",
+            "tool_calls": 3,
+            "capped": false,
+            "wall_s": 10.072,
+            "model_calls": 3,
+            "usage": {
+              "input_tokens": 8,
+              "output_tokens": 1640,
+              "cache_creation_input_tokens": 4657,
+              "cache_read_input_tokens": 7364
+            }
+          },
+          {
+            "step": 3,
+            "commit": "a0a53d2dce3980e35eec8c68650c42477b261ec6",
+            "tool_calls": 1,
+            "capped": false,
+            "wall_s": 6.7,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1361,
+              "cache_creation_input_tokens": 6228,
+              "cache_read_input_tokens": 4873
+            }
+          },
+          {
+            "step": 4,
+            "commit": "51dbbd8616be50d18a5e10fe1e3693fd979c1d13",
+            "tool_calls": 1,
+            "capped": false,
+            "wall_s": 7.09,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1301,
+              "cache_creation_input_tokens": 7621,
+              "cache_read_input_tokens": 6353
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    },
+    {
+      "plant": "ambiguity",
+      "arm": "with",
+      "run": 2,
+      "check": "pit_stays_back",
+      "valid": true,
+      "pass": false,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "actions_uppercase": {
+          "pass": false,
+          "msg": "ValueError: unknown action: 'E'"
+        },
+        "bad_action_raises": {
+          "pass": true,
+          "msg": "ValueError"
+        },
+        "budget_ends_game": {
+          "pass": false,
+          "msg": "KeyError: 'moves_left'"
+        },
+        "heldout_branching_states": {
+          "pass": true,
+          "msg": "branches independent"
+        },
+        "heldout_pit_from_above": {
+          "pass": false,
+          "msg": "first fall: lives 2, pos [3, 3]"
+        },
+        "key_opens_exit": {
+          "pass": true,
+          "msg": "key opens exit"
+        },
+        "level_loads": {
+          "pass": true,
+          "msg": "positions parsed"
+        },
+        "moves_and_walls": {
+          "pass": true,
+          "msg": "moves, walls and edges"
+        },
+        "pit_stays_back": {
+          "pass": false,
+          "msg": "after the pit the player is at [1, 3], not back on [1, 2]"
+        },
+        "render_shows_player": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'render'"
+        },
+        "step_returns_new_state": {
+          "pass": true,
+          "msg": "input untouched"
+        },
+        "zero_lives_loses": {
+          "pass": false,
+          "msg": "lives 0, status 'playing'"
+        }
+      },
+      "wall_s": 38.923,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-map275mr/disk",
+        "route": null,
+        "from_step": 1,
+        "to_step": 4,
+        "last_done": 4,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": false,
+        "spec_sha_before": null,
+        "spec_sha_after": null,
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "d0fc9a73a963add751ef3811f01a128b9f55c7da",
+            "tool_calls": 4,
+            "capped": false,
+            "wall_s": 6.379,
+            "model_calls": 3,
+            "usage": {
+              "input_tokens": 8,
+              "output_tokens": 929,
+              "cache_creation_input_tokens": 1261,
+              "cache_read_input_tokens": 4110
+            }
+          },
+          {
+            "step": 2,
+            "commit": "db095d15f77062fd8b6547a1af19480e4ae44a80",
+            "tool_calls": 3,
+            "capped": false,
+            "wall_s": 10.617,
+            "model_calls": 3,
+            "usage": {
+              "input_tokens": 8,
+              "output_tokens": 1714,
+              "cache_creation_input_tokens": 3224,
+              "cache_read_input_tokens": 8427
+            }
+          },
+          {
+            "step": 3,
+            "commit": "ad48da207e7d4a23eed36ea61255c84f37aaf8fd",
+            "tool_calls": 4,
+            "capped": false,
+            "wall_s": 12.986,
+            "model_calls": 4,
+            "usage": {
+              "input_tokens": 10,
+              "output_tokens": 1582,
+              "cache_creation_input_tokens": 5422,
+              "cache_read_input_tokens": 18525
+            }
+          },
+          {
+            "step": 4,
+            "commit": "0bb90b62748a7fe44ade602223dce268bddf99c3",
+            "tool_calls": 1,
+            "capped": false,
+            "wall_s": 8.086,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1280,
+              "cache_creation_input_tokens": 7301,
+              "cache_read_input_tokens": 8544
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    },
+    {
+      "plant": "ambiguity",
+      "arm": "with",
+      "run": 3,
+      "check": "pit_stays_back",
+      "valid": true,
+      "pass": false,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "actions_uppercase": {
+          "pass": false,
+          "msg": "ValueError: unknown action: 'E'"
+        },
+        "bad_action_raises": {
+          "pass": true,
+          "msg": "ValueError"
+        },
+        "budget_ends_game": {
+          "pass": false,
+          "msg": "KeyError: 'moves_left'"
+        },
+        "heldout_branching_states": {
+          "pass": true,
+          "msg": "branches independent"
+        },
+        "heldout_pit_from_above": {
+          "pass": false,
+          "msg": "first fall: lives 2, pos [3, 3]"
+        },
+        "key_opens_exit": {
+          "pass": true,
+          "msg": "key opens exit"
+        },
+        "level_loads": {
+          "pass": true,
+          "msg": "positions parsed"
+        },
+        "moves_and_walls": {
+          "pass": true,
+          "msg": "moves, walls and edges"
+        },
+        "pit_stays_back": {
+          "pass": false,
+          "msg": "after the pit the player is at [1, 3], not back on [1, 2]"
+        },
+        "render_shows_player": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'render'"
+        },
+        "step_returns_new_state": {
+          "pass": true,
+          "msg": "input untouched"
+        },
+        "zero_lives_loses": {
+          "pass": false,
+          "msg": "lives 0, status 'playing'"
+        }
+      },
+      "wall_s": 31.41,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-3fajz9bl/disk",
+        "route": null,
+        "from_step": 1,
+        "to_step": 4,
+        "last_done": 4,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": false,
+        "spec_sha_before": null,
+        "spec_sha_after": null,
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "24902c7c1d3c39fccb6639664b82f176e8e65fcd",
+            "tool_calls": 4,
+            "capped": false,
+            "wall_s": 6.786,
+            "model_calls": 3,
+            "usage": {
+              "input_tokens": 8,
+              "output_tokens": 1090,
+              "cache_creation_input_tokens": 1444,
+              "cache_read_input_tokens": 4110
+            }
+          },
+          {
+            "step": 2,
+            "commit": "d55a3e589421e967dc18179009e35233900e888f",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 7.838,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1498,
+              "cache_creation_input_tokens": 3041,
+              "cache_read_input_tokens": 4354
+            }
+          },
+          {
+            "step": 3,
+            "commit": "1d13a812751d8b7ba6c75b7e18f40fb224068668",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 7.641,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1476,
+              "cache_creation_input_tokens": 4732,
+              "cache_read_input_tokens": 6140
+            }
+          },
+          {
+            "step": 4,
+            "commit": "f87e026f944825bfe4204c15d44a626e60fa0559",
+            "tool_calls": 3,
+            "capped": false,
+            "wall_s": 8.068,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1745,
+              "cache_creation_input_tokens": 6641,
+              "cache_read_input_tokens": 7852
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    },
+    {
+      "plant": "ambiguity",
+      "arm": "without",
+      "run": 1,
+      "check": "pit_stays_back",
+      "valid": true,
+      "pass": true,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "actions_uppercase": {
+          "pass": false,
+          "msg": "ValueError: unknown action: 'E'"
+        },
+        "bad_action_raises": {
+          "pass": true,
+          "msg": "ValueError"
+        },
+        "budget_ends_game": {
+          "pass": false,
+          "msg": "KeyError: 'moves_left'"
+        },
+        "heldout_branching_states": {
+          "pass": true,
+          "msg": "branches independent"
+        },
+        "heldout_pit_from_above": {
+          "pass": true,
+          "msg": "stayed back twice"
+        },
+        "key_opens_exit": {
+          "pass": true,
+          "msg": "key opens exit"
+        },
+        "level_loads": {
+          "pass": true,
+          "msg": "positions parsed"
+        },
+        "moves_and_walls": {
+          "pass": true,
+          "msg": "moves, walls and edges"
+        },
+        "pit_stays_back": {
+          "pass": true,
+          "msg": "life lost, stayed back"
+        },
+        "render_shows_player": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'render'"
+        },
+        "step_returns_new_state": {
+          "pass": true,
+          "msg": "input untouched"
+        },
+        "zero_lives_loses": {
+          "pass": false,
+          "msg": "lives -3, status 'playing'"
+        }
+      },
+      "wall_s": 29.773,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-ypn5r8xk/disk",
+        "route": "flip-ambiguity",
+        "from_step": 1,
+        "to_step": 4,
+        "last_done": 4,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": true,
+        "spec_sha_before": "a1550040917cd8f716b2a5b2569630e09da573936de5057b97c8f8a91d4085ef",
+        "spec_sha_after": "6dc9e85c8aeecfac646fedc9acfe3d7c77c516c221721a8d937a811330d0ac05",
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "0c4bed70be3783d1047cd175fc96d84f0c3910d7",
+            "tool_calls": 4,
+            "capped": false,
+            "wall_s": 6.242,
+            "model_calls": 3,
+            "usage": {
+              "input_tokens": 8,
+              "output_tokens": 1085,
+              "cache_creation_input_tokens": 1401,
+              "cache_read_input_tokens": 4108
+            }
+          },
+          {
+            "step": 2,
+            "commit": "1d0150b771a886a6627cfe046f63e8af4e9871b8",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 8.841,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1638,
+              "cache_creation_input_tokens": 3376,
+              "cache_read_input_tokens": 4340
+            }
+          },
+          {
+            "step": 3,
+            "commit": "6d268112a4a276c598abda7560583983e17604b3",
+            "tool_calls": 1,
+            "capped": false,
+            "wall_s": 6.415,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1286,
+              "cache_creation_input_tokens": 4807,
+              "cache_read_input_tokens": 6451
+            }
+          },
+          {
+            "step": 4,
+            "commit": "109da6638f3ad4e873d461f24fd3f5e973d311a7",
+            "tool_calls": 1,
+            "capped": false,
+            "wall_s": 7.684,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1655,
+              "cache_creation_input_tokens": 8008,
+              "cache_read_input_tokens": 6444
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    },
+    {
+      "plant": "ambiguity",
+      "arm": "without",
+      "run": 2,
+      "check": "pit_stays_back",
+      "valid": true,
+      "pass": true,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "actions_uppercase": {
+          "pass": false,
+          "msg": "ValueError: unknown action: 'E'"
+        },
+        "bad_action_raises": {
+          "pass": true,
+          "msg": "ValueError"
+        },
+        "budget_ends_game": {
+          "pass": false,
+          "msg": "KeyError: 'moves_left'"
+        },
+        "heldout_branching_states": {
+          "pass": true,
+          "msg": "branches independent"
+        },
+        "heldout_pit_from_above": {
+          "pass": true,
+          "msg": "stayed back twice"
+        },
+        "key_opens_exit": {
+          "pass": true,
+          "msg": "key opens exit"
+        },
+        "level_loads": {
+          "pass": true,
+          "msg": "positions parsed"
+        },
+        "moves_and_walls": {
+          "pass": true,
+          "msg": "moves, walls and edges"
+        },
+        "pit_stays_back": {
+          "pass": true,
+          "msg": "life lost, stayed back"
+        },
+        "render_shows_player": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'render'"
+        },
+        "step_returns_new_state": {
+          "pass": true,
+          "msg": "input untouched"
+        },
+        "zero_lives_loses": {
+          "pass": false,
+          "msg": "lives -3, status 'playing'"
+        }
+      },
+      "wall_s": 29.363,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-r5yngnhg/disk",
+        "route": "flip-ambiguity",
+        "from_step": 1,
+        "to_step": 4,
+        "last_done": 4,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": true,
+        "spec_sha_before": "a1550040917cd8f716b2a5b2569630e09da573936de5057b97c8f8a91d4085ef",
+        "spec_sha_after": "6dc9e85c8aeecfac646fedc9acfe3d7c77c516c221721a8d937a811330d0ac05",
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "fa77a5fbc3b886e7e410cc84914b4ba42e222b54",
+            "tool_calls": 3,
+            "capped": false,
+            "wall_s": 5.847,
+            "model_calls": 3,
+            "usage": {
+              "input_tokens": 8,
+              "output_tokens": 985,
+              "cache_creation_input_tokens": 1073,
+              "cache_read_input_tokens": 3894
+            }
+          },
+          {
+            "step": 2,
+            "commit": "694b6f1153a08dbd69aa13b1111d862a78aefbf4",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 8.419,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1638,
+              "cache_creation_input_tokens": 2760,
+              "cache_read_input_tokens": 4070
+            }
+          },
+          {
+            "step": 3,
+            "commit": "9f34e2acf9724d6f9ac4a331a74e9418ab51fe9a",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 7.084,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1482,
+              "cache_creation_input_tokens": 4483,
+              "cache_read_input_tokens": 5990
+            }
+          },
+          {
+            "step": 4,
+            "commit": "df5fe02579a986caaae31255c862080156360c24",
+            "tool_calls": 3,
+            "capped": false,
+            "wall_s": 7.355,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1555,
+              "cache_creation_input_tokens": 6326,
+              "cache_read_input_tokens": 7739
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    },
+    {
+      "plant": "ambiguity",
+      "arm": "without",
+      "run": 3,
+      "check": "pit_stays_back",
+      "valid": true,
+      "pass": true,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "actions_uppercase": {
+          "pass": false,
+          "msg": "ValueError: unknown action: 'E'"
+        },
+        "bad_action_raises": {
+          "pass": true,
+          "msg": "ValueError"
+        },
+        "budget_ends_game": {
+          "pass": false,
+          "msg": "KeyError: 'moves_left'"
+        },
+        "heldout_branching_states": {
+          "pass": true,
+          "msg": "branches independent"
+        },
+        "heldout_pit_from_above": {
+          "pass": true,
+          "msg": "stayed back twice"
+        },
+        "key_opens_exit": {
+          "pass": true,
+          "msg": "key opens exit"
+        },
+        "level_loads": {
+          "pass": true,
+          "msg": "positions parsed"
+        },
+        "moves_and_walls": {
+          "pass": true,
+          "msg": "moves, walls and edges"
+        },
+        "pit_stays_back": {
+          "pass": true,
+          "msg": "life lost, stayed back"
+        },
+        "render_shows_player": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'render'"
+        },
+        "step_returns_new_state": {
+          "pass": true,
+          "msg": "input untouched"
+        },
+        "zero_lives_loses": {
+          "pass": false,
+          "msg": "lives -3, status 'playing'"
+        }
+      },
+      "wall_s": 28.994,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-wz_1bufd/disk",
+        "route": "flip-ambiguity",
+        "from_step": 1,
+        "to_step": 4,
+        "last_done": 4,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": true,
+        "spec_sha_before": "a1550040917cd8f716b2a5b2569630e09da573936de5057b97c8f8a91d4085ef",
+        "spec_sha_after": "6dc9e85c8aeecfac646fedc9acfe3d7c77c516c221721a8d937a811330d0ac05",
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "7cd432f64c393558c90747911efb0e594747cef8",
+            "tool_calls": 4,
+            "capped": false,
+            "wall_s": 6.004,
+            "model_calls": 3,
+            "usage": {
+              "input_tokens": 8,
+              "output_tokens": 918,
+              "cache_creation_input_tokens": 1246,
+              "cache_read_input_tokens": 4067
+            }
+          },
+          {
+            "step": 2,
+            "commit": "541e28aef290a78d208abf8d8f347dc7b84bead7",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 8.525,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1641,
+              "cache_creation_input_tokens": 2974,
+              "cache_read_input_tokens": 4161
+            }
+          },
+          {
+            "step": 3,
+            "commit": "a80804b9408357f10adedb5210f13a68cab4ff24",
+            "tool_calls": 1,
+            "capped": false,
+            "wall_s": 6.563,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1309,
+              "cache_creation_input_tokens": 4441,
+              "cache_read_input_tokens": 6098
+            }
+          },
+          {
+            "step": 4,
+            "commit": "694a90e9974a7c380ac6d73a0e085fabb082527d",
+            "tool_calls": 1,
+            "capped": false,
+            "wall_s": 7.089,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1472,
+              "cache_creation_input_tokens": 5986,
+              "cache_read_input_tokens": 7609
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    }
+  ]
+}
