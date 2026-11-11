@@ -1,0 +1,194 @@
+{
+  "run_id": "20261110-203723-toy-real",
+  "waves": [
+    {
+      "wave": "smoke-rebuild",
+      "purpose": "smoke",
+      "check": null,
+      "targets": [],
+      "checkpoint_id": "dsk-00000000001913a6/c2",
+      "fork_step": 2,
+      "to_step": 3,
+      "n": 3,
+      "wall_s": 10.065,
+      "max_builders": 8,
+      "routes": [
+        {
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "runs": 3,
+          "passed": 3,
+          "errors": 0,
+          "invalid": 0,
+          "graded": 3,
+          "score": "3/3"
+        }
+      ],
+      "copies": [
+        {
+          "id": "smoke-rebuild-rebuild-r1",
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "ok": true,
+          "branch": "smoke-rebuild-rebuild-r1-cb02ba",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "smoke-rebuild-rebuild-r1",
+            "from_step": 3,
+            "to_step": 3,
+            "last_done": 3,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": false,
+            "spec_sha_before": null,
+            "spec_sha_after": null,
+            "repairs": [],
+            "steps": [
+              {
+                "step": 3,
+                "commit": "c5f76eb4e384246763c603005a1bda6a28d60fb0",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 2.207,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 179,
+                  "cache_creation_input_tokens": 0,
+                  "cache_read_input_tokens": 2997
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "CHECK-SOURCE-91bc": true
+          },
+          "passed": true,
+          "wall_s": 8.708,
+          "timings_ms": {
+            "branch": 181.8,
+            "sandbox": 419.2,
+            "mount": 1323.1
+          }
+        },
+        {
+          "id": "smoke-rebuild-rebuild-r2",
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "ok": true,
+          "branch": "smoke-rebuild-rebuild-r2-644132",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "smoke-rebuild-rebuild-r2",
+            "from_step": 3,
+            "to_step": 3,
+            "last_done": 3,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": false,
+            "spec_sha_before": null,
+            "spec_sha_after": null,
+            "repairs": [],
+            "steps": [
+              {
+                "step": 3,
+                "commit": "5028e5a4d72a86f5b57289b7803f8cbb74383e3e",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 2.195,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 179,
+                  "cache_creation_input_tokens": 0,
+                  "cache_read_input_tokens": 2997
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "CHECK-SOURCE-91bc": true
+          },
+          "passed": true,
+          "wall_s": 9.149,
+          "timings_ms": {
+            "branch": 177.4,
+            "sandbox": 416.1,
+            "mount": 1811.7
+          }
+        },
+        {
+          "id": "smoke-rebuild-rebuild-r3",
+          "route": "rebuild",
+          "kind": "none",
+          "edit": null,
+          "ok": true,
+          "branch": "smoke-rebuild-rebuild-r3-4a1ecc",
+          "builder": {
+            "ok": true,
+            "disk": "/mnt/agent",
+            "route": "smoke-rebuild-rebuild-r3",
+            "from_step": 3,
+            "to_step": 3,
+            "last_done": 3,
+            "capped": false,
+            "invalid": false,
+            "patch_applied": false,
+            "spec_sha_before": null,
+            "spec_sha_after": null,
+            "repairs": [],
+            "steps": [
+              {
+                "step": 3,
+                "commit": "5028e5a4d72a86f5b57289b7803f8cbb74383e3e",
+                "tool_calls": 1,
+                "capped": false,
+                "wall_s": 2.136,
+                "model_calls": 2,
+                "usage": {
+                  "input_tokens": 6,
+                  "output_tokens": 179,
+                  "cache_creation_input_tokens": 0,
+                  "cache_read_input_tokens": 2997
+                }
+              }
+            ],
+            "drop_conversation": false,
+            "model": "claude-sonnet-5-5",
+            "error": null,
+            "exit_code": 0,
+            "checks_hidden_during_build": true,
+            "rate_limit_resumes": 0
+          },
+          "checks": {
+            "CHECK-SOURCE-91bc": true
+          },
+          "passed": true,
+          "wall_s": 8.795,
+          "timings_ms": {
+            "branch": 173.8,
+            "sandbox": 421.8,
+            "mount": 1928.6
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "run_id": "20261110-203723-toy-real",
+  "disk_id": "dsk-00000000001913a6",
+  "store": "archil",
+  "builder": "builder/ (real)",
+  "checks_source": "toy_checks.py",
+  "n_steps": 3,
+  "model": "claude-sonnet-5-5",
+  "simulated_slip": null,
+  "checkpoints": {
+    "0": "dsk-00000000001913a6/c0",
+    "1": "dsk-00000000001913a6/c1",
+    "2": "dsk-00000000001913a6/c2",
+    "3": "dsk-00000000001913a6/c3"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "wall_s": 2.98,
+      "wrote": [
+        "conversation.jsonl",
+        "routes/build.md",
+        "state.json",
+        "workspace/hello.py"
+      ],
+      "checks": {},
+      "checks_hidden_during_build": true,
+      "checkpoint_ms": 1317.4,
+      "model_calls": 2,
+      "usage": {
+        "input_tokens": 6,
+        "output_tokens": 148,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 2082
+      },
+      "tool_calls": 1,
+      "commit": "e2e13cd89b99d9e49b2d0fe135bb70ef46275666"
+    },
+    {
+      "step": 2,
+      "wall_s": 3.446,
+      "wrote": [
+        "conversation.jsonl",
+        "routes/build.md",
+        "state.json",
+        "workspace/code.py"
+      ],
+      "checks": {
+        "CHECK-SOURCE-91bc": true
+      },
+      "checks_hidden_during_build": true,
+      "checkpoint_ms": 946.9,
+      "model_calls": 2,
+      "usage": {
+        "input_tokens": 6,
+        "output_tokens": 165,
+        "cache_creation_input_tokens": 381,
+        "cache_read_input_tokens": 2146
+      },
+      "tool_calls": 1,
+      "commit": "670fe39dfa7f5be910a6fcb1cdaea620a7f45b3f"
+    },
+    {
+      "step": 3,
+      "wall_s": 3.533,
+      "wrote": [
+        "conversation.jsonl",
+        "routes/build.md",
+        "state.json",
+        "workspace/README.md"
+      ],
+      "checks": {
+        "CHECK-SOURCE-91bc": true
+      },
+      "checks_hidden_during_build": true,
+      "checkpoint_ms": 904.7,
+      "model_calls": 2,
+      "usage": {
+        "input_tokens": 6,
+        "output_tokens": 177,
+        "cache_creation_input_tokens": 620,
+        "cache_read_input_tokens": 2377
+      },
+      "tool_calls": 1,
+      "commit": "1006e41fbc5c11a6eb6e974de42a199047819d1a"
+    }
+  ],
+  "final_checks": {
+    "CHECK-SOURCE-91bc": true
+  }
+}

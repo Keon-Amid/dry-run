@@ -235,6 +235,7 @@ class AssertChecksAdapterTest(unittest.TestCase):
         self.assertEqual(run("--disk", str(tmp / "disk"), "--at-step", "2"), {"CHECK-SOURCE-91bc": True})
         (ws / "code.py").write_text("def make_code() -> str:\n    return '123'\n")
         self.assertEqual(run("--disk", str(tmp / "disk"), "--at-step", "2"), {"CHECK-SOURCE-91bc": False})
+        self.assertEqual(list((tmp / "disk").rglob("__pycache__")), [])  # grading imported code.py, wrote nothing
         meta = run("--meta")
         self.assertFalse(meta["HELDOUT-SECRET-7f3a"]["supported"])  # prose, not an assert: never graded
         self.assertTrue(meta["HELDOUT-SECRET-7f3a"]["heldout"])

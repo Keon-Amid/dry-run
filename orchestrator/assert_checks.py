@@ -20,6 +20,7 @@ import signal
 import sys
 from pathlib import Path
 
+sys.dont_write_bytecode = True  # importing the agent's code must not write __pycache__ onto its disk
 LINE = re.compile(r"^#\s*([A-Za-z0-9_-]+):\s*(.+?)\s*$")
 CHECK_LINES: list = []  # filled in by build_checks_file
 

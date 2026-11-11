@@ -1,0 +1,114 @@
+{
+  "counterfactuals": {
+    "rebuild": "without a checkpoint, each copy replays steps 1..fork_step",
+    "restore": "git clone + dependency install restores code only, not the conversation"
+  },
+  "per_step_avg": {
+    "steps_in_run": 3,
+    "wall_s": 3.319667,
+    "model_calls": 2.0,
+    "usd": 0.0027
+  },
+  "restore_baseline": {
+    "git_clone_plus_install_s": 11.036,
+    "branch_plus_mount_s": 2.298,
+    "source": "spikes/disk_spike.json"
+  },
+  "prices_per_mtok": {
+    "claude-fable-5-2": {
+      "input": 8.0,
+      "output": 40.0,
+      "cache_read": 0.2
+    },
+    "claude-opus-5-5": {
+      "input": 4.0,
+      "output": 20.0,
+      "cache_read": 0.2
+    },
+    "claude-sonnet-5-5": {
+      "input": 2.0,
+      "output": 10.0,
+      "cache_read": 0.1
+    },
+    "claude-haiku-5-5": {
+      "input": 0.1,
+      "output": 0.5,
+      "cache_read": 0.01
+    }
+  },
+  "waves": [
+    {
+      "wave": "smoke-rebuild",
+      "fork_step": 2,
+      "wall_s": 10.065,
+      "copies": [
+        {
+          "id": "smoke-rebuild-rebuild-r1",
+          "branch_ms": 181.8,
+          "mount_ms": 1323.1,
+          "wall_s": 8.708,
+          "sandbox_ms": 419.2
+        },
+        {
+          "id": "smoke-rebuild-rebuild-r2",
+          "branch_ms": 177.4,
+          "mount_ms": 1811.7,
+          "wall_s": 9.149,
+          "sandbox_ms": 416.1
+        },
+        {
+          "id": "smoke-rebuild-rebuild-r3",
+          "branch_ms": 173.8,
+          "mount_ms": 1928.6,
+          "wall_s": 8.795,
+          "sandbox_ms": 421.8
+        }
+      ],
+      "n_copies": 3,
+      "steps_reused_per_copy": 2,
+      "steps_reused": 6,
+      "sum_copy_s": 26.652,
+      "parallel_speedup": 2.65,
+      "saved": {
+        "steps": 6,
+        "minutes": 0.33,
+        "model_calls": 12.0,
+        "usd": 0.0162,
+        "restore_minutes_vs_git": 0.46
+      }
+    }
+  ],
+  "totals_saved": {
+    "steps": 6,
+    "minutes": 0.33,
+    "model_calls": 12.0,
+    "usd": 0.0162,
+    "restore_minutes_vs_git": 0.46,
+    "copies": 3,
+    "wall_s": 10.065,
+    "sum_copy_s": 26.652
+  },
+  "spent": {
+    "model": "claude-sonnet-5-5",
+    "build": {
+      "model_calls": 6,
+      "usd": 0.0081
+    },
+    "waves": {
+      "smoke-rebuild": {
+        "model_calls": 6,
+        "usd": 0.0063
+      }
+    },
+    "total": {
+      "model_calls": 12,
+      "usd": 0.0144
+    }
+  },
+  "stages_s": {
+    "build": 31.565,
+    "triage": 0.125,
+    "smoke_wave": 10.067,
+    "total": 41.76
+  }
+}

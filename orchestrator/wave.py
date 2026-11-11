@@ -154,12 +154,14 @@ def snapshot(w) -> dict:
 
 
 def grade(w, at_step: int, kit: Kit | None = None) -> dict:
-    """Copy the checks in (builder has exited), grade, remove them, all in one exec."""
+    """Copy the checks in (builder has exited), grade, remove them, all in one exec. Grading must leave the agent's
+    disk byte-identical (no __pycache__ from importing its code), or the builder sees a dirty workspace."""
     kit = kit or Kit()
     d, name = checks_dir(w), kit.checks_name
     b64 = base64.b64encode(Path(kit.checks_src).read_bytes()).decode()
     out = w.must(f"mkdir -p {d} && echo {b64} | base64 -d > {d}/{name} && "
-                 f"python3 {d}/{name} --disk {w.mnt} --at-step {at_step}; rc=$?; rm -rf {d}; exit $rc")
+                 f"PYTHONDONTWRITEBYTECODE=1 python3 {d}/{name} --disk {w.mnt} --at-step {at_step}; rc=$?; "
+                 f"rm -rf {d}; exit $rc")
     return json.loads(out)
 
 
