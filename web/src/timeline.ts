@@ -332,7 +332,7 @@ export function buildTimeline(d: RunData): Timeline {
         text = 'nothing changed'
       } else if (isPlain) {
         label = 'REBUILD'
-        text = `step ${to} rebuilt from checkpoint ${fork}, nothing changed`
+        text = to - fork > 1 ? `steps ${fork + 1} to ${to} built again from checkpoint ${fork}, nothing changed` : `step ${to} rebuilt from checkpoint ${fork}, nothing changed`
       } else if (r.kind === 'rule_off') {
         label = 'RULE OFF'
         text = String(Sx?.rule ?? r.edit ?? r.route)
@@ -600,7 +600,15 @@ export function buildTimeline(d: RunData): Timeline {
         }
         T = t + 3
       } else {
-        cap(T, String(w.purpose || 'wave').toUpperCase(), `"${w.wave}": ${Array.isArray(w.copies) ? w.copies.length : num(w.n, 0)} copies branched from checkpoint ${fork}.`, 'archil')
+        const nCopies = Array.isArray(w.copies) ? w.copies.length : num(w.n, 0)
+        cap(
+          T,
+          String(w.purpose || 'wave').toUpperCase(),
+          w.purpose === 'natural'
+            ? `The original spec, built ${nCopies} more times from checkpoint ${fork}, nothing changed: does it fail every time?`
+            : `"${w.wave}": ${nCopies} copies branched from checkpoint ${fork}.`,
+          'archil',
+        )
         T = playWave(w, T, {})
         cap(T, String(w.purpose || 'wave').toUpperCase(), `"${w.wave}" finished in ${num(w.wall_s, 0) ? w.wall_s + ' s' : 'unknown time'}.`)
         T += 2.2

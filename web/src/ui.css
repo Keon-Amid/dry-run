@@ -47,7 +47,7 @@ select.btn { max-width: 250px; }
 .spr { image-rendering: pixelated; display: inline-block; vertical-align: middle; }
 
 /* death cards */
-.cards { position: absolute; inset: 0; background: rgba(7, 6, 12, 0.84); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 16px; overflow: auto; }
+.cards { position: absolute; inset: 0; background: rgba(7, 6, 12, 0.84); display: flex; flex-direction: column; align-items: center; justify-content: safe center; gap: 14px; padding: 36px 16px 16px; overflow: auto; }
 .cardrow { display: flex; gap: 22px; align-items: stretch; justify-content: center; flex-wrap: wrap; }
 .scroll { position: relative; width: 330px; padding: 40px 16px 14px; background: var(--parch); color: var(--shadow); border: 4px solid var(--shadow); box-shadow: 0 0 0 4px var(--stoneL), 10px 10px 0 4px rgba(0, 0, 0, 0.55); font-size: 20px; line-height: 19px; }
 .scroll::before, .scroll::after { content: ''; position: absolute; left: -10px; right: -10px; height: 12px; background: var(--parch); border: 4px solid var(--shadow); }
@@ -103,3 +103,15 @@ td { padding: 1px 8px 1px 0; border-top: 2px dotted var(--stoneL); }
 .stubnote { margin: 10px 0; padding: 6px 8px; background: var(--shadow); color: var(--ember); }
 .stubnote code { display: block; color: var(--bone); font-family: var(--body); }
 .uploadbar { display: flex; gap: 8px; justify-content: flex-end; }
+
+.tabs { display: flex; gap: 6px; }
+.why { margin: 6px 0; padding: 4px 6px; background: rgba(7, 6, 12, 0.1); border-left: 4px solid var(--stoneL); word-break: break-word; }
+.scroll.result { width: 980px; max-width: 96%; padding-top: 14px; }
+.scroll.result h2 { color: var(--fire); margin-top: 0; }
+.resblock { margin-bottom: 10px; }
+table.arms { margin: 6px 0; font-size: 21px; }
+table.arms td { vertical-align: middle; padding: 3px 10px 3px 0; }
+.chip { font-family: var(--px); font-size: 7px; padding: 4px 5px; background: var(--shadow); color: var(--parch); white-space: nowrap; }
+.arm-before .chip { color: var(--red); } .arm-after .chip { color: var(--green); } .arm-baseline .chip { color: var(--cyan); }
+td.cost { color: var(--stoneL); white-space: nowrap; }
+table.arms th { font-family: var(--body); font-size: 18px; color: var(--stoneL); text-transform: uppercase; }

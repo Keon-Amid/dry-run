@@ -1,4 +1,5 @@
-import { frac, type RunData } from './data'
+import { useState } from 'react'
+import { frac, show, type RunData } from './data'
 import { Spr } from './Spr'
 
 export function Slots({ score, fails }: { score: any; fails?: boolean }) {
@@ -24,12 +25,105 @@ export function headline(c: any): string {
   return 'VERDICT PENDING'
 }
 
+// The final screen: before / after / baseline pass rates, straight from report.json.
+function ResultPanel({ data }: { data: RunData }) {
+  const rep = data.report || {}
+  const checks = Object.entries(rep.checks ?? {}) as [string, any][]
+  const wins: any[] = rep.winning_rewrites ?? []
+  const tot = rep.archil_totals
+  const sp = rep.spent?.total
+  return (
+    <div className="scroll result" onClick={(e) => e.stopPropagation()}>
+      <h2>BEFORE AND AFTER</h2>
+      {checks.map(([name, v]) => {
+        const win = wins.find((w) => w.check === name)
+        const held: string[] = v.heldout_checks ?? []
+        return (
+          <div key={name} className="resblock">
+            <div className="check">
+              check: {name}
+              {held.length ? ` · held-out: ${held.join(', ')}` : ''}
+            </div>
+            <table className="arms">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>what was built</th>
+                  <th>visible check</th>
+                  <th>held-out</th>
+                  <th>cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(v.arms ?? []).map((a: any, i: number) => {
+                  const kind = String(a.arm).startsWith('before') ? 'before' : String(a.arm).startsWith('after') ? 'after' : 'baseline'
+                  return (
+                    <tr key={i} className={'arm-' + kind}>
+                      <td>
+                        <span className="chip">{kind.toUpperCase()}</span>
+                      </td>
+                      <td>{String(a.label ?? a.arm).replace(/^(Before|After|Baseline):\s*/i, '')}</td>
+                      <td>
+                        <Slots score={a.visible} />
+                      </td>
+                      <td>
+                        <Slots score={a.heldout} />
+                      </td>
+                      <td className="cost">{a.cost == null || /None/.test(String(a.cost)) ? 'unknown' : String(a.cost)}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+            {win && (
+              <div className="win">
+                ★ WINNING FIX: {win.text}
+                <small>
+                  visible {win.visible ?? 'unknown'} · held-out {win.heldout ?? 'unknown'} · confirm build{' '}
+                  {win.confirm_passed === true ? 'passed' : win.confirm_passed === false ? 'failed' : 'unknown'}
+                </small>
+              </div>
+            )}
+          </div>
+        )
+      })}
+      <div className="row">
+        <span>spent on the whole run</span>
+        <em>{sp ? `${show(sp.model_calls)} model calls · ${typeof sp.usd === 'number' ? '$' + (sp.usd < 1 ? sp.usd.toFixed(4) : sp.usd.toFixed(2)) : 'cost unknown'}` : 'unknown'}</em>
+      </div>
+      <div className="row">
+        <span>replay avoided by branching</span>
+        <em>{tot ? `${show(tot.steps)} steps · ${show(tot.minutes, ' min')} · ${show(tot.copies)} copies` : 'unknown'}</em>
+      </div>
+    </div>
+  )
+}
+
 // One card per failing check. Every line is read from triage.json and swarm.json.
 export function Cards({ data, onClose }: { data: RunData; onClose: () => void }) {
   const checks: any[] = data.triage?.checks ?? []
   const swarms: any[] = data.swarm?.swarms ?? []
+  const hasResult = Object.keys(data.report?.checks ?? {}).length > 0
+  const [view, setView] = useState<'result' | 'cards'>(hasResult ? 'result' : 'cards')
+  const why = (name: string) => {
+    const m = data.run?.final_messages?.[name]
+    return typeof m === 'string' && m ? (m.length > 220 ? m.slice(0, 220) + '…' : m) : null
+  }
   return (
     <div className="cards" onClick={onClose}>
+      {hasResult && (
+        <div className="tabs" onClick={(e) => e.stopPropagation()}>
+          <button className={'btn' + (view === 'result' ? ' on' : '')} onClick={() => setView('result')}>
+            BEFORE / AFTER
+          </button>
+          <button className={'btn' + (view === 'cards' ? ' on' : '')} onClick={() => setView('cards')}>
+            DEATH CARDS
+          </button>
+        </div>
+      )}
+      {hasResult && view === 'result' ? (
+        <ResultPanel data={data} />
+      ) : (
       <div className="cardrow" onClick={(e) => e.stopPropagation()}>
         {checks.map((c) => {
           const sm = swarms.find((s) => s.check === c.check)
@@ -58,6 +152,7 @@ export function Cards({ data, onClose }: { data: RunData; onClose: () => void })
                 </div>
               )}
               <p className="cardtext">{c.card ?? ''}</p>
+              {why(c.check) && <p className="why">why it failed: {why(c.check)}</p>}
               {c.rebuild && (
                 <div className="row">
                   <span>rebuild fails</span>
@@ -118,6 +213,7 @@ export function Cards({ data, onClose }: { data: RunData; onClose: () => void })
           )
         })}
       </div>
+      )}
       <button className="btn closebtn" onClick={onClose}>
         CLOSE
       </button>

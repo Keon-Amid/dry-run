@@ -9,10 +9,11 @@ export type RunData = {
   swarm?: Json
   archil?: Json
   baseline?: Json
+  report?: Json
   sigs: Record<string, string>
   sig: string
 }
-const FILES = ['run', 'triage', 'results', 'swarm', 'archil', 'baseline'] as const
+const FILES = ['run', 'triage', 'results', 'swarm', 'archil', 'baseline', 'report'] as const
 
 function hash(s: string): string {
   let h = 5381

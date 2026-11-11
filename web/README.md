@@ -1,7 +1,8 @@
 # Banzai page
 
 The pixel-roguelike view of a run. It reads only the run files in `../orchestrator/runs/<stamp>/`
-(`run.json`, `triage.json`, `results.json`, `swarm.json`, `archil.json`); every number on screen comes from them.
+(`run.json`, `triage.json`, `results.json`, `swarm.json`, `archil.json`, plus `baseline.json` and `report.json` when
+present); every number on screen comes from them. `report.json` feeds the final BEFORE / AFTER screen.
 
 ```bash
 cd web
