@@ -123,7 +123,8 @@ against fakes first. `python -m orchestrator.pipeline [--local]` writes all five
   checks{name: {heldout_checks, arms[{arm: before_build|before_natural|before_control|after_culprit_edit|after_swarm|
   after_confirm|baseline, label, visible, heldout, cost}]}}, winning_rewrites[{check, culprit, route, text, visible,
   heldout, confirm_passed, all_winners}], archil_totals, spent, stages_s, spec_files{original, fixed},
-  culprits[{check, kind: spec_line|rule, step?, line?, rule?, rule_text?, fix}], culprit_lines, before_after}`.
+  culprits[{check, kind: spec_line|rule, step?, line?, rule?, rule_text?, fix}], culprit_lines, before_after,
+  after_both{wave, checks, passed, total}}` (arms may include `after_both`; results.json purposes add `confirm_both`, `live`).
 - **`spec.original.md`** (spec as built + its harness rules), **`spec.fixed.md`** (CONFIRMed winners applied, culprit
   rules struck through), **`specs.json`**, **`before_after.json`** (`{probes, columns[{name, workspace, results}]}`
   from `scripts/before_after.py` over `workspaces/{build, confirm-*, baseline-*}`, the exported code).
