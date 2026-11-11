@@ -308,7 +308,20 @@ export function buildTimeline(d: RunData): Timeline {
     const maxWall = Math.max(0.001, ...copies.map((c) => num(c.wall_s, 0)))
     const rw = new Map<string, any>((opt.swarm?.rewrites ?? []).map((r: any) => [r.route, r]))
     const sus = new Map<string, any>((opt.tri?.suspects?.suspects ?? []).map((s: any) => [s.route, s]))
-    const heldNames: string[] = opt.swarm?.heldout_checks ?? []
+    const heldNames: string[] =
+      opt.swarm?.heldout_checks ?? opt.tri?.heldout_checks ?? (Array.isArray(w.targets) ? w.targets.filter((x: string) => x !== w.check) : [])
+    // waves with no single target check (a plain re-build of the original spec) are graded on the triaged checks
+    const noTarget = !w.check
+    const triReal: string[] = triChecks.filter((c) => c.verdict && c.verdict !== 'test_wrong').map((c) => c.check)
+    const gated = purpose === 'swarm' || purpose === 'baseline'
+    const base = (d.baseline?.baselines ?? []).find((b: any) => b.wave === w.wave)
+    const outcomeOf = (c: any): 'ok' | 'dead' | 'held' | 'invalid' => {
+      if (c.invalid === true || c.ok === false) return 'invalid'
+      if (noTarget && triReal.length) return triReal.some((name) => c.checks?.[name] === false) ? 'dead' : 'ok'
+      if (gated && w.check && typeof c.checks?.[w.check] === 'boolean')
+        return c.checks[w.check] === false ? 'dead' : heldNames.some((h) => c.checks?.[h] === false) ? 'held' : 'ok'
+      return c.passed === true ? 'ok' : 'dead'
+    }
     const arch = new Map<string, any>()
     const aw = archWaves.find((x) => x.wave === w.wave)
     for (const c of aw?.copies ?? []) arch.set(c.id, c)
@@ -330,6 +343,12 @@ export function buildTimeline(d: RunData): Timeline {
       if (isControl) {
         label = 'CONTROL'
         text = 'nothing changed'
+      } else if (purpose === 'natural') {
+        label = 'ORIGINAL SPEC'
+        text = `built again from step ${fork}, nothing changed`
+      } else if (purpose === 'baseline') {
+        label = 'BASELINE'
+        text = `one plain ${base?.fixer ?? 'Claude'} call rewrote the whole spec`
       } else if (isPlain) {
         label = 'REBUILD'
         text = to - fork > 1 ? `steps ${fork + 1} to ${to} built again from checkpoint ${fork}, nothing changed` : `step ${to} rebuilt from checkpoint ${fork}, nothing changed`
@@ -339,7 +358,8 @@ export function buildTimeline(d: RunData): Timeline {
       } else if (r.kind === 'spec_line') {
         if (purpose === 'swarm') {
           label = `REWRITE ${li + 1}`
-          text = `"${R?.text ?? r.edit ?? ''}"`
+          const rt = String(R?.text ?? r.edit ?? '')
+          text = rt.trim() ? `"${rt}"` : '(an empty rewrite)'
         } else {
           label = Sx?.step != null ? `SPEC STEP ${Sx.step}` : 'SPEC LINE'
           text = Sx?.old != null ? `"${Sx.old}" → "${Sx.new ?? r.edit ?? ''}"` : `→ "${r.edit ?? ''}"`
@@ -348,9 +368,19 @@ export function buildTimeline(d: RunData): Timeline {
         label = String(r.route ?? 'route').toUpperCase()
         text = r.edit != null ? String(r.edit) : ''
       }
-      const passedN = typeof r.passed === 'number' ? r.passed : mine.filter((c) => c.passed === true).length
+      const outs = mine.map(outcomeOf)
+      const okN = outs.filter((o) => o === 'ok').length
+      const heldN = outs.filter((o) => o === 'held').length
+      const passedN = typeof r.passed === 'number' ? r.passed : okN
       const gradedN = typeof r.graded === 'number' ? r.graded : typeof r.runs === 'number' ? r.runs : mine.length
-      const score = typeof r.score === 'string' ? r.score : `${passedN}/${gradedN}`
+      let score = typeof r.score === 'string' ? r.score : `${passedN}/${gradedN}`
+      let sub: string | undefined = R ? `visible ${R.visible ?? score} · held-out ${R.heldout ?? 'unknown'}` : undefined
+      if (noTarget && triReal.length) {
+        score = `${okN}/${mine.length}`
+        sub = triReal.map((name) => `${name} ${mine.filter((c) => c.checks?.[name] === true).length}/${mine.length}`).join(' · ')
+      } else if (purpose === 'baseline' && base) {
+        sub = `visible ${base.visible ?? 'unknown'} · held-out ${base.heldout ?? 'unknown'}`
+      }
       const lane: Lane = {
         y0,
         h: pitch - 3,
@@ -359,13 +389,12 @@ export function buildTimeline(d: RunData): Timeline {
         text,
         color,
         score,
-        sub: R ? `visible ${R.visible ?? score} · held-out ${R.heldout ?? 'unknown'}` : undefined,
+        sub,
         scoreT: Infinity,
-        tone: gradedN > 0 && passedN === gradedN ? 'good' : passedN === 0 ? 'bad' : 'mixed',
+        tone: mine.length > 0 && okN === mine.length ? 'good' : okN === 0 && heldN === 0 ? 'bad' : 'mixed',
         flag: !!R?.winner,
-        gate: purpose === 'swarm',
+        gate: gated,
       }
-      if (R && !R.winner && lane.tone === 'good') lane.tone = 'mixed'
       mine.forEach((c, ci) => {
         const a = mk(String(c.id), String(c.id), `${label}${text ? ': ' + text : ''}`, color)
         a.wave = w.wave
@@ -375,8 +404,9 @@ export function buildTimeline(d: RunData): Timeline {
         seg(a, ts, ts + 0.5, forkX, xs, FY, feetY, 'spawn')
         let t = ts + 0.5
         const rel = 0.8 + 0.4 * (num(c.wall_s, maxWall) / maxWall)
-        const invalid = c.invalid === true || c.ok === false
-        const failedHeld = !!R && c.passed === true && heldNames.some((h) => c.checks?.[h] === false)
+        const outcome = outs[ci]
+        const invalid = outcome === 'invalid'
+        const failedHeld = outcome === 'held'
         if (invalid) {
           const xe = at(Math.min(to, fork + 1)) + off * 19
           const dur = perStep * rel
@@ -384,7 +414,7 @@ export function buildTimeline(d: RunData): Timeline {
           t += dur
           seg(a, t, t, xe, xe, feetY, feetY, 'invalid')
           a.mark = { t, kind: 'invalid' }
-        } else if (c.passed === true && !failedHeld) {
+        } else if (outcome === 'ok') {
           const xe = at(to) + off * 19
           const dur = span * perStep * rel
           seg(a, t, t + dur, xs, xe, feetY, feetY, 'walk')
@@ -472,7 +502,49 @@ export function buildTimeline(d: RunData): Timeline {
     return t + 2.6
   }
 
+  // any wave that is not triage / suspects / swarm / confirm: the plain re-builds and the one-call baseline
+  function playOther(w: any, T0: number): number {
+    let t = T0
+    const fork = Math.round(num(w.fork_step, 0))
+    const nCopies = Array.isArray(w.copies) ? w.copies.length : num(w.n, 0)
+    const phase = String(w.purpose || 'wave').toUpperCase()
+    const base = (d.baseline?.baselines ?? []).find((b: any) => b.wave === w.wave)
+    closeTags(t)
+    cap(
+      t,
+      phase,
+      w.purpose === 'natural'
+        ? `First, the original spec built ${nCopies} more times from step ${fork}, nothing changed. Does it fail every time?`
+        : w.purpose === 'baseline'
+          ? `The baseline for "${w.check ?? '?'}": one plain ${base?.fixer ?? 'Claude'} call rewrites the whole spec, then ${nCopies} fresh builds from step ${fork}.`
+          : `"${w.wave}": ${nCopies} copies branched from checkpoint ${fork}.`,
+      'archil',
+    )
+    t = playWave(w, t, { tri: triChecks.find((x) => x.check === w.check) })
+    const lane = laneSets[laneSets.length - 1]?.lanes[0]
+    cap(
+      t,
+      phase,
+      w.purpose === 'natural'
+        ? `Original spec, fresh builds: ${lane?.sub ?? lane?.score ?? 'unknown'}.`
+        : w.purpose === 'baseline' && base
+          ? `Baseline for "${w.check}": visible check ${base.visible ?? 'unknown'}, held-out ${base.heldout ?? 'unknown'}.`
+          : `"${w.wave}" finished${typeof w.wall_s === 'number' ? ' in ' + w.wall_s + ' s' : ''}.`,
+      w.purpose === 'baseline' && base?.passes_all === false ? 'bad' : 'info',
+    )
+    t += 2.6
+    endWave(t)
+    return t
+  }
+
   if (buildDone) {
+    // waves the orchestrator ran before triage (the plain re-builds of the original spec)
+    const firstTri = waves.findIndex((w) => w.purpose === 'triage')
+    for (const w of firstTri > 0 ? waves.slice(0, firstTri) : []) {
+      if (['suspects', 'swarm', 'confirm'].includes(w.purpose)) continue
+      played.add(w.wave)
+      T = playOther(w, T)
+    }
     // TRIAGE, in the orchestrator's order
     for (const c of triChecks) {
       const m = markerOf(c.check)
@@ -536,10 +608,20 @@ export function buildTimeline(d: RunData): Timeline {
         T = playWave(w, T, { tri: c })
         if (c?.culprit) {
           const q = c.culprit
+          const rc = (d.report?.culprits ?? []).find((x: any) => x.check === c.check)
           const what =
-            q.kind === 'rule_off' ? `harness rule "${q.rule}"` : q.kind === 'spec_line' ? `spec step ${q.step ?? '?'}, "${q.old ?? ''}"` : String(q.route)
+            q.kind === 'rule_off'
+              ? `harness rule "${q.rule}"${rc?.rule_text ? `: "${rc.rule_text}"` : ''}`
+              : q.kind === 'spec_line'
+                ? `spec step ${q.step ?? '?'}, "${q.old ?? ''}"`
+                : String(q.route)
           m?.states.push({ t: T, kind: 'culprit' })
-          cap(T, 'SUSPECTS', `CULPRIT: ${what}. With that one change: ${q.score ?? 'unknown'} pass. Control, nothing changed: ${c.suspects?.control ?? 'unknown'}.`, 'gold')
+          cap(
+            T,
+            'SUSPECTS',
+            `CULPRIT: ${what} ${q.kind === 'rule_off' ? 'With the rule switched off' : 'With that one line changed'}: ${q.score ?? 'unknown'} pass. Control, nothing changed: ${c.suspects?.control ?? 'unknown'}.`,
+            'gold',
+          )
           T += 3.6
         } else {
           cap(T, 'SUSPECTS', `Scores are in for ${Array.isArray(w.routes) ? w.routes.length : 0} routes.`)
@@ -561,7 +643,7 @@ export function buildTimeline(d: RunData): Timeline {
             T,
             'SWARM',
             wins.length
-              ? `${wins.length} of ${sm.n_rewrites ?? (sm.rewrites ?? []).length} rewrites pass the check and the held-out checks. Best: "${wins[0].text}"`
+              ? `${wins.length} of ${sm.n_rewrites ?? (sm.rewrites ?? []).length} rewrites pass the check and the held-out checks. Winner: "${sm.confirm?.text ?? wins[0].text}"`
               : `No rewrite passed both the check and the held-out checks within budget.`,
             wins.length ? 'gold' : 'bad',
           )
@@ -583,7 +665,8 @@ export function buildTimeline(d: RunData): Timeline {
           t += 0.55
           fires[k - 1].goldT = t
         }
-        const text = triChecks.find((x) => x.confirm?.text)?.confirm?.text
+        const ctext = (triChecks.find((x) => x.check === w.check) ?? triChecks.find((x) => x.confirm?.text))?.confirm?.text
+        const text = ctext ? (c0 && c0.passed === false ? `The fresh build with "${ctext}" did not pass.` : `CONFIRMED: a fresh build from step 0 with "${ctext}" passes.`) : undefined
         if (c0 && c0.passed === false) {
           seg(a, t, t + 0.5, at(n), at(n), FY, FY, 'fall')
           t += 0.5
@@ -599,21 +682,7 @@ export function buildTimeline(d: RunData): Timeline {
           cap(t, 'CONFIRM', text ?? `The fixed spec builds clean from step 0.`, 'gold')
         }
         T = t + 3
-      } else {
-        const nCopies = Array.isArray(w.copies) ? w.copies.length : num(w.n, 0)
-        cap(
-          T,
-          String(w.purpose || 'wave').toUpperCase(),
-          w.purpose === 'natural'
-            ? `The original spec, built ${nCopies} more times from checkpoint ${fork}, nothing changed: does it fail every time?`
-            : `"${w.wave}": ${nCopies} copies branched from checkpoint ${fork}.`,
-          'archil',
-        )
-        T = playWave(w, T, {})
-        cap(T, String(w.purpose || 'wave').toUpperCase(), `"${w.wave}" finished in ${num(w.wall_s, 0) ? w.wall_s + ' s' : 'unknown time'}.`)
-        T += 2.2
-        endWave(T)
-      }
+      } else T = playOther(w, T)
     }
   }
 
@@ -621,7 +690,7 @@ export function buildTimeline(d: RunData): Timeline {
   if (complete) {
     const count = (v: string) => triChecks.filter((c) => c.verdict === v).length
     const bits: string[] = []
-    if (count('real_problem')) bits.push(`${count('real_problem')} real problem${count('real_problem') === 1 ? '' : 's'} traced to its cause`)
+    if (count('real_problem')) bits.push(count('real_problem') === 1 ? `1 real problem traced to its cause` : `${count('real_problem')} real problems traced to their causes`)
     if (count('model_slip')) bits.push(`${count('model_slip')} model slip`)
     if (count('test_wrong')) bits.push(`${count('test_wrong')} wrong test`)
     if (count('inconclusive')) bits.push(`${count('inconclusive')} inconclusive`)

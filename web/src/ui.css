@@ -141,3 +141,8 @@ table.arms th { font-family: var(--body); font-size: 18px; color: var(--stoneL);
 .diffrow span { padding: 0 8px; white-space: pre-wrap; word-break: break-word; font-size: 19px; line-height: 19px; min-height: 19px; border-right: 2px solid var(--parch); }
 .diffrow.chg .l, .diffrow.del .l { background: rgba(214, 69, 93, 0.35); text-decoration: line-through; }
 .diffrow.chg .r, .diffrow.add .r { background: rgba(111, 207, 98, 0.45); }
+
+table.probes td { font-size: 19px; word-break: break-word; }
+table.probes tr.differs td:first-child { color: var(--shadow); }
+table.probes td.chg { background: rgba(111, 207, 98, 0.45); }
+.scroll.result { max-height: none; }

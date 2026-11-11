@@ -12,12 +12,13 @@ export type RunData = {
   archil?: Json
   baseline?: Json
   report?: Json
+  before_after?: Json
   specOriginal?: string
   specFixed?: string
   sigs: Record<string, string>
   sig: string
 }
-const FILES = ['run', 'triage', 'results', 'swarm', 'archil', 'baseline', 'report'] as const
+const FILES = ['run', 'triage', 'results', 'swarm', 'archil', 'baseline', 'report', 'before_after'] as const
 
 function hash(s: string): string {
   let h = 5381
@@ -55,7 +56,7 @@ export async function loadRun(id: string, prev?: RunData | null, files?: string[
   const keep = prev && prev.id === id ? prev : null
   const want = (name: string) => !files || files.includes(name)
   await Promise.all(
-    TEXTS.filter(([, name]) => !!files && files.includes(name)).map(async ([key, name]) => {
+    TEXTS.filter(([, name]) => want(name)).map(async ([key, name]) => {
       try {
         const r = await fetch(`/api/runs/${encodeURIComponent(id)}/${name}`, { cache: 'no-store' })
         if (!r.ok) return

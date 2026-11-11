@@ -142,6 +142,37 @@ function ResultPanel({ data }: { data: RunData }) {
           </div>
         )
       })}
+      {Array.isArray(data.before_after?.columns) && data.before_after.columns.length > 0 && (
+        <div className="resblock">
+          <div className="check">the same calls on each build (before_after.json)</div>
+          <table className="arms probes">
+            <thead>
+              <tr>
+                <th>call</th>
+                {data.before_after.columns.map((c: any, i: number) => (
+                  <th key={i}>{String(c.name ?? '')}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {Object.keys(data.before_after.columns[0].results ?? {}).map((k) => {
+                const vals = data.before_after.columns.map((c: any) => String(c.results?.[k] ?? 'unknown'))
+                const differs = vals.some((v: string) => v !== vals[0])
+                return (
+                  <tr key={k} className={differs ? 'differs' : ''}>
+                    <td>{k}</td>
+                    {vals.map((v: string, i: number) => (
+                      <td key={i} className={differs && i > 0 && v !== vals[0] ? 'chg' : ''}>
+                        {v}
+                      </td>
+                    ))}
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
       <div className="row">
         <span>spent on the whole run</span>
         <em>{sp ? `${show(sp.model_calls)} model calls · ${typeof sp.usd === 'number' ? '$' + (sp.usd < 1 ? sp.usd.toFixed(4) : sp.usd.toFixed(2)) : 'cost unknown'}` : 'unknown'}</em>
@@ -165,6 +196,10 @@ export function Cards({ data, onClose }: { data: RunData; onClose: () => void })
   useEffect(() => {
     if (hasResult) setView((v) => (v === 'diff' ? v : 'result'))
   }, [hasResult])
+  const ruleText = (name: string): string | null => {
+    const rc = (data.report?.culprits ?? []).find((x: any) => x.check === name)
+    return typeof rc?.rule_text === 'string' ? rc.rule_text : null
+  }
   const why = (name: string) => {
     const m = data.run?.final_messages?.[name]
     return typeof m === 'string' && m ? (m.length > 220 ? m.slice(0, 220) + '…' : m) : null
@@ -210,7 +245,14 @@ export function Cards({ data, onClose }: { data: RunData; onClose: () => void })
                 <div className="culprit">
                   {q.kind === 'rule_off' ? (
                     <>
-                      rule <b>{q.rule ?? 'unknown'}</b>
+                      harness rule <b>{q.rule ?? 'unknown'}</b>
+                      {ruleText(c.check) && (
+                        <>
+                          <br />
+                          <s>{ruleText(c.check)}</s>
+                          <br />→ <b>switch the rule off</b>
+                        </>
+                      )}
                     </>
                   ) : (
                     <>
