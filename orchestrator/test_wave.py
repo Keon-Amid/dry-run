@@ -55,8 +55,8 @@ class PipelineTest(unittest.TestCase):
 
     def test_run_files(self):
         purposes = [w["purpose"] for w in self.files["results"]["waves"]]
-        self.assertEqual(purposes, ["triage", "triage", "suspects", "swarm", "confirm"])  # the decoy needs no wave
-        self.assertEqual(len(self.files["archil"]["waves"]), 5)
+        self.assertEqual(purposes, ["triage", "triage", "suspects", "swarm", "confirm", "baseline"])  # decoy: no wave
+        self.assertEqual(len(self.files["archil"]["waves"]), 6)
         self.assertEqual(self.files["archil"]["spent"]["total"]["model_calls"], "unknown")  # stub: no model calls
         self.assertIn("build", self.files["archil"]["stages_s"])
         self.assertTrue(all(c["ok"] for w in self.files["results"]["waves"] for c in w["copies"]))
@@ -135,6 +135,41 @@ class BuilderHandoffTest(unittest.TestCase):
             "sys.exit(2)\n")
         res = run_builder(w, 1, 1, "copy")
         self.assertEqual((res["exit_code"], outcome(res)), (2, "invalid"))
+
+
+class BaselineTest(unittest.TestCase):
+    def test_stub_fixer_baseline_and_report(self):
+        tmp = Path(tempfile.mkdtemp())
+        pipeline(LocalStore(tmp / "store"), tmp / "run")
+        b = json.loads((tmp / "run" / "baseline.json").read_text())["baselines"][0]
+        self.assertEqual((b["fixer"], b["visible"], b["heldout"], b["call"]["model_calls"]), ("stub-fixer", "0/3", "0/3", 0))
+        report = (tmp / "run" / "report.md").read_text()
+        self.assertIn("| Before: control branches (no change) | 0/3 | 0/3 |", report)
+        self.assertIn('| After: swarm rw1 "Links expire 30 days after their last click." | 3/3 | 3/3 |', report)
+        self.assertIn("| Baseline: one stub-fixer call fixes the spec, built from step 0 | 0/3 | 0/3 |", report)
+
+    def test_a_fixer_that_fixes_the_spec_builds_from_step_0_three_times(self):
+        class Fixer:
+            model = "fake-fixer"
+
+            def create(self, system, messages, tools):
+                spec = messages[0]["content"].split("<spec>\n", 1)[1].split("\n</spec>", 1)[0]
+                fixed = spec.replace("Links expire after 30 days.", "Links expire 30 days after their last click.")
+                return {"model": self.model, "content": [{"type": "text", "text": f"<spec>\n{fixed}\n</spec>"}],
+                        "usage": {"input_tokens": 10, "output_tokens": 5}}
+        tmp = Path(tempfile.mkdtemp())
+        pipeline(LocalStore(tmp / "store"), tmp / "run", fixer=Fixer())
+        b = json.loads((tmp / "run" / "baseline.json").read_text())["baselines"][0]
+        self.assertEqual((b["visible"], b["heldout"], b["regressions"], b["passes_all"]), ("3/3", "3/3", [], True))
+        self.assertIn("+Links expire 30 days after their last click.", b["diff"])
+        w = next(w for w in json.loads((tmp / "run" / "results.json").read_text())["waves"] if w["purpose"] == "baseline")
+        self.assertEqual((w["fork_step"], w["n"]), (0, 3))
+        self.assertTrue(all(c["builder"]["built"] == list(range(1, 8)) for c in w["copies"]))
+
+    def test_a_reply_that_changes_the_steps_is_rejected(self):
+        from orchestrator.baseline import extract_spec
+        with self.assertRaisesRegex(ValueError, "steps"):
+            extract_spec("<spec>\n## Step 1\nx\n</spec>", "## Step 1\na\n## Step 2\nb\n")
 
 
 class BrendanPatchTest(unittest.TestCase):

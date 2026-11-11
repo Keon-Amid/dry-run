@@ -3,7 +3,8 @@
     .venv/bin/python -m orchestrator.pipeline [--local] [--builder stub|real] [--fixture stub|toy] [--smoke]
                                               [--copies 3] [--max-builders N]
 
-Writes orchestrator/runs/<stamp>/: run.json, triage.json, results.json (every wave), swarm.json, archil.json.
+Writes orchestrator/runs/<stamp>/: run.json, triage.json, results.json (every wave), swarm.json, archil.json,
+baseline.json (one plain Claude call fixes the spec; 3 fresh builds of it) and report.md (before/after/baseline).
 --fixture stub: the stub spec/checks/golden/rules/rewrites in orchestrator/ (all three verdicts planted).
 --fixture toy:  brendan's builder/tests/fixtures/toy (spec, rules, canary checks via orchestrator/assert_checks.py).
 --smoke: build + triage only (or, if nothing fails, one 3-copy rebuild of the last step), to exercise the real builder.
@@ -23,7 +24,8 @@ import time
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from orchestrator.archil_log import ArchilLog, spent
+from orchestrator.archil_log import ArchilLog, spent, usage_usd
+from orchestrator.baseline import StubFixer, fix_spec
 from orchestrator.assert_checks import build_checks_file
 from orchestrator.stores import ArchilStore, LocalStore
 from orchestrator.wave import HERE, REAL_BUILDER, STUB_BUILDER, STUB_CHECKS, Kit, _write_json, build, run_wave
@@ -86,14 +88,34 @@ def _route(wave: dict, route: str) -> dict:
     return next(r for r in wave["routes"] if r["route"] == route)
 
 
+def _score(cps: list[dict], c: str, heldout: list[str], ctrl_green) -> dict:
+    """Visible and held-out pass counts for a set of copies, and checks that were green in every control copy
+    but went red here."""
+    ok = [cp for cp in cps if cp["ok"]]
+    visible = sum(cp["checks"].get(c, False) for cp in ok)
+    held = sum(all(cp["checks"].get(h, False) for h in heldout) for cp in ok)
+    regress = sorted({k for cp in ok for k in ctrl_green if k != c and not cp["checks"].get(k)})
+    return {"visible": f"{visible}/{len(cps)}", "heldout": f"{held}/{len(cps)}", "regressions": regress,
+            "errors": len(cps) - len(ok), "_all": len(ok) == len(cps) and visible == held == len(cps) and not regress}
+
+
 def _verdict(fails: int, runs: int, errors: int) -> str:
     if errors or runs == 0:
         return "inconclusive"
     return {0: "model_slip", runs: "real_problem"}.get(fails, "inconclusive")
 
 
+def _usd(model, usage, fixer):
+    if isinstance(fixer, StubFixer):
+        return 0.0
+    try:
+        return round(usage_usd(model, usage), 6)
+    except KeyError:
+        return "unknown"
+
+
 def pipeline(store, run_dir: Path, *, fixture: Fixture | None = None, kit: Kit | None = None,
-             copies: int = N_COPIES, smoke: bool = False) -> dict:
+             copies: int = N_COPIES, smoke: bool = False, baseline: bool = True, fixer=None) -> dict:
     fx = fixture or load_fixture("stub", run_dir / "_scratch")
     kit = kit or Kit()
     kit.checks_src = fx.checks_src
@@ -185,18 +207,14 @@ def pipeline(store, run_dir: Path, *, fixture: Fixture | None = None, kit: Kit |
                       targets=[c], purpose="swarm", check=c, kit=kit)
         rewrites = []
         for e in rws:
-            cps = [cp for cp in ww["copies"] if cp["route"] == e["route"]]
-            ok = [cp for cp in cps if cp["ok"]]
-            visible = sum(cp["checks"].get(c, False) for cp in ok)
-            held = sum(all(cp["checks"].get(h, False) for h in heldout) for cp in ok)
-            regress = sorted({k for cp in ok for k in ctrl_green if k != c and not cp["checks"].get(k)})
-            rewrites.append({"route": e["route"], "text": e["new"], "visible": f"{visible}/{len(cps)}",
-                             "heldout": f"{held}/{len(cps)}", "regressions": regress, "errors": len(cps) - len(ok),
-                             "winner": len(ok) == len(cps) and visible == held == len(cps) and not regress})
+            sc = _score([cp for cp in ww["copies"] if cp["route"] == e["route"]], c, heldout, ctrl_green)
+            rewrites.append({"route": e["route"], "text": e["new"], **{k: v for k, v in sc.items() if k != "_all"},
+                             "winner": sc["_all"]})
         winners = [r for r in rewrites if r["winner"]]
         sw = {"check": c, "culprit": t_["culprit"], "fork_checkpoint_id": fork, "wave": ww["wave"],
               "heldout_checks": heldout, "n_branches": ww["n"], "n_rewrites": len(rws),
-              "rewrites": rewrites, "winners": [r["route"] for r in winners], "confirm": None}
+              "rewrites": rewrites, "winners": [r["route"] for r in winners], "confirm": None,
+              "control_green": sorted(ctrl_green)}
         t_["swarm"] = {"branches": ww["n"], "rewrites": len(rws), "winners": len(winners)}
         print(f"swarm {c}: winners {[r['text'] for r in winners]}", flush=True)
         stage("swarm")
@@ -218,15 +236,103 @@ def pipeline(store, run_dir: Path, *, fixture: Fixture | None = None, kit: Kit |
             stage("confirm")
         swarm.append(sw)
 
+    # BASELINE: one plain Claude call fixes the whole spec from the failing check alone; 3 fresh builds of it
+    baselines = []
+    if baseline and swarm:
+        if fixer is None:
+            from builder.llm import AnthropicLLM
+            fixer = StubFixer() if kit.builder_label == "stub" else AnthropicLLM(model=run["model"])
+        for sw in swarm:
+            c, heldout = sw["check"], sw["heldout_checks"]
+            out = fix_spec(fixer, fx.spec, c, meta[c].get("message", ""))
+            b = {"check": c, "fixer": out["model"], "message": meta[c].get("message", ""), "call": {
+                "model_calls": 0 if isinstance(fixer, StubFixer) else 1, "usage": out["usage"], "wall_s": out["wall_s"],
+                "stop_reason": out["stop_reason"], "usd": _usd(out["model"], out["usage"], fixer)},
+                 "diff": out.get("diff"), "fixed_spec": out["fixed_spec"], "error": out.get("error"),
+                 "prompt": out["prompt"], "reply": out["reply"]}
+            if out["fixed_spec"]:
+                bv = run_wave(store, ckpt["0"], [{"route": "baseline", "kind": "spec_replace", "spec": out["fixed_spec"]}],
+                              copies, wave=f"baseline-{c}", to_step=steps, run_dir=run_dir, log=log,
+                              targets=[c, *heldout], purpose="baseline", check=c, kit=kit)
+                sc = _score(bv["copies"], c, heldout, set(sw["control_green"]))
+                b.update(wave=bv["wave"], n_builds=len(bv["copies"]), **{k: v for k, v in sc.items() if k != "_all"},
+                         passes_all=sc["_all"])
+            baselines.append(b)
+            print(f"baseline {c}: visible {b.get('visible')}, held-out {b.get('heldout')} ({b['fixer']})", flush=True)
+        stage("baseline")
+    _write_json(run_dir / "baseline.json", {"run_id": run_dir.name, "baselines": baselines})
+
     for t_ in triage:
         t_["card"] = card(t_)
     _write_json(run_dir / "triage.json", {"run_id": run_dir.name, "checks": triage})
     _write_json(run_dir / "swarm.json", {"run_id": run_dir.name, "swarms": swarm})
     results = json.loads((run_dir / "results.json").read_text()) if (run_dir / "results.json").exists() else {}
     stages["total"] = round(time.perf_counter() - t_start, 3)
-    log.set_spent(spent(json.loads((run_dir / "run.json").read_text()), results), stages)
+    sp = spent(json.loads((run_dir / "run.json").read_text()), results)
+    if baselines:
+        calls = sum(b["call"]["model_calls"] for b in baselines)
+        usd = [b["call"]["usd"] for b in baselines]
+        sp["baseline_calls"] = {"model_calls": calls, "usd": "unknown" if "unknown" in usd else round(sum(usd), 4)}
+        if calls:
+            sp["total"] = {k: ("unknown" if "unknown" in (sp["total"][k], sp["baseline_calls"][k])
+                               else round(sp["total"][k] + sp["baseline_calls"][k], 4)) for k in sp["total"]}
+    log.set_spent(sp, stages)
+    write_report(run_dir)
     print(f"pipeline done in {stages['total']:.1f}s -> {run_dir}", flush=True)
     return {"triage": triage, "swarm": swarm}
+
+
+def write_report(run_dir: Path) -> Path:
+    """report.md: before / after / baseline pass rates side by side, read back from the run files only."""
+    load = lambda n: json.loads((run_dir / f"{n}.json").read_text()) if (run_dir / f"{n}.json").exists() else {}
+    run, results, sw_doc, bl_doc, arch = (load(n) for n in ("run", "results", "swarm", "baseline", "archil"))
+    waves = {w["wave"]: w for w in results.get("waves", [])}
+    spent_w = (arch.get("spent") or {}).get("waves", {})
+    cost = lambda wave: (lambda x: f"{x.get('model_calls')} calls, ${x.get('usd')}")(spent_w.get(wave, {}))
+    lines = [f"# Dry Run report: {run.get('run_id')}", "",
+             f"Builder: {run.get('builder')} · model: {run.get('model')} · disk: `{run.get('disk_id')}`. "
+             "Every number below is read from this folder's run files.", ""]
+    baselines = {b["check"]: b for b in bl_doc.get("baselines", [])}
+    for sw in sw_doc.get("swarms", []):
+        c, held = sw["check"], sw["heldout_checks"]
+        final = run.get("final_checks", {})
+        sus = next((w for w in results.get("waves", []) if w["purpose"] == "suspects" and w["check"] == c), None)
+        ctrl = [cp for cp in (sus or {}).get("copies", []) if cp["route"] == "control"]
+        cs = _score(ctrl, c, held, set()) if ctrl else None
+        rows = [("Before: the original build", f"{int(bool(final.get(c)))}/1",
+                 f"{int(all(final.get(h, False) for h in held))}/1", "build")]
+        if cs:
+            rows.append(("Before: control branches (no change)", cs["visible"], cs["heldout"], cost(sus["wave"])))
+        best = [r for r in sw["rewrites"] if r["winner"]] or sorted(sw["rewrites"], key=lambda r: r["visible"])[-1:]
+        for r in best:
+            rows.append((f"After: swarm {r['route']} \"{r['text']}\"" + ("" if r["winner"] else " (best, not a winner)"),
+                         r["visible"], r["heldout"], cost(sw["wave"])))
+        if sw.get("confirm"):
+            cf = sw["confirm"]
+            v = cf.get("checks") or {}
+            rows.append((f"After: CONFIRM, fresh build from step 0 with {cf['route']}", f"{int(bool(v.get(c)))}/1",
+                         f"{int(all(v.get(h, False) for h in held))}/1", cost(cf["wave"])))
+        b = baselines.get(c)
+        if b:
+            label = f"Baseline: one {b['fixer']} call fixes the spec, built from step 0"
+            if b.get("wave"):
+                rows.append((label, b["visible"], b["heldout"],
+                             f"{cost(b['wave'])} + 1 fix call ${b['call']['usd']}"))
+            else:
+                rows.append((label + f" (no usable spec: {b.get('error')})", "n/a", "n/a", f"${b['call']['usd']}"))
+        lines += [f"## `{c}`", "", f"Held-out checks: {', '.join(f'`{h}`' for h in held) or 'none'}.", "",
+                  "| Arm | Visible check | Held-out | Cost |", "|---|---|---|---|"]
+        lines += [f"| {a} | {v} | {h} | {k} |" for a, v, h, k in rows]
+        if b and b.get("diff"):
+            lines += ["", "<details><summary>Baseline's spec change</summary>", "", "```diff", b["diff"].rstrip(),
+                      "```", "</details>"]
+        lines.append("")
+    total = (arch.get("spent") or {}).get("total", {})
+    lines += [f"Run total: {total.get('model_calls')} model calls, ${total.get('usd')}; "
+              f"wall {arch.get('stages_s', {}).get('total')} s.", ""]
+    out = run_dir / "report.md"
+    out.write_text("\n".join(lines))
+    return out
 
 
 def card(t: dict) -> str:
@@ -270,6 +376,7 @@ def main() -> None:
                     help="stub = orchestrator/stub_builder/builder; real = brendan's builder/ at the repo root")
     ap.add_argument("--fixture", choices=["stub", "toy"], default="stub")
     ap.add_argument("--smoke", action="store_true", help="build + triage (or one 3-copy rebuild) only")
+    ap.add_argument("--no-baseline", action="store_true", help="skip the one-call baseline arm")
     ap.add_argument("--max-builders", type=int, default=None,
                     help="builder processes at once across all waves (default 8 for real, 64 for stub)")
     a = ap.parse_args()
@@ -297,7 +404,8 @@ def main() -> None:
     try:
         print(f"run dir: {run_dir}\ndisk: {store.disk_id}\nbuilder: {kit.builder_label}, fixture: {fx.name}, "
               f"max builders: {kit.max_builders}", flush=True)
-        out = pipeline(store, run_dir, fixture=fx, kit=kit, copies=a.copies, smoke=a.smoke)
+        out = pipeline(store, run_dir, fixture=fx, kit=kit, copies=a.copies, smoke=a.smoke,
+                       baseline=not a.no_baseline)
         for t_ in out["triage"]:
             print(" ", t_["card"])
     finally:

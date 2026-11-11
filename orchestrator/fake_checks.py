@@ -28,6 +28,16 @@ def _conv_ok(disk: Path, k: int) -> bool:
     return steps == [s for s in range(1, k + 1) for _ in (0, 1)]
 
 
+MESSAGES = {  # what a failing check says (the visible message the swarm and the baseline get)
+    "conversation_intact": "conversation.jsonl is missing steps or out of order",
+    "codes_6_digits": "generated codes are not 6 digits",
+    "expiry_from_last_click": "a link clicked yesterday expired 30 days after it was created",
+    "redirect_counts_click": "GET /<code> redirected but the click count did not go up",
+    "stats_returns_json": "GET /links/<code>/stats did not return JSON",
+    "all_steps_built": "not every step produced its file",
+    "heldout_expiry_keeps_30_days": "held out",
+}
+
 # name: (checkable from step, file it reads, held out?, test)
 CHECKS = {
     "conversation_intact": (1, "conversation.jsonl", False, lambda d, k: _conv_ok(d, k)),
@@ -48,7 +58,8 @@ def main() -> None:
     ap.add_argument("--meta", action="store_true")
     a = ap.parse_args()
     if a.meta:
-        print(json.dumps({n: {"from_step": s, "file": f, "heldout": h} for n, (s, f, h, _) in CHECKS.items()}))
+        print(json.dumps({n: {"from_step": s, "file": f, "heldout": h, "message": MESSAGES.get(n, "")}
+                          for n, (s, f, h, _) in CHECKS.items()}))
         return
     disk = Path(a.disk)
     print(json.dumps({n: bool(fn(disk, a.at_step)) for n, (s, _, _, fn) in CHECKS.items() if s <= a.at_step}))

@@ -224,14 +224,19 @@ def run_wave(store, checkpoint_id: str, edits: list[dict], n: int, *, wave: str,
         edit = edits[i % len(edits)]
         rid = f"{wave}-{edit['route']}-r{i // len(edits) + 1}"
         rec = {"id": rid, "route": edit["route"], "kind": edit.get("kind", "none"),
-               "edit": edit.get("new") or edit.get("rule"), "ok": False}
+               "edit": edit.get("new") or edit.get("rule") or (f"whole spec, {len(edit['spec'])} chars"
+                                                                if edit.get("spec") else None), "ok": False}
         t0 = time.perf_counter()
         w = None
         try:
             w = store.resume(checkpoint_id, rid)
             rec["branch"] = w.branch
             install_builder(w, kit.builder_src)
-            rec["builder"] = run_steps(w, fork_step + 1, to_step, rid, {**edit, "route": rid}, kit,
+            patch = {**edit, "route": rid}
+            if edit.get("kind") == "spec_replace":  # a whole new spec (baseline arm): written before the builder
+                w.put(f"{w.mnt}/spec.md", edit["spec"])  # starts; the builder's patch kinds only edit one step
+                patch = None
+            rec["builder"] = run_steps(w, fork_step + 1, to_step, rid, patch, kit,
                                        max_calls=kit.branch_max_calls)
             out = outcome(rec["builder"])
             if out == "invalid":

@@ -86,7 +86,7 @@ verdicts before the first run. Fallback `spec-b.md`: ambiguity + decoy + control
 - **P3 Builder & page:** builder loop (conversation saved to disk), triage, swarm rewrite prompt, cards page, pitch.
 
 Run files between areas: `run.json`, `triage.json`, `results.json`, `swarm.json`, `archil.json`. The page is built
-against fakes first. `python -m orchestrator.pipeline [--local]` writes all five to `orchestrator/runs/<stamp>/`
+against fakes first. `python -m orchestrator.pipeline [--local]` writes all five (plus `baseline.json`, `report.md`) to `orchestrator/runs/<stamp>/`
 (P1); `orchestrator/runs/20261110-200432/` is a real Archil run with the stub builder and checks.
 
 - **`run.json`** (the build): `{run_id, disk_id, store, builder, n_steps, model, simulated_slip, checkpoints{"k":
@@ -112,7 +112,12 @@ against fakes first. `python -m orchestrator.pipeline [--local]` writes all five
   mount_ms, wall_s}], steps_reused, sum_copy_s, parallel_speedup, saved{steps, minutes, model_calls, usd,
   restore_minutes_vs_git}}]`, `totals_saved` (same keys plus `copies`), `per_step_avg` (from `run.json`),
   `restore_baseline` (git clone + install, from `spikes/disk_spike.json`), `spent{model, build, waves{name}, total}`
-  (`{model_calls, usd}` each, from the builder's per-step usage), `stages_s` (wall seconds per pipeline stage). "Saved" = each copy would otherwise
+  (`{model_calls, usd}` each, from the builder's per-step usage), `stages_s` (wall seconds per pipeline stage).
+- **`baseline.json`**: `baselines[{check, fixer, message, call{model_calls, usage, wall_s, stop_reason, usd}, diff,
+  fixed_spec, error, prompt, reply, wave, n_builds, visible: "k/3", heldout: "k/3", regressions, errors, passes_all}]`.
+  One plain Claude call (same model as the swarm, no tools) gets the original spec + the failing visible check's name
+  and message and returns a whole fixed spec; it is built from `c0` three times. **`report.md`**: before / after /
+  baseline pass rates side by side, generated from the run files. "Saved" = each copy would otherwise
   replay steps `1..fork_step`.
 
 ## Clock (0:00 = 7:00 PM)

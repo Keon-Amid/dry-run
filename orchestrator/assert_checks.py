@@ -91,7 +91,8 @@ def main() -> None:
     a = ap.parse_args()
     if a.meta:
         print(json.dumps({c["name"]: {"from_step": 1, "file": None, "heldout": c["heldout"], "source": c["source"],
-                                      "supported": c["expr"] is not None, "text": c["text"]} for c in CHECK_LINES}))
+                                      "supported": c["expr"] is not None, "text": c["text"],
+                                      "message": f"failed: {c['text']}"} for c in CHECK_LINES}))
         return
     print(json.dumps(grade(Path(a.disk), a.at_step)))
 
