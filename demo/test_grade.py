@@ -219,5 +219,43 @@ class PlantsTest(unittest.TestCase):
                 self.assertFalse(f.startswith("test_"), os.path.join(d, f))
 
 
+class DemoTest(unittest.TestCase):
+    """The real Shortlink demo: golden/ passes all but the decoy; every plant's patch lands on demo/disk."""
+
+    def test_golden_passes_all_but_decoy(self):
+        res = grade.grade(os.path.join(HERE, "golden", "workspace"), grade.load_checks())
+        failing = sorted(n for n, r in res.items() if not r["pass"])
+        self.assertEqual(failing, ["stats_json"], res)
+
+    def test_each_plant_patch_lands(self):
+        import shutil
+        sys.path.insert(0, REPO)
+        from builder import patch as bpatch
+        from builder.types import Patch
+        with open(os.path.join(HERE, "plants.json")) as f:
+            plants = json.load(f)
+        for p in plants:
+            tmp = tempfile.mkdtemp(prefix="test-plant-")
+            try:
+                disk = os.path.join(tmp, "disk")
+                shutil.copytree(os.path.join(HERE, "disk"), disk)
+                before, after = bpatch.apply(disk, Patch.from_dict(p["patch"]), write_route=False)
+                if p["patch"]["kind"] == "spec_line":
+                    self.assertNotEqual(before, after, p["id"])
+                else:
+                    self.assertFalse(os.path.exists(os.path.join(disk, "rules", p["patch"]["rule"])))
+            finally:
+                shutil.rmtree(tmp, ignore_errors=True)
+
+    def test_plants_and_heldouts_pair_by_file(self):
+        checks = grade.load_checks()
+        with open(os.path.join(HERE, "plants.json")) as f:
+            plants = json.load(f)
+        for p in plants:
+            f_ = checks[p["check"]]["file"]
+            held = [n for n, c in checks.items() if c["heldout"] and c["file"] == f_]
+            self.assertEqual(len(held), 1, (p["id"], held))
+
+
 if __name__ == "__main__":
     unittest.main()
