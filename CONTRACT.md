@@ -86,8 +86,8 @@ verdicts before the first run. Fallback `spec-b.md`: ambiguity + decoy + control
 - **P3 Builder & page:** builder loop (conversation saved to disk), triage, swarm rewrite prompt, cards page, pitch.
 
 Run files between areas: `run.json`, `triage.json`, `results.json`, `swarm.json`, `archil.json`. The page is built
-against fakes first. `python -m orchestrator.pipeline [--local]` writes all five (plus `baseline.json`, `report.md`) to `orchestrator/runs/<stamp>/`
-(P1); `orchestrator/runs/20261110-200432/` is a real Archil run with the stub builder and checks.
+against fakes first. `python -m orchestrator.pipeline [--local]` writes all five (plus `baseline.json`, `report.md`/`report.json`, spec and before/after files) to `orchestrator/runs/<stamp>/`
+(P1); `orchestrator/runs/20261110-210049-demo-real/` is the real demo run (Haiku 5.5, real builder and grader).
 
 - **`run.json`** (the build): `{run_id, disk_id, store, builder, n_steps, model, simulated_slip, checkpoints{"k":
   checkpoint_id}, final_checks{name: bool}, steps[{step, wall_s, wrote[files], checks{name: bool},
@@ -116,9 +116,17 @@ against fakes first. `python -m orchestrator.pipeline [--local]` writes all five
 - **`baseline.json`**: `baselines[{check, fixer, message, call{model_calls, usage, wall_s, stop_reason, usd}, diff,
   fixed_spec, error, prompt, reply, wave, n_builds, visible: "k/3", heldout: "k/3", regressions, errors, passes_all}]`.
   One plain Claude call (same model as the swarm, no tools) gets the original spec + the failing visible check's name
-  and message and returns a whole fixed spec; it is built from `c0` three times. **`report.md`**: before / after /
-  baseline pass rates side by side, generated from the run files. "Saved" = each copy would otherwise
-  replay steps `1..fork_step`.
+  and message and returns a whole fixed spec; it is built from `c0` three times. In `archil.json`, "saved" = each
+  copy would otherwise replay steps `1..fork_step`.
+- **`report.md`** / **`report.json`** (generated from the run files; `--report RUN_DIR --fixture NAME` regenerates):
+  `report.json` = `{run_id, model, builder, disk_id, verdicts[{check, verdict, surfaced_step, origin_step, card}],
+  checks{name: {heldout_checks, arms[{arm: before_build|before_natural|before_control|after_culprit_edit|after_swarm|
+  after_confirm|baseline, label, visible, heldout, cost}]}}, winning_rewrites[{check, culprit, route, text, visible,
+  heldout, confirm_passed, all_winners}], archil_totals, spent, stages_s, spec_files{original, fixed},
+  culprits[{check, kind: spec_line|rule, step?, line?, rule?, rule_text?, fix}], culprit_lines, before_after}`.
+- **`spec.original.md`** (spec as built + its harness rules), **`spec.fixed.md`** (CONFIRMed winners applied, culprit
+  rules struck through), **`specs.json`**, **`before_after.json`** (`{probes, columns[{name, workspace, results}]}`
+  from `scripts/before_after.py` over `workspaces/{build, confirm-*, baseline-*}`, the exported code).
 
 ## Clock (0:00 = 7:00 PM)
 
