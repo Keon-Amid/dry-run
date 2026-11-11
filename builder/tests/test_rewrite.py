@@ -177,3 +177,26 @@ class TestGenerate(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SelfCorrectionTest(unittest.TestCase):
+    """Real Sonnet 5.5 reply (2026-11-10): a first JSON with a rewrite equal to the original, then a fix."""
+    REPLY = ('{"rewrites":[{"text":"","kind":"delete"},{"text":"Generated codes are 6 digits.","kind":"disambiguate"},'
+             '{"text":"Codes are 6 digits.","kind":"rephrase"},{"text":"Generated codes are 6 digits; aliases are '
+             'exempt.","kind":"disambiguate"},{"text":"Codes: 6 digits.","kind":"shorten"}]}\n\nWait, the third '
+             'entry is identical to the original line. Corrected output:\n\n{"rewrites":[{"text":"","kind":"delete"},'
+             '{"text":"Generated codes are 6 digits.","kind":"disambiguate"},{"text":"Auto-generated codes use 6 '
+             'digits.","kind":"rephrase"},{"text":"Generated codes are 6 digits; aliases are exempt.","kind":'
+             '"disambiguate"},{"text":"Generated codes: 6 digits.","kind":"shorten"}]}')
+
+    def test_last_valid_object_wins(self):
+        class L:
+            def create(self, system, messages, tools):
+                return {"content": [{"type": "text", "text": SelfCorrectionTest.REPLY}], "stop_reason": "end_turn"}
+        with tempfile.TemporaryDirectory() as d:
+            out = rewrite.generate(L(), "Codes are 6 digits.", "Codes are 6 digits.", "alias_accepted", "422",
+                                   out=os.path.join(d, "r.json"))
+        texts = [r["text"] for r in out["rewrites"]]
+        self.assertIn("Auto-generated codes use 6 digits.", texts)
+        self.assertNotIn("Codes are 6 digits.", texts)
+        self.assertEqual(texts[0], "")   # shortest first

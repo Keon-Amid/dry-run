@@ -98,6 +98,23 @@ def extract_text(resp: dict) -> str:
 _FENCE = re.compile(r"```(?:json)?\s*(.*?)```", re.S)
 
 
+def json_objects(text: str) -> list:
+    """Every top-level JSON object in text, in order (handles fenced blocks and prose between objects)."""
+    dec, out, i = json.JSONDecoder(), [], 0
+    while True:
+        i = text.find("{", i)
+        if i < 0:
+            return out
+        try:
+            obj, end = dec.raw_decode(text, i)
+        except json.JSONDecodeError:
+            i += 1
+            continue
+        if isinstance(obj, dict):
+            out.append(obj)
+        i = end
+
+
 def parse_json(text: str) -> dict:
     text = text.strip()
     m = _FENCE.search(text)
@@ -128,11 +145,22 @@ def generate(llm, culprit: str, step_text: str, check_name: str, check_msg: str,
     """Call llm, parse, validate, write rewrites.json. Return the written dict."""
     prompt = build_prompt(culprit, step_text, check_name, check_msg, mode)
     resp = llm.create([{"type": "text", "text": SYSTEM}], [{"role": "user", "content": prompt}], None)
-    data = parse_json(extract_text(resp))
+    text = extract_text(resp)
     result = {"culprit": culprit, "check": check_name, "mode": mode}
-    if mode == "fix":
-        result["rewrites"] = validate(culprit, data.get("rewrites"))
+    # The model sometimes self-corrects ("Wait, ... Corrected output:") and emits several JSON objects:
+    # use the last one that validates.
+    cands = json_objects(text) or [parse_json(text)]
+    err = None
+    for data in reversed(cands):
+        try:
+            if mode == "fix":
+                result["rewrites"] = validate(culprit, data.get("rewrites"))
+            else:
+                result["readings"] = validate_readings(data.get("readings"))
+            break
+        except (ValueError, AttributeError, TypeError) as e:
+            err = e
     else:
-        result["readings"] = validate_readings(data.get("readings"))
+        raise err if err else ValueError("no JSON object in model reply")
     _write_atomic(out, result)
     return result
