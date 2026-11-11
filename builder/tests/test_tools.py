@@ -113,14 +113,24 @@ class TestFiles(Base):
     def test_list_skips_git_and_is_relative(self):
         self.ex.write_file("src/main.py", "")
         self.ex.write_file("README.md", "")
-        self.ex.write_file(".git/HEAD", "ref")
-        self.ex.write_file(".git/objects/ab", "")
+        os.makedirs(os.path.join(self.ex.workspace, ".git", "objects"))
+        open(os.path.join(self.ex.workspace, ".git", "HEAD"), "w").close()
+        open(os.path.join(self.ex.workspace, ".git", "objects", "ab"), "w").close()
         out = self.ex.list_files()
         lines = out.splitlines()
         self.assertIn("README.md", lines)
         self.assertIn(os.path.join("src", "main.py"), lines)
         self.assertNotIn(".git", out)
         self.assertEqual(self.ex.list_files("src").splitlines(), [os.path.join("src", "main.py")])
+
+    def test_git_dir_rejected_for_file_tools(self):
+        # .git/config filter drivers would run commands when the harness commits
+        for p in (".git/config", ".git", "./.git/hooks/pre-commit", "sub/../.git/config"):
+            with self.assertRaises(PathEscape):
+                self.ex.write_file(p, "x")
+            with self.assertRaises(PathEscape):
+                self.ex.read_file(p)
+        self.ex.write_file("sub/.git/x", "ok")   # nested .git is harmless here; commit_step removes it
 
     def test_list_truncated(self):
         for i in range(400):

@@ -14,6 +14,7 @@ from builder import convo, gitops, prompt, tools
 from builder.types import StepResult, USAGE_KEYS, empty_usage
 
 BUDGET_MSG = "budget reached, finish now"
+NORMAL_STOPS = ("end_turn", "tool_use", "stop_sequence")
 
 
 def log(msg: str) -> None:
@@ -55,9 +56,17 @@ def run_step(disk: str, k: int, llm, ex, max_calls: int = 25, history_min_step: 
         model_calls += 1
         _add_usage(usage, resp)
         uses = [b for b in (resp.get("content") or []) if b.get("type") == "tool_use"]
+        stop = resp.get("stop_reason") or "end_turn"
+        if stop not in NORMAL_STOPS:
+            # max_tokens / refusal / pause_turn: the step did not finish normally, so it is invalid (capped),
+            # never graded. Any (possibly truncated) tool_use is dropped, not run, so the log stays valid.
+            step_msgs.append(_assistant_msg(resp, strip_tool_use=True))
+            capped = True
+            log(f"step {k}: stop_reason={stop}; step marked invalid")
+            break
         step_msgs.append(_assistant_msg(resp))
         if not uses:
-            break  # end_turn (or max_tokens / stop_sequence with no pending tool call)
+            break  # end_turn / stop_sequence
 
         results = []
         for b in uses:

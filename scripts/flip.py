@@ -92,7 +92,7 @@ def one_run(plant: dict, arm: str, i: int, template: str, to_step: int, check_cm
         rec["wall_s"] = round(time.time() - t0, 3)
         rec["exit"] = code
         rec["result"] = result
-        capped = code == 2 or bool(result and result.get("capped"))
+        capped = bool(result and result.get("capped"))
         rec["capped"] = capped
         if capped:
             rec["reason"] = "capped"
@@ -118,6 +118,11 @@ def one_run(plant: dict, arm: str, i: int, template: str, to_step: int, check_cm
 
 def run_flip(plants: list, template: str, to_step: int, out: str, runs: int = 3, matrix: bool = False,
              fake_llm=None, check_cmd=None, runner=subprocess_runner) -> str:
+    if runs < 1:
+        raise ValueError("--runs must be >= 1")
+    ids = [p["id"] for p in plants]
+    if len(set(ids)) != len(ids):
+        raise ValueError(f"plant ids must be unique: {ids}")
     check_cmd = check_cmd or os.environ.get("DRYRUN_CHECK_CMD")
     if not check_cmd:
         raise SystemExit("DRYRUN_CHECK_CMD is not set")
@@ -136,6 +141,8 @@ def run_flip(plants: list, template: str, to_step: int, out: str, runs: int = 3,
 
 def verdict(w: dict, wo: dict, runs: int) -> str:
     """Team item B: only all-fail with the plant vs all-pass without it names a culprit."""
+    if runs < 1:
+        return "inconclusive"
     if w["fail"] == runs and wo["pass"] == runs:
         return "FLIP"
     if w["invalid"] or wo["invalid"]:

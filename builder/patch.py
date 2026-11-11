@@ -185,7 +185,11 @@ def _patch_dict(p: Patch) -> dict:
             "rule": p.rule, "hypothesis": p.hypothesis}
 
 
-def apply(disk: str, p: Patch) -> tuple:
+def route_md(p: Patch, before: str, after: str) -> str:
+    return _route_md(p, before, after)
+
+
+def apply(disk: str, p: Patch, write_route: bool = True) -> tuple:
     """Apply p, assert it landed, write routes/<route>.md. Return (sha_before, sha_after).
     Raise PatchError on 0 / >1 matches, missing rule, or edit not landed."""
     _validate(p)
@@ -201,6 +205,8 @@ def apply(disk: str, p: Patch) -> tuple:
         raise PatchError("spec_line did not land: spec sha unchanged")
     if p.kind in ("control", "rule_off") and after != before:
         raise PatchError(f"{p.kind} changed spec.md (sha {before[:12]} -> {after[:12]})")
+    if not write_route:   # run.py writes the note after the last step, so the agent can't read it mid-run
+        return before, after
     routes = os.path.join(disk, ROUTES)
     os.makedirs(routes, exist_ok=True)
     _write_bytes(os.path.join(routes, p.route + ".md"), _route_md(p, before, after).encode("utf-8"))

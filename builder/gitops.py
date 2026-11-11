@@ -24,10 +24,9 @@ def _ws(disk: str) -> str:
 
 
 def _env() -> dict:
-    env = dict(os.environ)
-    for k in list(env):
-        if k.startswith("GIT_"):
-            del env[k]
+    # Minimal env: the agent can write workspace/.git/config (filter drivers etc.), so anything git runs
+    # must not see the harness's secrets (ANTHROPIC_API_KEY, DRYRUN_CHECK_CMD, ...).
+    env = {k: os.environ[k] for k in ("PATH", "HOME", "LANG", "TMPDIR") if k in os.environ}
     env["GIT_CONFIG_GLOBAL"] = os.devnull
     env["GIT_CONFIG_NOSYSTEM"] = "1"
     env["GIT_AUTHOR_NAME"] = env["GIT_COMMITTER_NAME"] = "builder"
@@ -49,6 +48,7 @@ def init_workspace(disk: str) -> str:
     os.makedirs(_ws(disk), exist_ok=True)
     if not os.path.exists(os.path.join(_ws(disk), ".git")):
         _git(disk, "init", "-q")
+        _git(disk, "add", "-A")   # c_0 = the workspace as delivered (empty, or P2's starter files)
         _git(disk, "commit", "-q", "--allow-empty", "-m", "step 0")
         _git(disk, "tag", "-f", "step-0")
     elif tag_sha(disk, 0) is None:
@@ -59,11 +59,31 @@ def init_workspace(disk: str) -> str:
 
 
 def commit_step(disk: str, k: int) -> str:
-    """git add -A; commit --allow-empty -m 'step k' (identity builder/builder@dryrun.local); tag -f step-k. Return sha."""
+    """git add -A; commit --allow-empty -m 'step k' (identity builder/builder@dryrun.local); tag -f step-k. Return sha.
+    Exactly one commit per step: any commits/tags the agent made itself are squashed away, and nested .git
+    dirs (an agent `git init` in a subfolder) are removed so their files are committed, not a gitlink."""
+    _remove_nested_git(disk)
+    if tag_sha(disk, k - 1) is not None:
+        _git(disk, "reset", "-q", "--soft", f"refs/tags/step-{k - 1}")
+    delete_tags_after(disk, k - 1)
     _git(disk, "add", "-A")
     _git(disk, "commit", "-q", "--allow-empty", "-m", f"step {k}")
     _git(disk, "tag", "-f", f"step-{k}")
     return head(disk)
+
+
+def _remove_nested_git(disk: str) -> None:
+    import shutil
+    root = _ws(disk)
+    for dirpath, dirnames, filenames in os.walk(root):
+        if dirpath == root:
+            dirnames[:] = [d for d in dirnames if d != ".git"]
+            continue
+        if ".git" in dirnames:
+            shutil.rmtree(os.path.join(dirpath, ".git"), ignore_errors=True)
+            dirnames.remove(".git")
+        if ".git" in filenames:   # a worktree/submodule .git file
+            os.remove(os.path.join(dirpath, ".git"))
 
 
 def head(disk: str) -> str:
@@ -90,7 +110,7 @@ def reset_to(disk: str, k: int) -> None:
     if tag_sha(disk, k) is None:
         raise ResumeError(f"tag step-{k} missing in {_ws(disk)}")
     _git(disk, "reset", "-q", "--hard", f"refs/tags/step-{k}")
-    _git(disk, "clean", "-q", "-fdx")
+    _git(disk, "clean", "-q", "-ffdx")
     delete_tags_after(disk, k)
 
 
@@ -103,7 +123,8 @@ def delete_tags_after(disk: str, k: int) -> list:
 
 
 def _dirty(disk: str) -> bool:
-    return bool(_git(disk, "status", "--porcelain", "--ignored", "--untracked-files=all").stdout.strip())
+    # Ignored files (build/, .pytest_cache, deps) are not a crash sign; only tracked or untracked changes are.
+    return bool(_git(disk, "status", "--porcelain", "--untracked-files=all").stdout.strip())
 
 
 def repair(disk: str, last_done: int) -> list:
@@ -125,11 +146,11 @@ def repair(disk: str, last_done: int) -> list:
     moved, dirty = cur != want, _dirty(disk)
     if moved or dirty:
         _git(disk, "reset", "-q", "--hard", f"refs/tags/step-{last_done}")
-        _git(disk, "clean", "-q", "-fdx")
+        _git(disk, "clean", "-q", "-ffdx" if moved else "-ffd")
         if moved:
             actions.append(f"reset --hard HEAD {cur[:12] or '(none)'} -> step-{last_done} {want[:12]}; clean -fdx")
         else:
-            actions.append(f"discarded uncommitted workspace changes (reset --hard step-{last_done}; clean -fdx)")
+            actions.append(f"discarded uncommitted workspace changes (reset --hard step-{last_done}; clean -fd)")
 
     stale = delete_tags_after(disk, last_done)
     if stale:

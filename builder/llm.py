@@ -97,8 +97,13 @@ class AnthropicLLM:
             return max(retry_after, jittered)   # never sooner than the server asked
         return jittered
 
+    def capture_key(self) -> None:
+        """Move ANTHROPIC_API_KEY out of os.environ into this object, so the agent's tools (and anything that
+        can read this process's environment, e.g. `ps eww $PPID`) never see it. run.py calls this at startup."""
+        self._key = os.environ.pop("ANTHROPIC_API_KEY", None) or getattr(self, "_key", None)
+
     def create(self, system: list, messages: list, tools: list | None) -> dict:
-        key = os.environ.get("ANTHROPIC_API_KEY")
+        key = getattr(self, "_key", None) or os.environ.get("ANTHROPIC_API_KEY")
         if not key:
             raise RuntimeError("ANTHROPIC_API_KEY is not set")
         data = json.dumps(self._body(system, messages, tools)).encode("utf-8")

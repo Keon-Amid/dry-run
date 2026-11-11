@@ -92,6 +92,9 @@ class LocalExec:
         real = os.path.realpath(cand)   # follows symlinks, so a link pointing out resolves out
         if os.path.commonpath([real, self.workspace]) != self.workspace:
             raise PathEscape(f"path escapes workspace: {p}")
+        gitdir = os.path.join(self.workspace, ".git")
+        if real == gitdir or real.startswith(gitdir + os.sep):
+            raise PathEscape(f"workspace/.git is managed by the harness: {p}")
         return real
 
     def read_file(self, p: str) -> str:
