@@ -67,6 +67,16 @@ class ArchilWorker:
             self.sandbox.files.upload_file(tmp.name, remote_tar)
         self.must(f"mkdir -p {remote_dir} && tar xzf {remote_tar} -C {remote_dir} && rm -f {remote_tar}")
 
+    def get_tree(self, remote_dir: str, local_dir: Path) -> None:
+        """Copy a folder out of the sandbox (minus .git and __pycache__): tar.gz over base64."""
+        out = self.must(f"cd {remote_dir} && tar czf - --exclude=.git --exclude=__pycache__ . | base64 -w0")
+        Path(local_dir).mkdir(parents=True, exist_ok=True)
+        with tempfile.NamedTemporaryFile(suffix=".tar.gz") as tmp:
+            tmp.write(base64.b64decode(out))
+            tmp.flush()
+            with tarfile.open(tmp.name) as tar:
+                tar.extractall(local_dir, filter="data")
+
     def delete(self) -> None:
         for step in ("stop", "delete"):
             try:
@@ -159,6 +169,10 @@ class LocalWorker:
     def put_tree(self, local_dir: Path, remote_dir: str) -> None:
         shutil.copytree(local_dir, Path(remote_dir) / Path(local_dir).name, dirs_exist_ok=True,
                         ignore=shutil.ignore_patterns("__pycache__"))
+
+    def get_tree(self, remote_dir: str, local_dir: Path) -> None:
+        shutil.copytree(remote_dir, local_dir, dirs_exist_ok=True,
+                        ignore=shutil.ignore_patterns(".git", "__pycache__"))
 
     def delete(self) -> None:
         pass  # branches stay on disk for inspection, like Archil branches

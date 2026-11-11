@@ -146,7 +146,25 @@ class BaselineTest(unittest.TestCase):
         report = (tmp / "run" / "report.md").read_text()
         self.assertIn("| Before: control branches (no change) | 0/3 | 0/3 |", report)
         self.assertIn('| After: swarm rw1 "Links expire 30 days after their last click." | 3/3 | 3/3 |', report)
-        self.assertIn("| Baseline: one stub-fixer call fixes the spec, built from step 0 | 0/3 | 0/3 |", report)
+        self.assertIn("| Baseline: one stub-fixer call rewrites the spec, built from step 0 | 0/3 | 0/3 |", report)
+        rj = json.loads((tmp / "run" / "report.json").read_text())
+        arms = {a["arm"]: (a["visible"], a["heldout"]) for a in rj["checks"]["expiry_from_last_click"]["arms"]}
+        self.assertEqual(arms["before_control"], ("0/3", "0/3"))
+        self.assertEqual(arms["after_confirm"], ("1/1", "1/1"))
+        self.assertEqual(arms["baseline"], ("0/3", "0/3"))
+        self.assertEqual(rj["winning_rewrites"][0]["route"], "rw1")
+        self.assertEqual(rj["archil_totals"], json.loads((tmp / "run" / "archil.json").read_text())["totals_saved"])
+
+    def test_before_after_script_runs_the_exported_workspaces(self):
+        tmp = Path(tempfile.mkdtemp())
+        pipeline(LocalStore(tmp / "store"), tmp / "run")
+        self.assertTrue((tmp / "run" / "workspaces" / "build").is_dir())
+        self.assertTrue((tmp / "run" / "workspaces" / "confirm-expiry_from_last_click").is_dir())
+        r = subprocess.run([sys.executable, str(HERE.parent / "scripts" / "before_after.py"), str(tmp / "run")],
+                           capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn("before (original build)", r.stdout)
+        self.assertIn("import failed", r.stdout)  # the stub builder writes no links.py: reported, not crashed
 
     def test_a_fixer_that_fixes_the_spec_builds_from_step_0_three_times(self):
         class Fixer:
@@ -170,6 +188,27 @@ class BaselineTest(unittest.TestCase):
         from orchestrator.baseline import extract_spec
         with self.assertRaisesRegex(ValueError, "steps"):
             extract_spec("<spec>\n## Step 1\nx\n</spec>", "## Step 1\na\n## Step 2\nb\n")
+
+
+class DemoFixtureTest(unittest.TestCase):
+    def test_demo_fixture(self):
+        from builder.patch import load_patch
+        from orchestrator.pipeline import load_fixture, local_checks
+        fx = load_fixture("demo", Path(tempfile.mkdtemp()))
+        self.assertEqual(fx.steps, 7)
+        self.assertEqual(sorted(fx.rules), ["errors.md", "style.md"])
+        self.assertEqual([e["route"] for e in fx.suspects], ["spec-step4", "rule-errors"])  # contradiction dropped
+        meta = local_checks(fx.checks_src, "--meta")
+        self.assertEqual(sum(m["heldout"] for m in meta.values()), 3)
+        golden = local_checks(fx.checks_src, "--disk", str(fx.golden), "--at-step", "7")
+        self.assertEqual([c for c, ok in golden.items() if not ok], ["stats_json"])  # only the decoy fails golden
+        anchor = fx.suspects[0]
+        control = {"route": "control", "kind": "control", "step": anchor["step"], "old": anchor["old"]}
+        tmp = Path(tempfile.mkdtemp())
+        for e in fx.suspects + [control]:
+            (tmp / "p.json").write_text(json.dumps({**e, "route": "suspects-x-" + e["route"] + "-r1"}))
+            load_patch(str(tmp / "p.json"))
+        self.assertEqual(fx.spec.count(anchor["old"]), 1)
 
 
 class BrendanPatchTest(unittest.TestCase):

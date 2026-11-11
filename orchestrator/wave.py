@@ -165,8 +165,25 @@ def grade(w, at_step: int, kit: Kit | None = None) -> dict:
     return json.loads(out)
 
 
+def grade_messages(w, at_step: int, kit: Kit | None = None) -> dict | None:
+    """Failure messages per check, from a grader that has a flip mode (`checks.py WORKSPACE` ->
+    {"checks": {name: {"pass", "msg"}}}). None if the grader has no such mode (the stub checks)."""
+    kit = kit or Kit()
+    d, name = checks_dir(w), kit.checks_name
+    b64 = base64.b64encode(Path(kit.checks_src).read_bytes()).decode()
+    code, out, _ = w.exec(f"mkdir -p {d} && echo {b64} | base64 -d > {d}/{name} && "
+                          f"PYTHONDONTWRITEBYTECODE=1 python3 {d}/{name} {w.mnt}/workspace --at-step {at_step}; "
+                          f"rc=$?; rm -rf {d}; exit $rc")
+    try:
+        res = json.loads(out)["checks"] if code == 0 else None
+    except (ValueError, KeyError, TypeError):
+        return None
+    return {n: r.get("msg") for n, r in res.items() if not r.get("pass")} if res else None
+
+
 def build(store, spec: str, rules: dict[str, str], steps: int, run_dir: Path, *,
-          slip_step: int | None = None, name: str = "build", kit: Kit | None = None) -> dict:
+          slip_step: int | None = None, name: str = "build", kit: Kit | None = None,
+          export_dir: Path | None = None) -> dict:
     """One builder process per step, graded after each step, save(k) between turns. Writes run.json."""
     kit = kit or Kit()
     run_dir.mkdir(parents=True, exist_ok=True)
@@ -206,6 +223,13 @@ def build(store, spec: str, rules: dict[str, str], steps: int, run_dir: Path, *,
             run["steps"].append(rec)
             _write_json(run_dir / "run.json", run)
         run["final_checks"] = run["steps"][-1]["checks"]
+        run["final_messages"] = grade_messages(w, steps, kit)  # why each failing check failed (visible + held-out)
+        if export_dir:  # the finished workspace, for scripts/before_after.py (the sandbox is deleted next)
+            try:
+                w.get_tree(f"{w.mnt}/workspace", export_dir)
+                run["workspace_export"] = str(export_dir.relative_to(run_dir))
+            except Exception as e:  # never sink a run over an export
+                run["workspace_export_error"] = f"{type(e).__name__}: {e}"[:300]
         _write_json(run_dir / "run.json", run)
         return run
     finally:
@@ -214,7 +238,7 @@ def build(store, spec: str, rules: dict[str, str], steps: int, run_dir: Path, *,
 
 def run_wave(store, checkpoint_id: str, edits: list[dict], n: int, *, wave: str, to_step: int, run_dir: Path,
              log: ArchilLog, targets: list[str], purpose: str, check: str | None = None,
-             kit: Kit | None = None) -> dict:
+             kit: Kit | None = None, export_dir: Path | None = None) -> dict:
     """Branch n copies of checkpoint_id = c_{k-1} in parallel; each runs steps k..to_step with
     edits[i % len(edits)] applied first. A copy `passed` when every check in `targets` is true at to_step."""
     kit = kit or Kit()
@@ -247,6 +271,12 @@ def run_wave(store, checkpoint_id: str, edits: list[dict], n: int, *, wave: str,
                 rec["checks"] = grade(w, to_step, kit)
                 rec["passed"] = all(rec["checks"].get(t, False) for t in targets)
                 rec["ok"] = True
+                if export_dir and i == 0:  # first copy's finished workspace, before its sandbox is deleted
+                    try:
+                        w.get_tree(f"{w.mnt}/workspace", export_dir)
+                        rec["workspace_export"] = str(export_dir.relative_to(run_dir))
+                    except Exception as e:
+                        rec["workspace_export_error"] = f"{type(e).__name__}: {e}"[:300]
         except Exception as e:
             rec["error"] = f"{type(e).__name__}: {e}"[:600]
         finally:

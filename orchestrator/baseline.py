@@ -65,3 +65,19 @@ class StubFixer:
         spec = re.search(r"<spec>\n(.*?)\n</spec>", messages[0]["content"], re.S).group(1)
         return {"model": self.model, "content": [{"type": "text", "text": f"<spec>\n{spec}\n</spec>"}],
                 "usage": {}, "stop_reason": "end_turn"}
+
+
+class UsageRecorder:
+    """Wraps an llm with .create(): records each call's model and usage, so orchestrator-side calls (rewrites,
+    baseline) are counted in archil.json's spent."""
+
+    def __init__(self, llm):
+        self.llm, self.calls = llm, []
+        self.model = getattr(llm, "model", None)
+
+    def create(self, system, messages, tools):
+        t0 = time.perf_counter()
+        resp = self.llm.create(system, messages, tools)
+        self.calls.append({"model": resp.get("model") or self.model, "usage": resp.get("usage") or {},
+                           "wall_s": round(time.perf_counter() - t0, 3)})
+        return resp

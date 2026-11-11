@@ -25,7 +25,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from orchestrator.archil_log import ArchilLog, spent, usage_usd
-from orchestrator.baseline import StubFixer, fix_spec
+from orchestrator.baseline import StubFixer, UsageRecorder, fix_spec
 from orchestrator.assert_checks import build_checks_file
 from orchestrator.stores import ArchilStore, LocalStore
 from orchestrator.wave import HERE, REAL_BUILDER, STUB_BUILDER, STUB_CHECKS, Kit, _write_json, build, run_wave
@@ -33,6 +33,7 @@ from orchestrator.wave import HERE, REAL_BUILDER, STUB_BUILDER, STUB_CHECKS, Kit
 ROOT = HERE.parent
 N_COPIES = 3  # per hypothesis: verdicts are counts (3/3 vs 0/3), never one run
 TOY = ROOT / "builder" / "tests" / "fixtures" / "toy"
+DEMO = ROOT / "demo"
 
 # STUBS until P2 / brendan land theirs. Suspect edits are minimal disambiguations (docs/plan-builder.md change C);
 # swarm rewrites stand in for the rewrite generator. rw3 passes the visible check but fails the held-out one.
@@ -55,7 +56,10 @@ class Fixture:
     golden: Path | None = None
     slip_step: int | None = None
     disambiguate: dict = field(default_factory=dict)
-    rewrites: dict = field(default_factory=dict)
+    rewrites: dict = field(default_factory=dict)   # culprit line -> rewrites; used when rewriter == "table"
+    rewriter: str = "table"                        # "table" (hand-written, stubs) | "generator" (builder/rewrite.py)
+    suspects: list | None = None                   # fixed suspect edits; None = mechanical (spec lines + every rule)
+    natural: int = 0                               # fresh builds of the original spec from c0 ("before" arm)
 
     @property
     def steps(self) -> int:
@@ -72,6 +76,20 @@ def load_fixture(name: str, scratch: Path) -> Fixture:
         return Fixture("toy", (TOY / "disk" / "spec.md").read_text(),
                        {p.name: p.read_text() for p in sorted((TOY / "disk" / "rules").glob("*.md"))},
                        build_checks_file(TOY, scratch / "toy_checks.py"))
+    if name == "demo":  # P2's Shortlink: spec + rules from demo/disk, checks bundled from demo/grade.py
+        scratch.mkdir(parents=True, exist_ok=True)
+        bundle = scratch / "demo_checks.py"
+        subprocess.run([sys.executable, str(DEMO / "grade.py"), "--bundle", str(bundle)], check=True,
+                       capture_output=True)
+        plants = json.loads((DEMO / "plants.json").read_text())
+        suspects = []
+        for p in plants:  # the kept plants' edits are the suspects (CONTRACT.md 8f8b1a4: contradiction dropped)
+            e = {k: v for k, v in p["patch"].items() if v is not None}
+            e["route"] = f"spec-step{e['step']}" if e["kind"] == "spec_line" else f"rule-{Path(e['rule']).stem}"
+            suspects.append(e)
+        return Fixture("demo", (DEMO / "disk" / "spec.md").read_text(),
+                       {p.name: p.read_text() for p in sorted((DEMO / "disk" / "rules").glob("*.md"))}, bundle,
+                       golden=DEMO / "golden", rewriter="generator", suspects=suspects, natural=3)
     raise SystemExit(f"unknown fixture {name}")
 
 
@@ -129,14 +147,28 @@ def pipeline(store, run_dir: Path, *, fixture: Fixture | None = None, kit: Kit |
         t = time.perf_counter()
 
     # BUILD + GRADE (checks after every step, from outside the agent's disk)
-    run = build(store, fx.spec, fx.rules, steps, run_dir, slip_step=fx.slip_step, kit=kit)
+    run = build(store, fx.spec, fx.rules, steps, run_dir, slip_step=fx.slip_step, kit=kit,
+                export_dir=run_dir / "workspaces" / "build")
     stage("build")
     ckpt = run["checkpoints"]
     log = ArchilLog(run_dir / "run.json", run_dir / "archil.json", ROOT / "spikes" / "disk_spike.json")
     meta = local_checks(fx.checks_src, "--meta")
     golden = local_checks(fx.checks_src, "--disk", str(fx.golden), "--at-step", str(steps)) if fx.golden else {}
     failing = [c for c, ok in run["final_checks"].items() if not ok and not meta[c]["heldout"]]
-    print(f"build: {steps} steps, final checks {run['final_checks']}", flush=True)
+    messages = run.get("final_messages") or {}
+    msg_of = lambda c: messages.get(c) or meta[c].get("message", "")
+    heldout_of = lambda c: [h for h, m in meta.items() if m["heldout"] and m.get("file") == meta[c].get("file")]
+    print(f"build: {steps} steps, failing {failing}", flush=True)
+    recorder = None
+    if kit.builder_label != "stub" and (fx.rewriter == "generator" or baseline):
+        from builder.llm import AnthropicLLM
+        recorder = UsageRecorder(AnthropicLLM(model=run["model"]))  # same model as the builder
+
+    # NATURAL: the original spec built from step 0 n times, "what Claude builds naturally"
+    if fx.natural:
+        run_wave(store, ckpt["0"], [{"route": "natural", "kind": "none"}], fx.natural, wave="natural", to_step=steps,
+                 run_dir=run_dir, log=log, targets=[], purpose="natural", kit=kit)
+        stage("natural")
 
     # TRIAGE each failing check, LOCATE the real ones
     triage = []
@@ -145,7 +177,7 @@ def pipeline(store, run_dir: Path, *, fixture: Fixture | None = None, kit: Kit |
         f = meta[c].get("file")
         origin = next((s["step"] for s in run["steps"] if f and f in s["wrote"]), surfaced) \
             if f != "conversation.jsonl" else surfaced
-        t_ = {"check": c, "surfaced_step": surfaced, "origin_step": origin,
+        t_ = {"check": c, "surfaced_step": surfaced, "origin_step": origin, "heldout_checks": heldout_of(c),
               "fails_on_golden": (not golden.get(c, True)) if fx.golden else None}
         if t_["fails_on_golden"]:
             t_.update(verdict="test_wrong", rebuild=None)
@@ -175,13 +207,17 @@ def pipeline(store, run_dir: Path, *, fixture: Fixture | None = None, kit: Kit |
         # SUSPECTS
         c, fork = t_["check"], t_["fork_checkpoint_id"]
         ks = list(dict.fromkeys((t_["origin_step"], t_["surfaced_step"])))
-        edits = [{"route": f"spec-step{k}", "kind": "spec_line", "step": k, "old": spec_line(fx.spec, k),
-                  "new": fx.disambiguate.get(spec_line(fx.spec, k), ""), "hypothesis": f"spec step {k} is the cause"}
-                 for k in ks]
-        edits += [{"route": f"rule-{Path(r).stem}", "kind": "rule_off", "rule": r,
-                   "hypothesis": f"rule {r} is the cause"} for r in fx.rules]
-        edits.append({"route": "control", "kind": "control", "step": ks[0], "old": spec_line(fx.spec, ks[0]),
-                      "hypothesis": "no change"})
+        if fx.suspects is not None:
+            edits = [dict(e) for e in fx.suspects]
+        else:
+            edits = [{"route": f"spec-step{k}", "kind": "spec_line", "step": k, "old": spec_line(fx.spec, k),
+                      "new": fx.disambiguate.get(spec_line(fx.spec, k), ""), "hypothesis": f"spec step {k} is the cause"}
+                     for k in ks]
+            edits += [{"route": f"rule-{Path(r).stem}", "kind": "rule_off", "rule": r,
+                       "hypothesis": f"rule {r} is the cause"} for r in fx.rules]
+        anchor = next((e for e in edits if e["kind"] == "spec_line"), None)
+        cstep, cold = (anchor["step"], anchor["old"]) if anchor else (ks[0], spec_line(fx.spec, ks[0]))
+        edits.append({"route": "control", "kind": "control", "step": cstep, "old": cold, "hypothesis": "no change"})
         sv = run_wave(store, fork, edits, copies * len(edits), wave=f"suspects-{c}", to_step=steps, run_dir=run_dir,
                       log=log, targets=[c], purpose="suspects", check=c, kit=kit)
         ctrl = _route(sv, "control")
@@ -193,16 +229,27 @@ def pipeline(store, run_dir: Path, *, fixture: Fixture | None = None, kit: Kit |
         print(f"suspects {c}: control {ctrl['score']}, " + ", ".join(f"{s['route']} {s['score']}" for s in suspects),
               flush=True)
         stage("suspects")
-        if not t_["culprit"] or t_["culprit"]["kind"] != "spec_line" or not fx.rewrites.get(t_["culprit"]["old"]):
-            continue  # a harness culprit, no unique culprit, or no rewrites: no swarm
+        t_["control_green"] = sorted(k for k in run["final_checks"] if all(
+            cp["checks"].get(k) for cp in sv["copies"] if cp["route"] == "control" and cp["ok"]))
+        if not t_["culprit"] or t_["culprit"]["kind"] != "spec_line":
+            continue  # a harness culprit or no unique culprit: no swarm
+        old = t_["culprit"]["old"]
+        if fx.rewriter == "generator" and recorder:
+            from builder.rewrite import generate
+            g = generate(recorder, old, spec_line(fx.spec, t_["culprit"]["step"]), c, msg_of(c),
+                         out=str(run_dir / f"rewrites-{c}.json"))
+            texts = [r["text"] for r in g["rewrites"]]
+        else:
+            texts = fx.rewrites.get(old, [])
+        if not texts:
+            continue
 
         # SWARM: rewrites of the culprit line x copies, from the same checkpoint
-        old = t_["culprit"]["old"]
-        heldout = [h for h, m in meta.items() if m["heldout"] and m.get("file") == meta[c].get("file")]
+        heldout = heldout_of(c)
         ctrl_green = {k for k in run["final_checks"] if all(cp["checks"].get(k) for cp in sv["copies"]
                                                              if cp["route"] == "control" and cp["ok"])}
         rws = [{"route": f"rw{i + 1}", "kind": "spec_line", "step": t_["culprit"]["step"], "old": old, "new": new,
-                "hypothesis": "rewrite of the culprit line"} for i, new in enumerate(fx.rewrites[old])]
+                "hypothesis": "rewrite of the culprit line"} for i, new in enumerate(texts)]
         ww = run_wave(store, fork, rws, copies * len(rws), wave=f"swarm-{c}", to_step=steps, run_dir=run_dir, log=log,
                       targets=[c], purpose="swarm", check=c, kit=kit)
         rewrites = []
@@ -225,7 +272,7 @@ def pipeline(store, run_dir: Path, *, fixture: Fixture | None = None, kit: Kit |
             edit = next(e for e in rws if e["route"] == win["route"])
             cv = run_wave(store, ckpt["0"], [{**edit, "route": f"confirm-{win['route']}"}], 1, wave=f"confirm-{c}",
                           to_step=steps, run_dir=run_dir, log=log, targets=[c, *heldout], purpose="confirm", check=c,
-                          kit=kit)
+                          kit=kit, export_dir=run_dir / "workspaces" / f"confirm-{c}")
             cp = cv["copies"][0]
             regress = sorted(k for k in ctrl_green if k != c and cp["ok"] and not cp["checks"].get(k))
             sw["confirm"] = {"wave": cv["wave"], "route": win["route"], "text": win["text"], "ok": cp["ok"],
@@ -238,14 +285,14 @@ def pipeline(store, run_dir: Path, *, fixture: Fixture | None = None, kit: Kit |
 
     # BASELINE: one plain Claude call fixes the whole spec from the failing check alone; 3 fresh builds of it
     baselines = []
-    if baseline and swarm:
+    real = [x for x in triage if x["verdict"] == "real_problem" and x.get("suspects")]
+    if baseline and real:
         if fixer is None:
-            from builder.llm import AnthropicLLM
-            fixer = StubFixer() if kit.builder_label == "stub" else AnthropicLLM(model=run["model"])
-        for sw in swarm:
-            c, heldout = sw["check"], sw["heldout_checks"]
-            out = fix_spec(fixer, fx.spec, c, meta[c].get("message", ""))
-            b = {"check": c, "fixer": out["model"], "message": meta[c].get("message", ""), "call": {
+            fixer = StubFixer() if kit.builder_label == "stub" else recorder
+        for t_ in real:
+            c, heldout = t_["check"], heldout_of(t_["check"])
+            out = fix_spec(fixer, fx.spec, c, msg_of(c))
+            b = {"check": c, "fixer": out["model"], "message": msg_of(c), "call": {
                 "model_calls": 0 if isinstance(fixer, StubFixer) else 1, "usage": out["usage"], "wall_s": out["wall_s"],
                 "stop_reason": out["stop_reason"], "usd": _usd(out["model"], out["usage"], fixer)},
                  "diff": out.get("diff"), "fixed_spec": out["fixed_spec"], "error": out.get("error"),
@@ -253,8 +300,9 @@ def pipeline(store, run_dir: Path, *, fixture: Fixture | None = None, kit: Kit |
             if out["fixed_spec"]:
                 bv = run_wave(store, ckpt["0"], [{"route": "baseline", "kind": "spec_replace", "spec": out["fixed_spec"]}],
                               copies, wave=f"baseline-{c}", to_step=steps, run_dir=run_dir, log=log,
-                              targets=[c, *heldout], purpose="baseline", check=c, kit=kit)
-                sc = _score(bv["copies"], c, heldout, set(sw["control_green"]))
+                              targets=[c, *heldout], purpose="baseline", check=c, kit=kit,
+                              export_dir=run_dir / "workspaces" / f"baseline-{c}")
+                sc = _score(bv["copies"], c, heldout, set(t_.get("control_green", [])))
                 b.update(wave=bv["wave"], n_builds=len(bv["copies"]), **{k: v for k, v in sc.items() if k != "_all"},
                          passes_all=sc["_all"])
             baselines.append(b)
@@ -269,7 +317,14 @@ def pipeline(store, run_dir: Path, *, fixture: Fixture | None = None, kit: Kit |
     results = json.loads((run_dir / "results.json").read_text()) if (run_dir / "results.json").exists() else {}
     stages["total"] = round(time.perf_counter() - t_start, 3)
     sp = spent(json.loads((run_dir / "run.json").read_text()), results)
-    if baselines:
+    if recorder:  # orchestrator-side calls: rewrite generator + baseline (all through the recorder)
+        usd = [_usd(x["model"], x["usage"], None) for x in recorder.calls]
+        sp["orchestrator_calls"] = {"model_calls": len(recorder.calls),
+                                    "usd": "unknown" if "unknown" in usd else round(sum(usd), 4)}
+        if recorder.calls:
+            sp["total"] = {k: ("unknown" if "unknown" in (sp["total"][k], sp["orchestrator_calls"][k])
+                               else round(sp["total"][k] + sp["orchestrator_calls"][k], 4)) for k in sp["total"]}
+    elif baselines:
         calls = sum(b["call"]["model_calls"] for b in baselines)
         usd = [b["call"]["usd"] for b in baselines]
         sp["baseline_calls"] = {"model_calls": calls, "usd": "unknown" if "unknown" in usd else round(sum(usd), 4)}
@@ -283,56 +338,119 @@ def pipeline(store, run_dir: Path, *, fixture: Fixture | None = None, kit: Kit |
 
 
 def write_report(run_dir: Path) -> Path:
-    """report.md: before / after / baseline pass rates side by side, read back from the run files only."""
+    """report.md: verdicts, then before / after / baseline pass rates side by side, read back from the run files."""
     load = lambda n: json.loads((run_dir / f"{n}.json").read_text()) if (run_dir / f"{n}.json").exists() else {}
-    run, results, sw_doc, bl_doc, arch = (load(n) for n in ("run", "results", "swarm", "baseline", "archil"))
-    waves = {w["wave"]: w for w in results.get("waves", [])}
+    run, results, tri, sw_doc, bl_doc, arch = (load(n) for n in ("run", "results", "triage", "swarm", "baseline",
+                                                                  "archil"))
+    waves = results.get("waves", [])
     spent_w = (arch.get("spent") or {}).get("waves", {})
     cost = lambda wave: (lambda x: f"{x.get('model_calls')} calls, ${x.get('usd')}")(spent_w.get(wave, {}))
-    lines = [f"# Dry Run report: {run.get('run_id')}", "",
-             f"Builder: {run.get('builder')} · model: {run.get('model')} · disk: `{run.get('disk_id')}`. "
-             "Every number below is read from this folder's run files.", ""]
+    swarms = {sw["check"]: sw for sw in sw_doc.get("swarms", [])}
     baselines = {b["check"]: b for b in bl_doc.get("baselines", [])}
-    for sw in sw_doc.get("swarms", []):
-        c, held = sw["check"], sw["heldout_checks"]
-        final = run.get("final_checks", {})
-        sus = next((w for w in results.get("waves", []) if w["purpose"] == "suspects" and w["check"] == c), None)
-        ctrl = [cp for cp in (sus or {}).get("copies", []) if cp["route"] == "control"]
-        cs = _score(ctrl, c, held, set()) if ctrl else None
-        rows = [("Before: the original build", f"{int(bool(final.get(c)))}/1",
-                 f"{int(all(final.get(h, False) for h in held))}/1", "build")]
-        if cs:
-            rows.append(("Before: control branches (no change)", cs["visible"], cs["heldout"], cost(sus["wave"])))
-        best = [r for r in sw["rewrites"] if r["winner"]] or sorted(sw["rewrites"], key=lambda r: r["visible"])[-1:]
-        for r in best:
-            rows.append((f"After: swarm {r['route']} \"{r['text']}\"" + ("" if r["winner"] else " (best, not a winner)"),
-                         r["visible"], r["heldout"], cost(sw["wave"])))
-        if sw.get("confirm"):
-            cf = sw["confirm"]
-            v = cf.get("checks") or {}
-            rows.append((f"After: CONFIRM, fresh build from step 0 with {cf['route']}", f"{int(bool(v.get(c)))}/1",
-                         f"{int(all(v.get(h, False) for h in held))}/1", cost(cf["wave"])))
+    natural = next((w for w in waves if w["purpose"] == "natural"), None)
+    final = run.get("final_checks", {})
+    lines = [f"# Banzai report: {run.get('run_id')}", "",
+             f"Builder: {run.get('builder')} · model: {run.get('model')} · disk: `{run.get('disk_id')}`. "
+             "Every number below is read from this folder's run files.", "",
+             "## Verdicts", "", "| Failing check | Verdict | Surfaced / origin step | Card |", "|---|---|---|---|"]
+    for t in tri.get("checks", []):
+        lines.append(f"| `{t['check']}` | {t['verdict']} | {t['surfaced_step']} / {t['origin_step']} | "
+                     f"{t.get('card', '').replace('|', '/')} |")
+    lines.append("")
+    rj = {"run_id": run.get("run_id"), "model": run.get("model"), "builder": run.get("builder"),
+          "disk_id": run.get("disk_id"), "verdicts": [{k: t.get(k) for k in ("check", "verdict", "surfaced_step",
+                                                                          "origin_step", "card")}
+                                                      for t in tri.get("checks", [])],
+          "checks": {}, "winning_rewrites": [], "archil_totals": arch.get("totals_saved"), "spent": arch.get("spent"),
+          "stages_s": arch.get("stages_s"), "source": "built from run.json, results.json, triage.json, swarm.json, "
+                                                      "baseline.json and archil.json in this folder"}
+
+    def frac(cps, name, held):
+        sc = _score(cps, name, held, set())
+        return sc["visible"], sc["heldout"]
+
+    for t in tri.get("checks", []):
+        if t["verdict"] != "real_problem":
+            continue
+        c = t["check"]
+        held = t.get("heldout_checks") or []
+        rows = [("Before: the checkpointed build", f"{int(bool(final.get(c)))}/1",
+                 f"{int(all(final.get(h, False) for h in held))}/1" if held else "n/a", "build")]
+        if natural:
+            v, h = frac(natural["copies"], c, held)
+            rows.append((f"Before: original spec, {natural['n']} fresh builds from step 0", v, h if held else "n/a",
+                         cost(natural["wave"])))
+        sus = next((w for w in waves if w["purpose"] == "suspects" and w["check"] == c), None)
+        if sus:
+            v, h = frac([cp for cp in sus["copies"] if cp["route"] == "control"], c, held)
+            rows.append(("Before: control branches (no change)", v, h if held else "n/a", cost(sus["wave"])))
+            cul = t.get("culprit")
+            if cul:
+                v, h = frac([cp for cp in sus["copies"] if cp["route"] == cul["route"]], c, held)
+                what = f"rule {cul['rule']} off" if cul["kind"] == "rule_off" else f"step {cul['step']} edit"
+                rows.append((f"After: the culprit's suspect edit ({what})", v, h if held else "n/a", cost(sus["wave"])))
+        sw = swarms.get(c)
+        if sw:
+            best = [r for r in sw["rewrites"] if r["winner"]] or sorted(sw["rewrites"], key=lambda r: r["visible"])[-1:]
+            for r in best:
+                rows.append((f"After: swarm {r['route']} \"{r['text']}\"" + ("" if r["winner"] else " (best, not a winner)"),
+                             r["visible"], r["heldout"], cost(sw["wave"])))
+            if sw.get("confirm"):
+                cf = sw["confirm"]
+                v = cf.get("checks") or {}
+                rows.append((f"After: CONFIRM, fresh build from step 0 with {cf['route']}", f"{int(bool(v.get(c)))}/1",
+                             f"{int(all(v.get(h, False) for h in held))}/1", cost(cf["wave"])))
         b = baselines.get(c)
         if b:
-            label = f"Baseline: one {b['fixer']} call fixes the spec, built from step 0"
+            label = f"Baseline: one {b['fixer']} call rewrites the spec, built from step 0"
             if b.get("wave"):
-                rows.append((label, b["visible"], b["heldout"],
-                             f"{cost(b['wave'])} + 1 fix call ${b['call']['usd']}"))
+                rows.append((label, b["visible"], b["heldout"] if held else "n/a",
+                             f"{cost(b['wave'])} + fix call ${b['call']['usd']}"))
             else:
                 rows.append((label + f" (no usable spec: {b.get('error')})", "n/a", "n/a", f"${b['call']['usd']}"))
+        keys = ["before_build", "before_natural", "before_control", "after_culprit_edit", "after_swarm",
+                "after_confirm", "baseline"]
+        rj["checks"][c] = {"heldout_checks": held, "arms": [
+            {"arm": next((k for k in keys if _arm_key(a_) == k), _arm_key(a_)), "label": a_, "visible": v_,
+             "heldout": h_, "cost": k_} for a_, v_, h_, k_ in rows]}
+        if sw and sw.get("confirm"):
+            win = next(r for r in sw["rewrites"] if r["route"] == sw["confirm"]["route"])
+            rj["winning_rewrites"].append({"check": c, "culprit": sw["culprit"].get("old"), "route": win["route"],
+                                           "text": win["text"], "visible": win["visible"], "heldout": win["heldout"],
+                                           "confirm_passed": sw["confirm"]["passed"],
+                                           "all_winners": sw["winners"]})
         lines += [f"## `{c}`", "", f"Held-out checks: {', '.join(f'`{h}`' for h in held) or 'none'}.", "",
                   "| Arm | Visible check | Held-out | Cost |", "|---|---|---|---|"]
-        lines += [f"| {a} | {v} | {h} | {k} |" for a, v, h, k in rows]
+        lines += [f"| {a_} | {v_} | {h_} | {k_} |" for a_, v_, h_, k_ in rows]
+        if sw:
+            lines += ["", "All swarm rewrites (losers included):", "", "| Rewrite | Visible | Held-out | Regressions | Winner |",
+                      "|---|---|---|---|---|"]
+            lines += [f"| {r['route']} \"{r['text']}\" | {r['visible']} | {r['heldout']} | "
+                      f"{', '.join(r['regressions']) or '-'} | {'yes' if r['winner'] else 'no'} |" for r in sw["rewrites"]]
         if b and b.get("diff"):
             lines += ["", "<details><summary>Baseline's spec change</summary>", "", "```diff", b["diff"].rstrip(),
                       "```", "</details>"]
         lines.append("")
-    total = (arch.get("spent") or {}).get("total", {})
-    lines += [f"Run total: {total.get('model_calls')} model calls, ${total.get('usd')}; "
-              f"wall {arch.get('stages_s', {}).get('total')} s.", ""]
+    sp, st, tot = arch.get("spent") or {}, arch.get("stages_s") or {}, arch.get("totals_saved") or {}
+    lines += ["## Cost and Archil", "",
+              f"- Spent: {sp.get('total', {}).get('model_calls')} model calls, ${sp.get('total', {}).get('usd')} "
+              f"(build {sp.get('build')}; orchestrator calls {sp.get('orchestrator_calls')}).",
+              f"- Wall: {st.get('total')} s; stages {st}.",
+              f"- Branching saved (archil.json totals): {tot}.", ""]
     out = run_dir / "report.md"
     out.write_text("\n".join(lines))
+    _write_json(run_dir / "report.json", rj)  # the same numbers for Keon's page (final screen)
     return out
+
+
+def _arm_key(label: str) -> str:
+    for prefix, key in (("Before: the checkpointed", "before_build"), ("Before: original spec", "before_natural"),
+                        ("Before: control", "before_control"), ("After: the culprit", "after_culprit_edit"),
+                        ("After: swarm", "after_swarm"), ("After: CONFIRM", "after_confirm"),
+                        ("Baseline", "baseline")):
+        if label.startswith(prefix):
+            return key
+    return label
 
 
 def card(t: dict) -> str:
@@ -374,23 +492,28 @@ def main() -> None:
     ap.add_argument("--copies", type=int, default=N_COPIES, help="copies per hypothesis")
     ap.add_argument("--builder", choices=["stub", "real"], default="stub",
                     help="stub = orchestrator/stub_builder/builder; real = brendan's builder/ at the repo root")
-    ap.add_argument("--fixture", choices=["stub", "toy"], default="stub")
+    ap.add_argument("--fixture", choices=["stub", "toy", "demo"], default="stub")
+    ap.add_argument("--model", help="DRYRUN_MODEL for the builder (the rewrite and baseline calls use the same)")
     ap.add_argument("--smoke", action="store_true", help="build + triage (or one 3-copy rebuild) only")
     ap.add_argument("--no-baseline", action="store_true", help="skip the one-call baseline arm")
     ap.add_argument("--max-builders", type=int, default=None,
                     help="builder processes at once across all waves (default 8 for real, 64 for stub)")
+    ap.add_argument("--report", metavar="RUN_DIR", help="only regenerate report.md + report.json from a run folder")
     a = ap.parse_args()
+    if a.report:
+        print(write_report(Path(a.report)))
+        return
     stamp = time.strftime("%Y%m%d-%H%M%S")
     run_dir = HERE / "runs" / f"{stamp}-{a.fixture}-{a.builder}{'-local' if a.local else ''}"
     _load_env()
     env = {}
     if a.builder == "real":
         env["ANTHROPIC_API_KEY"] = os.environ["ANTHROPIC_API_KEY"]  # exec env only; never written anywhere
-        if os.environ.get("DRYRUN_MODEL"):
-            env["DRYRUN_MODEL"] = os.environ["DRYRUN_MODEL"]
+        if a.model or os.environ.get("DRYRUN_MODEL"):
+            env["DRYRUN_MODEL"] = a.model or os.environ["DRYRUN_MODEL"]
     kit = Kit(builder_src=REAL_BUILDER if a.builder == "real" else STUB_BUILDER, env=env,
               max_builders=a.max_builders or (8 if a.builder == "real" else 64),
-              branch_max_calls=10 if a.builder == "real" else None)
+              branch_max_calls=10 if a.builder == "real" and a.fixture == "toy" else None)
     scratch = Path(tempfile.mkdtemp(prefix="dryrun-scratch-"))
     fx = load_fixture(a.fixture, scratch)
     client = None
