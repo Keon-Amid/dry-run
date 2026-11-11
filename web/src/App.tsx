@@ -57,6 +57,12 @@ function Main({ reportOpen, preferRun }: { reportOpen: boolean; preferRun: strin
   const st = useRef({ playing, speed, reportOpen, live, tl, data, runId, cardsFor: '' })
   Object.assign(st.current, { playing, speed, reportOpen, live, tl, data, runId })
   if (sceneRef.current) sceneRef.current.tl = tl
+  // keep the HUD and caption in step with freshly loaded data, even while paused
+  useEffect(() => {
+    if (!tl) return
+    const t = Math.min(tRef.current, tl.duration)
+    setUi({ t, cap: captionAt(tl, t), hud: hudAt(tl, t), ended: t >= tl.duration - 0.001 })
+  }, [tl])
 
   // run list + live polling (every 2 s)
   useEffect(() => {

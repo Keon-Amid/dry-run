@@ -395,7 +395,7 @@ export class Scene {
         // the held-out line: checks the swarm never saw
         ctx.fillStyle = PAL.gold
         ctx.globalAlpha = 0.7
-        for (let y = l.y0 + 11; y < l.y0 + l.h; y += 4) ctx.fillRect(GATE_X - 56, y, 1, 2)
+        for (let y = l.y0 + 11; y < l.y0 + l.h; y += 4) ctx.fillRect(GATE_X - 68, y, 1, 2)
         ctx.globalAlpha = 1
       }
       if (done) {
@@ -495,7 +495,9 @@ export class Scene {
     const m = a.mark
     if (m && t >= m.t) {
       const my = lying ? y - 22 : y - 33
-      if (m.kind === 'ok') {
+      if (m.kind === 'ok' && p.pose === 'cheer') {
+        /* winners already have the flag and the chest */
+      } else if (m.kind === 'ok') {
         ctx.fillStyle = PAL.shadow
         ctx.fillRect(x - 5, my - 1, 10, 8)
         ctx.fillStyle = PAL.green

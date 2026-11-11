@@ -390,7 +390,7 @@ export function buildTimeline(d: RunData): Timeline {
           seg(a, t, t + dur, xs, xe, feetY, feetY, 'walk')
           t += dur
           if (R?.winner) {
-            const xf = GATE_X - 34 + off * 17
+            const xf = GATE_X - 46 + off * 17
             seg(a, t, t + 0.6, xe, xf, feetY, feetY, 'walk')
             t += 0.6
             seg(a, t, t, xf, xf, feetY, feetY, 'cheer')
