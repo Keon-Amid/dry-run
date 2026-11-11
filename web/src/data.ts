@@ -64,6 +64,19 @@ export async function liveWave(runId: string, cmd: 'wave' | 'both' = 'wave'): Pr
   if (!r.ok) throw new Error(j.error || 'could not start the live wave')
   return j.job
 }
+export type Workspace = { name: string; files: { path: string; size: number }[] }
+export const listWorkspaces = (runId: string): Promise<Workspace[]> =>
+  STATIC
+    ? Promise.resolve([])
+    : fetch(`/api/runs/${encodeURIComponent(runId)}/workspaces`, { cache: 'no-store' })
+        .then((r) => (r.ok ? r.json() : { workspaces: [] }))
+        .then((j) => j.workspaces ?? [])
+        .catch(() => [])
+export const workspaceFile = (runId: string, ws: string, file: string): Promise<string> =>
+  fetch(`/api/runs/${encodeURIComponent(runId)}/workspaces/${encodeURIComponent(ws)}/${file.split('/').map(encodeURIComponent).join('/')}`, { cache: 'no-store' }).then((r) =>
+    r.ok ? r.text() : 'could not read this file',
+  )
+export const workspaceTgz = (runId: string, ws: string): string => `/api/runs/${encodeURIComponent(runId)}/workspaces/${encodeURIComponent(ws)}.tgz`
 export const stopRun = () => fetch('/api/stop', { method: 'POST' }).then((r) => r.json())
 
 const TEXTS: [keyof RunData, string][] = [

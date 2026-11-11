@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { frac, show, type RunData } from './data'
+import { frac, listWorkspaces, show, workspaceFile, workspaceTgz, type RunData, type Workspace } from './data'
 import { Spr } from './Spr'
 
 export function Slots({ score, fails }: { score: any; fails?: boolean }) {
@@ -75,6 +75,58 @@ function SpecDiff({ data }: { data: RunData }) {
             <span className="r">{r.r ?? ''}</span>
           </div>
         ))}
+      </div>
+    </div>
+  )
+}
+
+// The finished product: the code each build exported, to read here or download.
+function Product({ data, spaces }: { data: RunData; spaces: Workspace[] }) {
+  const pref = spaces.find((w) => w.name === 'confirm-both') ?? [...spaces].reverse().find((w) => w.name.startsWith('confirm')) ?? spaces.find((w) => w.name === 'build') ?? spaces[0]
+  const [ws, setWs] = useState(pref?.name ?? '')
+  const cur = spaces.find((w) => w.name === ws) ?? pref
+  const [file, setFile] = useState('')
+  const [text, setText] = useState('')
+  const what = (name: string) =>
+    name === 'build' ? 'the original build (before any fix)' : name === 'confirm-both' ? 'fresh build with every fix' : name.startsWith('confirm') ? 'fresh build with the winning fix' : name.startsWith('baseline') ? 'the plain-Claude baseline build' : 'a build'
+  useEffect(() => {
+    const first = cur?.files.find((f) => /\.(py|ts|js|md|json|txt|html)$/i.test(f.path)) ?? cur?.files[0]
+    setFile(first?.path ?? '')
+  }, [cur?.name])
+  useEffect(() => {
+    if (!cur || !file) return setText('')
+    let off = false
+    workspaceFile(data.id, cur.name, file).then((t) => !off && setText(t))
+    return () => {
+      off = true
+    }
+  }, [cur?.name, file])
+  if (!cur) return null
+  return (
+    <div className="scroll diff product" onClick={(e) => e.stopPropagation()}>
+      <h2>THE FINISHED PRODUCT</h2>
+      <div className="prodbar">
+        {spaces.map((w) => (
+          <button key={w.name} className={'btn' + (w.name === cur.name ? ' on' : '')} onClick={() => setWs(w.name)} title={what(w.name)}>
+            {w.name}
+          </button>
+        ))}
+        <a className="btn dl" href={workspaceTgz(data.id, cur.name)}>
+          DOWNLOAD {cur.name}.tgz
+        </a>
+      </div>
+      <div className="check">
+        {what(cur.name)} · {cur.files.length} files · orchestrator/runs/{data.id}/workspaces/{cur.name}/
+      </div>
+      <div className="prodgrid">
+        <ul className="files">
+          {cur.files.map((f) => (
+            <li key={f.path} className={f.path === file ? 'on' : ''} onClick={() => setFile(f.path)}>
+              {f.path} <small>{f.size} B</small>
+            </li>
+          ))}
+        </ul>
+        <pre className="code">{text}</pre>
       </div>
     </div>
   )
@@ -206,9 +258,21 @@ export function Cards({ data, onClose }: { data: RunData; onClose: () => void })
   const hasResult = Object.keys(data.report?.checks ?? {}).length > 0
   const hasDiff = typeof data.specOriginal === 'string' && typeof data.specFixed === 'string'
   const asked = new URLSearchParams(location.search).get('view')
-  const [view, setView] = useState<'result' | 'cards' | 'diff'>(asked === 'diff' && hasDiff ? 'diff' : hasResult ? 'result' : 'cards')
+  const [view, setView] = useState<'result' | 'cards' | 'diff' | 'product'>(asked === 'diff' && hasDiff ? 'diff' : hasResult ? 'result' : 'cards')
+  const [spaces, setSpaces] = useState<Workspace[]>([])
   useEffect(() => {
-    if (hasResult) setView((v) => (v === 'diff' ? v : 'result'))
+    let off = false
+    listWorkspaces(data.id).then((w) => {
+      if (off) return
+      setSpaces(w)
+      if (asked === 'product' && w.length) setView('product')
+    })
+    return () => {
+      off = true
+    }
+  }, [data.id, data.sig])
+  useEffect(() => {
+    if (hasResult) setView((v) => (v === 'diff' || v === 'product' ? v : 'result'))
   }, [hasResult])
   const ruleText = (name: string): string | null => {
     const rc = (data.report?.culprits ?? []).find((x: any) => x.check === name)
@@ -220,7 +284,7 @@ export function Cards({ data, onClose }: { data: RunData; onClose: () => void })
   }
   return (
     <div className="cards" onClick={onClose}>
-      {(hasResult || hasDiff) && (
+      {(hasResult || hasDiff || spaces.length > 0) && (
         <div className="tabs" onClick={(e) => e.stopPropagation()}>
           {hasResult && (
             <button className={'btn' + (view === 'result' ? ' on' : '')} onClick={() => setView('result')}>
@@ -235,9 +299,16 @@ export function Cards({ data, onClose }: { data: RunData; onClose: () => void })
           <button className={'btn' + (view === 'cards' ? ' on' : '')} onClick={() => setView('cards')}>
             DEATH CARDS
           </button>
+          {spaces.length > 0 && (
+            <button className={'btn' + (view === 'product' ? ' on' : '')} onClick={() => setView('product')}>
+              FINISHED PRODUCT
+            </button>
+          )}
         </div>
       )}
-      {hasDiff && view === 'diff' ? (
+      {spaces.length > 0 && view === 'product' ? (
+        <Product data={data} spaces={spaces} />
+      ) : hasDiff && view === 'diff' ? (
         <SpecDiff data={data} />
       ) : hasResult && view === 'result' ? (
         <ResultPanel data={data} />

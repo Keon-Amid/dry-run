@@ -99,6 +99,16 @@ export function makeApi(repoRoot: string, RUNS: string) {
     const mb = Number(o?.maxBuilders)
     if (Number.isInteger(mb) && mb >= 1 && mb <= 64) args.push('--max-builders', String(mb))
     if (typeof o?.model === 'string' && /^[\w.-]{3,60}$/.test(o.model)) args.push('--model', o.model)
+    // an uploaded spec: same pipeline, the fixture's spec text replaced (web/tools/run_spec.py)
+    if (typeof o?.specText === 'string' && o.specText.trim()) {
+      if (builder !== 'real') throw new Error('an uploaded spec needs the real builder (the stub agent ignores the spec)')
+      if (o.specText.length > 200000 || !/^## Step 1\b/m.test(o.specText)) throw new Error('the spec needs "## Step 1", "## Step 2", ... headings (and to be under 200 KB)')
+      const dir = path.join(repoRoot, 'web/.tmp/uploads')
+      fs.mkdirSync(dir, { recursive: true })
+      const file = path.join(dir, `spec-${Date.now()}.md`)
+      fs.writeFileSync(file, o.specText)
+      return launch(['-u', path.join(repoRoot, 'web/tools/run_spec.py'), '--spec', file, ...args.slice(3)], { fixture, builder, local, uploaded: true }, null)
+    }
     return launch(args, { fixture, builder, local }, null)
   }
 
@@ -200,6 +210,15 @@ export function makeApi(repoRoot: string, RUNS: string) {
       .sort((a, b) => (a.id < b.id ? 1 : a.id > b.id ? -1 : 0))
   }
 
+  const walk = (dir: string, base = '', out: { path: string; size: number }[] = []) => {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (e.name.startsWith('.') || e.name === '__pycache__' || e.name === 'node_modules') continue
+      const rel = base ? base + '/' + e.name : e.name
+      if (e.isDirectory()) walk(path.join(dir, e.name), rel, out)
+      else if (out.length < 400) out.push({ path: rel, size: fs.statSync(path.join(dir, e.name)).size })
+    }
+    return out
+  }
   const isLocal = (req: any) => ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(req.socket?.remoteAddress ?? '')
   const send = (res: any, code: number, body: any) => {
     res.statusCode = code
@@ -243,6 +262,32 @@ export function makeApi(repoRoot: string, RUNS: string) {
       if (url.startsWith('/api/runs')) {
         const parts = url.split('/').filter(Boolean).slice(2).map(decodeURIComponent)
         if (parts.length === 0) return send(res, 200, listRuns())
+        // the finished product: the code each build exported into <run>/workspaces/<name>/
+        if (parts.length >= 2 && NAME.test(parts[0]) && parts[1] === 'workspaces') {
+          const root = path.join(RUNS, parts[0], 'workspaces')
+          if (parts.length === 2) {
+            const names = fs.existsSync(root) ? fs.readdirSync(root).filter((d) => NAME.test(d) && fs.statSync(path.join(root, d)).isDirectory()) : []
+            return send(res, 200, { workspaces: names.sort().map((name) => ({ name, files: walk(path.join(root, name)) })) })
+          }
+          if (parts.length === 3 && parts[2].endsWith('.tgz')) {
+            const ws = parts[2].slice(0, -4)
+            if (!NAME.test(ws) || !fs.existsSync(path.join(root, ws))) return send(res, 404, { error: 'not found' })
+            res.setHeader('Content-Type', 'application/gzip')
+            res.setHeader('Content-Disposition', `attachment; filename="${parts[0]}-${ws}.tgz"`)
+            const tar = spawn('tar', ['-czf', '-', '--exclude', '__pycache__', '--exclude', '.git', '-C', root, ws])
+            tar.stdout.pipe(res)
+            tar.on('error', () => res.end())
+            return
+          }
+          if (parts.length >= 4 && NAME.test(parts[2]) && parts.slice(3).every((seg) => /^[\w][\w .-]*$/.test(seg))) {
+            const f = path.join(root, parts[2], ...parts.slice(3))
+            if (!f.startsWith(root + path.sep) || !fs.existsSync(f) || !fs.statSync(f).isFile()) return send(res, 404, { error: 'not found' })
+            res.setHeader('Content-Type', 'text/plain; charset=utf-8')
+            res.end(fs.readFileSync(f).subarray(0, 400000))
+            return
+          }
+          return send(res, 400, { error: 'bad request' })
+        }
         if (parts.length === 2 && NAME.test(parts[0]) && FILE.test(parts[1])) {
           const p = path.join(RUNS, parts[0], parts[1])
           if (!fs.existsSync(p)) return send(res, 404, { error: 'not found' })

@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getCaps, startRun, type Caps, type Job } from './data'
 
-type Picked = { path: string; size: number }
-
 // NEW RUN: start the real pipeline from the page, then follow it live.
 // It runs `python -m orchestrator.pipeline` on the machine that serves this page, with the options chosen here.
 export function Upload({ onClose, onStarted, job }: { onClose: () => void; onStarted: (j: Job) => void; job: Job | null }) {
@@ -14,7 +12,8 @@ export function Upload({ onClose, onStarted, job }: { onClose: () => void; onSta
   const [noBaseline, setNoBaseline] = useState(false)
   const [err, setErr] = useState('')
   const [busy, setBusy] = useState(false)
-  const [files, setFiles] = useState<Picked[]>([])
+  const [specText, setSpecText] = useState('')
+  const [specName, setSpecName] = useState('')
   const [steps, setSteps] = useState<number | null>(null)
 
   useEffect(() => {
@@ -46,7 +45,7 @@ export function Upload({ onClose, onStarted, job }: { onClose: () => void; onSta
     setErr('')
     setBusy(true)
     try {
-      onStarted(await startRun({ fixture, builder, local, smoke, noBaseline: skipBaseline }))
+      onStarted(await startRun({ fixture, builder, local, smoke, noBaseline: skipBaseline, specText: specText || undefined }))
     } catch (e: any) {
       setErr(String(e?.message || e))
     } finally {
@@ -55,20 +54,18 @@ export function Upload({ onClose, onStarted, job }: { onClose: () => void; onSta
   }
 
   const pick = async (list: FileList | null) => {
-    if (!list) return
-    const arr = Array.from(list)
-    setFiles(arr.map((f) => ({ path: (f as any).webkitRelativePath || f.name, size: f.size })))
-    const spec = arr.find((f) => /(^|\/)spec\.md$/i.test((f as any).webkitRelativePath || f.name))
-    setSteps(spec ? ((await spec.text()).match(/^##\s*Step\s+\d+/gim) || []).length : null)
+    const f = list?.[0]
+    if (!f) return
+    const txt = await f.text()
+    setSpecText(txt)
+    setSpecName(f.name)
+    setSteps((txt.match(/^##\s*Step\s+\d+/gim) || []).length)
+    if (canReal) {
+      setBuilder('real')
+      if (fixture === 'stub') setFixture(caps?.fixtures.includes('demo') ? 'demo' : (caps?.fixtures.find((x) => x !== 'stub') ?? 'stub'))
+    }
   }
-  const has = (re: RegExp) => files.some((f) => re.test(f.path))
-  const parts: [string, boolean][] = [
-    ['spec.md', has(/(^|\/)spec\.md$/i)],
-    ['rules/', has(/(^|\/)rules\//i)],
-    ['checks/', has(/(^|\/)checks\//i)],
-    ['checks_heldout/', has(/(^|\/)checks_heldout\//i)],
-    ['golden/', has(/(^|\/)golden\//i)],
-  ]
+  const bundleName = fixture === 'stub' ? 'stub' : `${caps?.fixtureNames?.[fixture] ?? fixture}`
 
   const Opt = ({ on, set, ok = true, children, why }: { on: boolean; set: () => void; ok?: boolean; children: any; why?: string }) => (
     <button className={'opt' + (on ? ' on' : '')} disabled={!ok} onClick={set} title={ok ? '' : why}>
@@ -133,7 +130,7 @@ export function Upload({ onClose, onStarted, job }: { onClose: () => void; onSta
           </Opt>
         </div>
         <div className="stubnote">
-          <code>python -m orchestrator.pipeline {args.join(' ')}</code>
+          <code>{specText ? `python web/tools/run_spec.py --spec ${specName || 'spec.md'} ${args.join(' ')}` : `python -m orchestrator.pipeline ${args.join(' ')}`}</code>
         </div>
         {caps && (!caps.python || !caps.pipeline) && <div className="stubnote">python3 or orchestrator/pipeline.py is missing on this machine, so runs can't start here.</div>}
         {running && <div className="stubnote">A run is already in progress: {job?.runId ?? 'starting'}.</div>}
@@ -146,27 +143,23 @@ export function Upload({ onClose, onStarted, job }: { onClose: () => void; onSta
             CLOSE
           </button>
         </div>
-        <details className="own">
-          <summary>Your own spec bundle (not wired yet)</summary>
-          <p className="cardtext">The pipeline takes its named bundles today. This only checks that a folder has the parts a run needs.</p>
+        <div className="own">
           <label className="drop">
-            <input type="file" multiple {...({ webkitdirectory: '', directory: '' } as any)} onChange={(e) => pick(e.target.files)} />
-            <span>{files.length ? `${files.length} files chosen` : 'Choose a bundle folder'}</span>
+            <input type="file" accept=".md,.txt,text/markdown,text/plain" onChange={(e) => pick(e.target.files)} />
+            <span>{specName ? `YOUR SPEC: ${specName} · ${steps ?? 0} steps` : 'UPLOAD YOUR SPEC (a .md file with "## Step 1", "## Step 2", ... headings)'}</span>
           </label>
-          <ul className="checks">
-            {parts.map(([name, ok]) => (
-              <li key={name} className={files.length ? (ok ? 'ok' : 'no') : ''}>
-                {files.length ? (ok ? '✓' : '✗') : '·'} <b>{name}</b>
-              </li>
-            ))}
-          </ul>
-          {steps != null && (
-            <div className="row">
-              <span>steps found in spec.md</span>
-              <em>{steps}</em>
-            </div>
+          {specText ? (
+            <p className="cardtext">
+              Your spec replaces the {bundleName} spec. It is built by the real builder and graded with the {bundleName} checks, so it has to be a spec for that same project.{' '}
+              {builder !== 'real' ? 'Choose the real builder: the stub agent ignores the spec. ' : ''}
+              <button className="mini" onClick={() => (setSpecText(''), setSpecName(''), setSteps(null))}>
+                REMOVE
+              </button>
+            </p>
+          ) : (
+            <p className="cardtext">No file chosen: the run uses the bundle's own spec.</p>
           )}
-        </details>
+        </div>
       </div>
     </div>
   )

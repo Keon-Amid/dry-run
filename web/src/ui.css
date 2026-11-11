@@ -146,3 +146,12 @@ table.probes td { font-size: 19px; word-break: break-word; }
 table.probes tr.differs td:first-child { color: var(--shadow); }
 table.probes td.chg { background: rgba(111, 207, 98, 0.45); }
 .scroll.result { max-height: none; }
+
+.prodbar { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 6px; }
+.btn.dl { text-decoration: none; margin-left: auto; background: var(--gold); color: var(--shadow); border-color: var(--fire); }
+.prodgrid { display: grid; grid-template-columns: 240px 1fr; gap: 8px; margin-top: 6px; }
+.files { list-style: none; margin: 0; padding: 0; max-height: 48vh; overflow: auto; border: 2px solid var(--shadow); background: var(--bone); }
+.files li { padding: 2px 8px; cursor: pointer; font-size: 19px; word-break: break-all; }
+.files li.on { background: var(--shadow); color: var(--gold); }
+.files small { color: var(--stoneL); }
+.code { margin: 0; max-height: 48vh; overflow: auto; padding: 8px 10px; background: var(--shadow); color: var(--bone); font-family: var(--body); font-size: 18px; line-height: 18px; white-space: pre; border: 2px solid var(--shadow); }
