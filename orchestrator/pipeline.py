@@ -6,6 +6,7 @@
 Writes orchestrator/runs/<stamp>/: run.json, triage.json, results.json (every wave), swarm.json, archil.json,
 baseline.json (one plain Claude call fixes the spec; 3 fresh builds of it) and report.md (before/after/baseline).
 --fixture stub: the stub spec/checks/golden/rules/rewrites in orchestrator/ (all three verdicts planted).
+--fixture demo2: brendan's visual demo (demo2/, Dungeon Painter SVG; side-by-side via demo2/render.py).
 --fixture toy:  brendan's builder/tests/fixtures/toy (spec, rules, canary checks via orchestrator/assert_checks.py).
 --smoke: build + triage only (or, if nothing fails, one 3-copy rebuild of the last step), to exercise the real builder.
 --builder real: ANTHROPIC_API_KEY (and DRYRUN_MODEL if set) go to each builder process through the exec env only.
@@ -90,7 +91,32 @@ def load_fixture(name: str, scratch: Path) -> Fixture:
         return Fixture("demo", (DEMO / "disk" / "spec.md").read_text(),
                        {p.name: p.read_text() for p in sorted((DEMO / "disk" / "rules").glob("*.md"))}, bundle,
                        golden=DEMO / "golden", rewriter="generator", suspects=suspects, natural=3)
+    if name == "demo2":
+        return demo2_fixture(scratch)
     raise SystemExit(f"unknown fixture {name}")
+
+
+DEMO2 = ROOT / "demo2"
+
+
+def demo2_fixture(scratch: Path) -> Fixture:
+    """brendan's visual demo (Dungeon Painter, SVG), wired like the Shortlink `demo` fixture: suspects are the
+    plants' own edits (ambiguity, contradiction, bad rule, plus the placebo that must not flip), rewrites come live
+    from builder/rewrite.py, and 3 natural builds give the "before" arm. Side by side: demo2/render.py."""
+    scratch.mkdir(parents=True, exist_ok=True)
+    bundle = scratch / "demo2_checks.py"
+    subprocess.run([sys.executable, str(DEMO2 / "grade.py"), "--bundle", str(bundle)], check=True,
+                   capture_output=True)
+    suspects = []
+    for p in json.loads((DEMO2 / "plants.json").read_text()):
+        if p["patch"]["kind"] == "control":
+            continue   # the pipeline adds its own control branch
+        e = {k: v for k, v in p["patch"].items() if v is not None}
+        e["route"] = f"spec-step{e['step']}" if e["kind"] == "spec_line" else f"rule-{Path(e['rule']).stem}"
+        suspects.append(e)
+    return Fixture("demo2", (DEMO2 / "disk" / "spec.md").read_text(),
+                   {p.name: p.read_text() for p in sorted((DEMO2 / "disk" / "rules").glob("*.md"))}, bundle,
+                   golden=DEMO2 / "golden", rewriter="generator", suspects=suspects, natural=3)
 
 
 def spec_line(spec: str, k: int) -> str:
@@ -492,7 +518,7 @@ def main() -> None:
     ap.add_argument("--copies", type=int, default=N_COPIES, help="copies per hypothesis")
     ap.add_argument("--builder", choices=["stub", "real"], default="stub",
                     help="stub = orchestrator/stub_builder/builder; real = brendan's builder/ at the repo root")
-    ap.add_argument("--fixture", choices=["stub", "toy", "demo"], default="stub")
+    ap.add_argument("--fixture", choices=["stub", "toy", "demo", "demo2"], default="stub")
     ap.add_argument("--model", help="DRYRUN_MODEL for the builder (the rewrite and baseline calls use the same)")
     ap.add_argument("--smoke", action="store_true", help="build + triage (or one 3-copy rebuild) only")
     ap.add_argument("--no-baseline", action="store_true", help="skip the one-call baseline arm")
