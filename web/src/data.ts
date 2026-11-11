@@ -58,6 +58,7 @@ export async function startRun(opts: Json): Promise<Job> {
   return j.job
 }
 export async function liveWave(runId: string, cmd: 'wave' | 'both' = 'wave'): Promise<Job> {
+  if (STATIC) throw new Error('live waves can only be started from the machine that serves this page (this is the published copy)')
   const r = await fetch('/api/live', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ runId, cmd }) })
   const j = await r.json().catch(() => ({}))
   if (!r.ok) throw new Error(j.error || 'could not start the live wave')
