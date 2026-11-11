@@ -1,0 +1,581 @@
+{
+  "waves": [
+    {
+      "wave": "swarm",
+      "checkpoint_id": "dsk-0000000000190d38/c2",
+      "fork_step": 2,
+      "to_step": 7,
+      "n": 15,
+      "wall_s": 12.185,
+      "routes": [
+        {
+          "route": "rw1",
+          "edit": "Links expire 30 days after their last click.",
+          "runs": 3,
+          "passed": 3,
+          "errors": 0,
+          "score": "3/3"
+        },
+        {
+          "route": "rw2",
+          "edit": "Links expire 30 days after they are created.",
+          "runs": 3,
+          "passed": 0,
+          "errors": 0,
+          "score": "0/3"
+        },
+        {
+          "route": "rw3",
+          "edit": "A link expires when 30 days pass without a click.",
+          "runs": 3,
+          "passed": 0,
+          "errors": 0,
+          "score": "0/3"
+        },
+        {
+          "route": "rw4",
+          "edit": "Links expire after 30 days, counted from the last click.",
+          "runs": 3,
+          "passed": 3,
+          "errors": 0,
+          "score": "3/3"
+        },
+        {
+          "route": "rw5",
+          "edit": "Links never expire.",
+          "runs": 3,
+          "passed": 0,
+          "errors": 0,
+          "score": "0/3"
+        }
+      ],
+      "copies": [
+        {
+          "id": "swarm-rw1-r1",
+          "route": "rw1",
+          "kind": "spec_line",
+          "edit": "Links expire 30 days after their last click.",
+          "ok": true,
+          "branch": "swarm-rw1-r1-75f529",
+          "builder": {
+            "route": "swarm-rw1-r1",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "patch_applied": true,
+            "builder": "fake"
+          },
+          "checks": {
+            "all_steps_built": true,
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": true
+          },
+          "passed": true,
+          "wall_s": 10.442,
+          "timings_ms": {
+            "branch": 287.8,
+            "sandbox": 3349.2,
+            "mount": 1697.9
+          }
+        },
+        {
+          "id": "swarm-rw2-r1",
+          "route": "rw2",
+          "kind": "spec_line",
+          "edit": "Links expire 30 days after they are created.",
+          "ok": true,
+          "branch": "swarm-rw2-r1-ca7873",
+          "builder": {
+            "route": "swarm-rw2-r1",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "patch_applied": true,
+            "builder": "fake"
+          },
+          "checks": {
+            "all_steps_built": true,
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false
+          },
+          "passed": false,
+          "wall_s": 9.067,
+          "timings_ms": {
+            "branch": 229.6,
+            "sandbox": 1700.5,
+            "mount": 1464.8
+          }
+        },
+        {
+          "id": "swarm-rw3-r1",
+          "route": "rw3",
+          "kind": "spec_line",
+          "edit": "A link expires when 30 days pass without a click.",
+          "ok": true,
+          "branch": "swarm-rw3-r1-55bf82",
+          "builder": {
+            "route": "swarm-rw3-r1",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "patch_applied": true,
+            "builder": "fake"
+          },
+          "checks": {
+            "all_steps_built": true,
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false
+          },
+          "passed": false,
+          "wall_s": 10.095,
+          "timings_ms": {
+            "branch": 231.6,
+            "sandbox": 2925.9,
+            "mount": 1586.7
+          }
+        },
+        {
+          "id": "swarm-rw4-r1",
+          "route": "rw4",
+          "kind": "spec_line",
+          "edit": "Links expire after 30 days, counted from the last click.",
+          "ok": true,
+          "branch": "swarm-rw4-r1-7b0b14",
+          "builder": {
+            "route": "swarm-rw4-r1",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "patch_applied": true,
+            "builder": "fake"
+          },
+          "checks": {
+            "all_steps_built": true,
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": true
+          },
+          "passed": true,
+          "wall_s": 8.61,
+          "timings_ms": {
+            "branch": 257.7,
+            "sandbox": 1675.7,
+            "mount": 1460.7
+          }
+        },
+        {
+          "id": "swarm-rw5-r1",
+          "route": "rw5",
+          "kind": "spec_line",
+          "edit": "Links never expire.",
+          "ok": true,
+          "branch": "swarm-rw5-r1-e71982",
+          "builder": {
+            "route": "swarm-rw5-r1",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "patch_applied": true,
+            "builder": "fake"
+          },
+          "checks": {
+            "all_steps_built": true,
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false
+          },
+          "passed": false,
+          "wall_s": 10.636,
+          "timings_ms": {
+            "branch": 240.0,
+            "sandbox": 3394.7,
+            "mount": 1825.3
+          }
+        },
+        {
+          "id": "swarm-rw1-r2",
+          "route": "rw1",
+          "kind": "spec_line",
+          "edit": "Links expire 30 days after their last click.",
+          "ok": true,
+          "branch": "swarm-rw1-r2-15dc21",
+          "builder": {
+            "route": "swarm-rw1-r2",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "patch_applied": true,
+            "builder": "fake"
+          },
+          "checks": {
+            "all_steps_built": true,
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": true
+          },
+          "passed": true,
+          "wall_s": 10.442,
+          "timings_ms": {
+            "branch": 260.0,
+            "sandbox": 3381.4,
+            "mount": 1671.4
+          }
+        },
+        {
+          "id": "swarm-rw2-r2",
+          "route": "rw2",
+          "kind": "spec_line",
+          "edit": "Links expire 30 days after they are created.",
+          "ok": true,
+          "branch": "swarm-rw2-r2-e7376f",
+          "builder": {
+            "route": "swarm-rw2-r2",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "patch_applied": true,
+            "builder": "fake"
+          },
+          "checks": {
+            "all_steps_built": true,
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false
+          },
+          "passed": false,
+          "wall_s": 9.065,
+          "timings_ms": {
+            "branch": 279.0,
+            "sandbox": 1643.9,
+            "mount": 1490.7
+          }
+        },
+        {
+          "id": "swarm-rw3-r2",
+          "route": "rw3",
+          "kind": "spec_line",
+          "edit": "A link expires when 30 days pass without a click.",
+          "ok": true,
+          "branch": "swarm-rw3-r2-930c57",
+          "builder": {
+            "route": "swarm-rw3-r2",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "patch_applied": true,
+            "builder": "fake"
+          },
+          "checks": {
+            "all_steps_built": true,
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false
+          },
+          "passed": false,
+          "wall_s": 10.096,
+          "timings_ms": {
+            "branch": 259.8,
+            "sandbox": 2891.5,
+            "mount": 1593.9
+          }
+        },
+        {
+          "id": "swarm-rw4-r2",
+          "route": "rw4",
+          "kind": "spec_line",
+          "edit": "Links expire after 30 days, counted from the last click.",
+          "ok": true,
+          "branch": "swarm-rw4-r2-c6d5e7",
+          "builder": {
+            "route": "swarm-rw4-r2",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "patch_applied": true,
+            "builder": "fake"
+          },
+          "checks": {
+            "all_steps_built": true,
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": true
+          },
+          "passed": true,
+          "wall_s": 9.065,
+          "timings_ms": {
+            "branch": 272.4,
+            "sandbox": 1647.2,
+            "mount": 1477.5
+          }
+        },
+        {
+          "id": "swarm-rw5-r2",
+          "route": "rw5",
+          "kind": "spec_line",
+          "edit": "Links never expire.",
+          "ok": true,
+          "branch": "swarm-rw5-r2-e1ac13",
+          "builder": {
+            "route": "swarm-rw5-r2",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "patch_applied": true,
+            "builder": "fake"
+          },
+          "checks": {
+            "all_steps_built": true,
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false
+          },
+          "passed": false,
+          "wall_s": 10.094,
+          "timings_ms": {
+            "branch": 262.6,
+            "sandbox": 2609.3,
+            "mount": 1626.9
+          }
+        },
+        {
+          "id": "swarm-rw1-r3",
+          "route": "rw1",
+          "kind": "spec_line",
+          "edit": "Links expire 30 days after their last click.",
+          "ok": true,
+          "branch": "swarm-rw1-r3-1d939a",
+          "builder": {
+            "route": "swarm-rw1-r3",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "patch_applied": true,
+            "builder": "fake"
+          },
+          "checks": {
+            "all_steps_built": true,
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": true
+          },
+          "passed": true,
+          "wall_s": 10.092,
+          "timings_ms": {
+            "branch": 267.0,
+            "sandbox": 2887.2,
+            "mount": 1589.5
+          }
+        },
+        {
+          "id": "swarm-rw2-r3",
+          "route": "rw2",
+          "kind": "spec_line",
+          "edit": "Links expire 30 days after they are created.",
+          "ok": true,
+          "branch": "swarm-rw2-r3-94393d",
+          "builder": {
+            "route": "swarm-rw2-r3",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "patch_applied": true,
+            "builder": "fake"
+          },
+          "checks": {
+            "all_steps_built": true,
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false
+          },
+          "passed": false,
+          "wall_s": 10.67,
+          "timings_ms": {
+            "branch": 245.2,
+            "sandbox": 3390.4,
+            "mount": 1827.1
+          }
+        },
+        {
+          "id": "swarm-rw3-r3",
+          "route": "rw3",
+          "kind": "spec_line",
+          "edit": "A link expires when 30 days pass without a click.",
+          "ok": true,
+          "branch": "swarm-rw3-r3-143ab7",
+          "builder": {
+            "route": "swarm-rw3-r3",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "patch_applied": true,
+            "builder": "fake"
+          },
+          "checks": {
+            "all_steps_built": true,
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false
+          },
+          "passed": false,
+          "wall_s": 9.754,
+          "timings_ms": {
+            "branch": 245.7,
+            "sandbox": 2494.2,
+            "mount": 1684.8
+          }
+        },
+        {
+          "id": "swarm-rw4-r3",
+          "route": "rw4",
+          "kind": "spec_line",
+          "edit": "Links expire after 30 days, counted from the last click.",
+          "ok": true,
+          "branch": "swarm-rw4-r3-f56f9b",
+          "builder": {
+            "route": "swarm-rw4-r3",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "patch_applied": true,
+            "builder": "fake"
+          },
+          "checks": {
+            "all_steps_built": true,
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": true
+          },
+          "passed": true,
+          "wall_s": 9.059,
+          "timings_ms": {
+            "branch": 248.8,
+            "sandbox": 1677.6,
+            "mount": 1463.4
+          }
+        },
+        {
+          "id": "swarm-rw5-r3",
+          "route": "rw5",
+          "kind": "spec_line",
+          "edit": "Links never expire.",
+          "ok": true,
+          "branch": "swarm-rw5-r3-960552",
+          "builder": {
+            "route": "swarm-rw5-r3",
+            "from_step": 2,
+            "to_step": 7,
+            "built": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "patch_applied": true,
+            "builder": "fake"
+          },
+          "checks": {
+            "all_steps_built": true,
+            "conversation_intact": true,
+            "codes_6_digits": true,
+            "expiry_from_last_click": false
+          },
+          "passed": false,
+          "wall_s": 9.229,
+          "timings_ms": {
+            "branch": 265.9,
+            "sandbox": 2248.4,
+            "mount": 1860.8
+          }
+        }
+      ]
+    }
+  ]
+}

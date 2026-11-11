@@ -1,0 +1,175 @@
+{
+  "counterfactuals": {
+    "rebuild": "without a checkpoint, each copy replays steps 1..fork_step",
+    "restore": "git clone + dependency install restores code only, not the conversation"
+  },
+  "per_step_avg": {
+    "steps_in_run": 7,
+    "wall_s": 0.767857,
+    "model_calls": "unknown",
+    "usd": "unknown"
+  },
+  "restore_baseline": {
+    "git_clone_plus_install_s": 11.036,
+    "branch_plus_mount_s": 2.298,
+    "source": "spikes/disk_spike.json"
+  },
+  "prices_per_mtok": {
+    "claude-fable-5-2": {
+      "input": 8.0,
+      "output": 40.0,
+      "cache_read": 0.2
+    },
+    "claude-opus-5-5": {
+      "input": 4.0,
+      "output": 20.0,
+      "cache_read": 0.2
+    },
+    "claude-sonnet-5-5": {
+      "input": 2.0,
+      "output": 10.0,
+      "cache_read": 0.1
+    },
+    "claude-haiku-5-5": {
+      "input": 0.1,
+      "output": 0.5,
+      "cache_read": 0.01
+    }
+  },
+  "waves": [
+    {
+      "wave": "swarm",
+      "fork_step": 2,
+      "wall_s": 12.185,
+      "copies": [
+        {
+          "id": "swarm-rw1-r1",
+          "branch_ms": 287.8,
+          "mount_ms": 1697.9,
+          "wall_s": 10.442,
+          "sandbox_ms": 3349.2
+        },
+        {
+          "id": "swarm-rw2-r1",
+          "branch_ms": 229.6,
+          "mount_ms": 1464.8,
+          "wall_s": 9.067,
+          "sandbox_ms": 1700.5
+        },
+        {
+          "id": "swarm-rw3-r1",
+          "branch_ms": 231.6,
+          "mount_ms": 1586.7,
+          "wall_s": 10.095,
+          "sandbox_ms": 2925.9
+        },
+        {
+          "id": "swarm-rw4-r1",
+          "branch_ms": 257.7,
+          "mount_ms": 1460.7,
+          "wall_s": 8.61,
+          "sandbox_ms": 1675.7
+        },
+        {
+          "id": "swarm-rw5-r1",
+          "branch_ms": 240.0,
+          "mount_ms": 1825.3,
+          "wall_s": 10.636,
+          "sandbox_ms": 3394.7
+        },
+        {
+          "id": "swarm-rw1-r2",
+          "branch_ms": 260.0,
+          "mount_ms": 1671.4,
+          "wall_s": 10.442,
+          "sandbox_ms": 3381.4
+        },
+        {
+          "id": "swarm-rw2-r2",
+          "branch_ms": 279.0,
+          "mount_ms": 1490.7,
+          "wall_s": 9.065,
+          "sandbox_ms": 1643.9
+        },
+        {
+          "id": "swarm-rw3-r2",
+          "branch_ms": 259.8,
+          "mount_ms": 1593.9,
+          "wall_s": 10.096,
+          "sandbox_ms": 2891.5
+        },
+        {
+          "id": "swarm-rw4-r2",
+          "branch_ms": 272.4,
+          "mount_ms": 1477.5,
+          "wall_s": 9.065,
+          "sandbox_ms": 1647.2
+        },
+        {
+          "id": "swarm-rw5-r2",
+          "branch_ms": 262.6,
+          "mount_ms": 1626.9,
+          "wall_s": 10.094,
+          "sandbox_ms": 2609.3
+        },
+        {
+          "id": "swarm-rw1-r3",
+          "branch_ms": 267.0,
+          "mount_ms": 1589.5,
+          "wall_s": 10.092,
+          "sandbox_ms": 2887.2
+        },
+        {
+          "id": "swarm-rw2-r3",
+          "branch_ms": 245.2,
+          "mount_ms": 1827.1,
+          "wall_s": 10.67,
+          "sandbox_ms": 3390.4
+        },
+        {
+          "id": "swarm-rw3-r3",
+          "branch_ms": 245.7,
+          "mount_ms": 1684.8,
+          "wall_s": 9.754,
+          "sandbox_ms": 2494.2
+        },
+        {
+          "id": "swarm-rw4-r3",
+          "branch_ms": 248.8,
+          "mount_ms": 1463.4,
+          "wall_s": 9.059,
+          "sandbox_ms": 1677.6
+        },
+        {
+          "id": "swarm-rw5-r3",
+          "branch_ms": 265.9,
+          "mount_ms": 1860.8,
+          "wall_s": 9.229,
+          "sandbox_ms": 2248.4
+        }
+      ],
+      "n_copies": 15,
+      "steps_reused_per_copy": 2,
+      "steps_reused": 30,
+      "sum_copy_s": 146.416,
+      "parallel_speedup": 12.02,
+      "saved": {
+        "steps": 30,
+        "minutes": 0.38,
+        "model_calls": "unknown",
+        "usd": "unknown",
+        "restore_minutes_vs_git": 2.29
+      }
+    }
+  ],
+  "totals_saved": {
+    "steps": 30,
+    "minutes": 0.38,
+    "model_calls": "unknown",
+    "usd": "unknown",
+    "restore_minutes_vs_git": 2.29,
+    "copies": 15,
+    "wall_s": 12.185,
+    "sum_copy_s": 146.416
+  }
+}

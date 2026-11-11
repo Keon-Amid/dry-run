@@ -42,7 +42,7 @@ class ArchilLogTest(unittest.TestCase):
         self.assertEqual(rec["saved"]["minutes"], 4.0)      # 6 x 40 s avg
         self.assertEqual(rec["saved"]["model_calls"], 30)   # 6 x 5 avg
         self.assertAlmostEqual(rec["saved"]["usd"], 6 * 0.72)
-        self.assertEqual(rec["saved"]["restore_minutes_vs_git"], 1.5)  # (32.15 - 2.15) s x 3 copies
+        self.assertEqual(rec["saved"]["restore_minutes_vs_git"], 1.55)  # (32.15 - 0.04 - 1.1) s x 3 copies
 
         self.log.wave(Wave("suspects", fork_step=1, wall_s=50, copies=copies[:2]))
         doc = json.loads(self.out.read_text())

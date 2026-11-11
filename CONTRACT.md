@@ -93,10 +93,14 @@ against fakes first.
   `cache_read_input_tokens`), plus a top-level `"model"`. `archil.json` averages them; any that are missing make the
   matching savings `"unknown"`, nothing breaks.
 - **`archil.json`** (P1, `orchestrator/archil_log.py`, rewritten after each wave): what branching saved.
-  `waves[]`: `{wave, fork_step, wall_s, copies[{id, branch_ms, mount_ms, wall_s}], steps_reused, sum_copy_s,
+  `waves[]`: `{wave, fork_step, wall_s, copies[{id, branch_ms, sandbox_ms, mount_ms, wall_s}], steps_reused, sum_copy_s,
   parallel_speedup, saved{steps, minutes, model_calls, usd, restore_minutes_vs_git}}`; `totals_saved` (same keys,
   plus `copies`); `per_step_avg` (from `run.json`); `restore_baseline` (git clone + install vs branch + mount, from
   `spikes/disk_spike.json`). "Saved" = each copy would otherwise replay steps `1..fork_step`.
+- **`results.json`** (P1, `orchestrator/wave.py`, one entry appended per wave): `waves[]`: `{wave, checkpoint_id,
+  fork_step, to_step, n, wall_s, routes[{route, edit, runs, passed, errors, score: "3/3"}], copies[{id, route, kind,
+  edit, branch, ok, passed, checks{name: bool}, builder{...the worker's JSON line}, wall_s, timings_ms, error?}]}`.
+  Run files live in `orchestrator/runs/<stamp>/` next to `run.json` and `archil.json`.
 
 ## Clock (0:00 = 7:00 PM)
 

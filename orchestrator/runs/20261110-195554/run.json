@@ -1,0 +1,59 @@
+{
+  "disk_id": "dsk-0000000000190d38",
+  "store": "archil",
+  "builder": "fake_builder.py",
+  "n_steps": 7,
+  "checkpoints": {
+    "0": "dsk-0000000000190d38/c0",
+    "1": "dsk-0000000000190d38/c1",
+    "2": "dsk-0000000000190d38/c2",
+    "3": "dsk-0000000000190d38/c3",
+    "4": "dsk-0000000000190d38/c4",
+    "5": "dsk-0000000000190d38/c5",
+    "6": "dsk-0000000000190d38/c6",
+    "7": "dsk-0000000000190d38/c7"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "wall_s": 0.744,
+      "checkpoint_ms": 768.2
+    },
+    {
+      "step": 2,
+      "wall_s": 0.795,
+      "checkpoint_ms": 749.0
+    },
+    {
+      "step": 3,
+      "wall_s": 0.633,
+      "checkpoint_ms": 735.6
+    },
+    {
+      "step": 4,
+      "wall_s": 1.152,
+      "checkpoint_ms": 721.2
+    },
+    {
+      "step": 5,
+      "wall_s": 0.71,
+      "checkpoint_ms": 688.9
+    },
+    {
+      "step": 6,
+      "wall_s": 0.669,
+      "checkpoint_ms": 653.3
+    },
+    {
+      "step": 7,
+      "wall_s": 0.672,
+      "checkpoint_ms": 694.4
+    }
+  ],
+  "checks": {
+    "all_steps_built": true,
+    "conversation_intact": true,
+    "codes_6_digits": true,
+    "expiry_from_last_click": false
+  }
+}

@@ -80,6 +80,7 @@ class Copy:
     branch_ms: float    # create_branch call
     mount_ms: float     # mount in its sandbox until the files are readable
     wall_s: float       # resume -> graded, this copy alone
+    sandbox_ms: float = 0.0  # sandbox create, between the branch and the mount
 
 
 @dataclass
@@ -117,9 +118,10 @@ class ArchilLog:
                 "usd": _times(reused, self.avg["usd"], 4),
             },
         }
-        if self.restore:
-            per_copy = self.restore["git_clone_plus_install_s"] - self.restore["branch_plus_mount_s"]
-            rec["saved"]["restore_minutes_vs_git"] = round(per_copy * n / 60, 2)
+        if self.restore:  # each copy's own branch + mount, against the one-time git clone + install baseline
+            git_s = self.restore["git_clone_plus_install_s"]
+            saved_s = sum(git_s - (c.branch_ms + c.mount_ms) / 1000 for c in w.copies)
+            rec["saved"]["restore_minutes_vs_git"] = round(saved_s / 60, 2)
         self.waves.append(rec)
         self.write()
         return rec
@@ -150,3 +152,20 @@ class ArchilLog:
         tmp = self.out.with_suffix(".json.tmp")
         tmp.write_text(json.dumps(doc, indent=2) + "\n")
         os.replace(tmp, self.out)  # atomic: the page never reads half a file
+
+
+def relog(run_dir: Path, spike_json: Path | None = None) -> dict:
+    """Rebuild run_dir/archil.json from run_dir/run.json + results.json (the run files), e.g. after a formula fix."""
+    run_dir = Path(run_dir)
+    log = ArchilLog(run_dir / "run.json", run_dir / "archil.json", spike_json)
+    for wv in json.loads((run_dir / "results.json").read_text())["waves"]:
+        log.wave(Wave(wave=wv["wave"], fork_step=wv["fork_step"], wall_s=wv["wall_s"], copies=[
+            Copy(c["id"], c["timings_ms"].get("branch", 0.0), c["timings_ms"].get("mount", 0.0), c["wall_s"],
+                 c["timings_ms"].get("sandbox", 0.0)) for c in wv["copies"] if c["ok"]]))
+    return json.loads((run_dir / "archil.json").read_text())
+
+
+if __name__ == "__main__":  # python -m orchestrator.archil_log RUN_DIR
+    import sys
+    doc = relog(Path(sys.argv[1]), Path(__file__).resolve().parent.parent / "spikes" / "disk_spike.json")
+    print(json.dumps(doc["totals_saved"], indent=1))
