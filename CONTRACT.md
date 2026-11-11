@@ -1,4 +1,4 @@
-# v8: Dry Run (v7 + Brendan's four fixes)
+# v8: Banzai (formerly Dry Run; v7 + Brendan's four fixes)
 
 *Same product as v7. What changed, and why:*
 - *#4 "no disk": the agent's files and conversation now live on an Archil disk. Each step is a disk checkpoint;
