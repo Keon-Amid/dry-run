@@ -85,7 +85,18 @@ verdicts before the first run. Fallback `spec-b.md`: ambiguity + decoy + control
 - **P2 Spec & checks:** `spec.md`, `spec-b.md`, `rules/`, checks, held-out checks, `golden/`, git trace, the plants.
 - **P3 Builder & page:** builder loop (conversation saved to disk), triage, swarm rewrite prompt, cards page, pitch.
 
-Run files between areas: `run.json`, `triage.json`, `results.json`, `swarm.json`. The page is built against fakes first.
+Run files between areas: `run.json`, `triage.json`, `results.json`, `swarm.json`, `archil.json`. The page is built
+against fakes first.
+
+- **`run.json`** optional fields, per build step: `{"step", "wall_s", "model_calls", "usage"}`, where `usage` is the
+  sum of the API's `usage` objects for that step (`input_tokens`, `output_tokens`, `cache_creation_input_tokens`,
+  `cache_read_input_tokens`), plus a top-level `"model"`. `archil.json` averages them; any that are missing make the
+  matching savings `"unknown"`, nothing breaks.
+- **`archil.json`** (P1, `orchestrator/archil_log.py`, rewritten after each wave): what branching saved.
+  `waves[]`: `{wave, fork_step, wall_s, copies[{id, branch_ms, mount_ms, wall_s}], steps_reused, sum_copy_s,
+  parallel_speedup, saved{steps, minutes, model_calls, usd, restore_minutes_vs_git}}`; `totals_saved` (same keys,
+  plus `copies`); `per_step_avg` (from `run.json`); `restore_baseline` (git clone + install vs branch + mount, from
+  `spikes/disk_spike.json`). "Saved" = each copy would otherwise replay steps `1..fork_step`.
 
 ## Clock (0:00 = 7:00 PM)
 

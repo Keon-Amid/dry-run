@@ -1,0 +1,142 @@
+{
+  "region": "aws-us-east-1",
+  "sdk": "0.21.0",
+  "started": "20261110-194015",
+  "timings_s": {
+    "disk_create": 0.774,
+    "sandbox_a_create_with_mount": 3.605,
+    "sandbox_a_first_exec_mount_check": 0.694,
+    "write_files": 0.783,
+    "archil_cli_install_a": 0.661,
+    "checkpoint_create": 0.642,
+    "branch_create": 0.149,
+    "sandbox_b_create": 4.09,
+    "archil_cli_install_b": 1.537,
+    "branch_mount_b": 2.149,
+    "read_files_b": 0.735
+  },
+  "steps": {
+    "1_disk_and_mount": {
+      "ok": true,
+      "mount": "dsk-00000000001909fb[aws-us-east-1] on /mnt/agent type fuse.archil (rw,relatime,user_id=0,group_id=0,allow_other)"
+    },
+    "2_write_files": {
+      "ok": true,
+      "sha256": [
+        "5e29ad94ae7605f14b712ca2ce885ccc6f8ac1d157d63ba3027c1e21c19c046a  workspace/hello.txt",
+        "cc054da50f809fcd445d5d4bf7ae22a046e6d111abaeb986fc56b30098149027  conversation.jsonl"
+      ]
+    },
+    "3_checkpoint": {
+      "ok": true,
+      "cli_version": "Latest Available: v0.10.3-1794351348",
+      "name": "c1"
+    },
+    "4_branch_mount_identical": {
+      "ok": true,
+      "branch": "b1",
+      "from_checkpoint": "c1",
+      "sha256_b": [
+        "5e29ad94ae7605f14b712ca2ce885ccc6f8ac1d157d63ba3027c1e21c19c046a  workspace/hello.txt",
+        "cc054da50f809fcd445d5d4bf7ae22a046e6d111abaeb986fc56b30098149027  conversation.jsonl"
+      ],
+      "identical": true
+    },
+    "6_anthropic_egress": {
+      "ok": true,
+      "http_code": "405"
+    }
+  },
+  "fallback": {
+    "timings_s": {
+      "sandbox_create": 0.392,
+      "write_files": 0.91,
+      "pause": 1.342,
+      "fork_of_paused": 1.715,
+      "first_exec_in_fork": 0.779
+    },
+    "steps": {
+      "fork_pause_identical": {
+        "ok": true,
+        "sha256_parent": [
+          "5e29ad94ae7605f14b712ca2ce885ccc6f8ac1d157d63ba3027c1e21c19c046a  workspace/hello.txt",
+          "cc054da50f809fcd445d5d4bf7ae22a046e6d111abaeb986fc56b30098149027  conversation.jsonl"
+        ],
+        "sha256_fork": [
+          "5e29ad94ae7605f14b712ca2ce885ccc6f8ac1d157d63ba3027c1e21c19c046a  workspace/hello.txt",
+          "cc054da50f809fcd445d5d4bf7ae22a046e6d111abaeb986fc56b30098149027  conversation.jsonl"
+        ]
+      }
+    }
+  },
+  "disk_id": "dsk-00000000001909fb",
+  "cleanup": {
+    "spike-fb-child-20261110-194015": [
+      "stop ok",
+      "delete ok"
+    ],
+    "spike-fb-20261110-194015": [
+      "stop ok",
+      "delete ok"
+    ],
+    "spike-b-20261110-194015": [
+      "stop ok",
+      "delete ok"
+    ],
+    "spike-a-20261110-194015": [
+      "stop ok",
+      "delete ok"
+    ],
+    "spike-bl-20261110-194559": [
+      "stop ok",
+      "delete ok"
+    ],
+    "iso-b-20261110-195201": [
+      "stop ok",
+      "delete ok"
+    ],
+    "iso-a-20261110-195201": [
+      "stop ok",
+      "delete ok"
+    ]
+  },
+  "baseline": {
+    "timings_s": {
+      "sandbox_create": 2.092,
+      "git_clone": 1.388,
+      "dependency_install": 9.648,
+      "total": 11.036
+    },
+    "steps": {
+      "restore": {
+        "ok": true,
+        "repo": "https://github.com/Keon-Amid/dry-run.git",
+        "deps": "fastapi uvicorn httpx pytest",
+        "note": "restores code and dependencies only, not the conversation"
+      }
+    },
+    "measured": "20261110-194559"
+  },
+  "isolation": {
+    "timings_s": {
+      "disk_create": 0.861,
+      "sandbox_a_create_with_mount": 3.554,
+      "checkpoint_create": 0.647,
+      "branch_create": 0.111,
+      "sandbox_b_create": 0.385,
+      "branch_mount_b": 1.279
+    },
+    "steps": {
+      "isolation": {
+        "ok": true,
+        "branch_matches_checkpoint": true,
+        "a_after_checkpoint_hidden_from_b": true,
+        "b_new_file_hidden_from_a": true,
+        "b_edit_hidden_from_a": true,
+        "control_a_sees_own_write": true
+      }
+    },
+    "measured": "20261110-195201",
+    "disk_id": "dsk-0000000000190c87"
+  }
+}

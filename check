@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Runs every test in the repo (test_*.py, stdlib unittest). No Archil, no API calls. Exit code = pass/fail.
+set -euo pipefail
+cd "$(dirname "$0")"
+PY=.venv/bin/python
+[ -x "$PY" ] || PY=python3
+"$PY" -m unittest discover -s . -t . -p 'test_*.py' "$@"
