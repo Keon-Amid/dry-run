@@ -1,0 +1,112 @@
+{
+  "run_id": "20261110-210049-demo-real",
+  "swarms": [
+    {
+      "check": "expiry_from_last_click",
+      "culprit": {
+        "route": "spec-step4",
+        "kind": "spec_line",
+        "step": 4,
+        "old": "Links expire after 30 days.",
+        "new": "Links expire 30 days after their last click (a link that was never clicked expires 30 days after it was created).",
+        "rule": null,
+        "score": "3/3"
+      },
+      "fork_checkpoint_id": "dsk-000000000019172a/c3",
+      "wave": "swarm-expiry_from_last_click",
+      "heldout_checks": [
+        "heldout_expiry_keeps_alive"
+      ],
+      "n_branches": 15,
+      "n_rewrites": 5,
+      "rewrites": [
+        {
+          "route": "rw1",
+          "text": "",
+          "visible": "0/3",
+          "heldout": "0/3",
+          "regressions": [],
+          "errors": 0,
+          "winner": false
+        },
+        {
+          "route": "rw2",
+          "text": "Links expire.",
+          "visible": "0/3",
+          "heldout": "0/3",
+          "regressions": [],
+          "errors": 0,
+          "winner": false
+        },
+        {
+          "route": "rw3",
+          "text": "Links expire after 30 days unused.",
+          "visible": "3/3",
+          "heldout": "3/3",
+          "regressions": [],
+          "errors": 0,
+          "winner": true
+        },
+        {
+          "route": "rw4",
+          "text": "Expiry is 30 days after the last click.",
+          "visible": "3/3",
+          "heldout": "3/3",
+          "regressions": [],
+          "errors": 0,
+          "winner": true
+        },
+        {
+          "route": "rw5",
+          "text": "Links expire 30 days after their last click.",
+          "visible": "3/3",
+          "heldout": "3/3",
+          "regressions": [],
+          "errors": 0,
+          "winner": true
+        }
+      ],
+      "winners": [
+        "rw3",
+        "rw4",
+        "rw5"
+      ],
+      "confirm": {
+        "wave": "confirm-expiry_from_last_click",
+        "route": "rw3",
+        "text": "Links expire after 30 days unused.",
+        "ok": true,
+        "passed": true,
+        "regressions": [],
+        "checks": {
+          "alias_resolves": true,
+          "clicks_counted": true,
+          "codes_6_digits": true,
+          "delete_link": true,
+          "expiry_from_last_click": true,
+          "heldout_alias_digits_hyphens": true,
+          "heldout_expiry_keeps_alive": true,
+          "heldout_shorten_rejects_bad_url": false,
+          "rejects_bad_urls": false,
+          "same_url_same_code": true,
+          "shorten_resolve": true,
+          "stats_json": false,
+          "unknown_code_is_none": true,
+          "urls_normalized": true
+        },
+        "error": null
+      },
+      "control_green": [
+        "alias_resolves",
+        "clicks_counted",
+        "codes_6_digits",
+        "delete_link",
+        "heldout_alias_digits_hyphens",
+        "same_url_same_code",
+        "shorten_resolve",
+        "unknown_code_is_none",
+        "urls_normalized"
+      ]
+    }
+  ]
+}

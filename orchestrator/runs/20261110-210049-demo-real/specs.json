@@ -1,0 +1,23 @@
+{
+  "spec_files": {
+    "original": "spec.original.md",
+    "fixed": "spec.fixed.md"
+  },
+  "culprits": [
+    {
+      "check": "expiry_from_last_click",
+      "kind": "spec_line",
+      "step": 4,
+      "line": "Links expire after 30 days.",
+      "fix": "Links expire after 30 days unused.",
+      "fix_route": "rw3"
+    },
+    {
+      "check": "rejects_bad_urls",
+      "kind": "rule",
+      "rule": "errors.md",
+      "rule_text": "Public functions must never raise exceptions. When the input is invalid, return None instead.",
+      "fix": "switch the rule off"
+    }
+  ]
+}

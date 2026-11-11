@@ -1,0 +1,48 @@
+{
+  "probes": [
+    "shorten at day 0, resolve at day 25 (a click), resolve at day 31",
+    "normalize(\"not a url\")"
+  ],
+  "columns": [
+    {
+      "name": "before (original build)",
+      "workspace": "workspaces/build",
+      "results": {
+        "shorten(url, now=day 0)": "'516516'",
+        "resolve(code, now=day 25)": "'https://example.com/a?b=1'",
+        "resolve(code, now=day 31)": "None",
+        "normalize(\"not a url\")": "None"
+      }
+    },
+    {
+      "name": "after (confirm-expiry_from_last_click)",
+      "workspace": "workspaces/confirm-expiry_from_last_click",
+      "results": {
+        "shorten(url, now=day 0)": "'290880'",
+        "resolve(code, now=day 25)": "'https://example.com/a?b=1'",
+        "resolve(code, now=day 31)": "'https://example.com/a?b=1'",
+        "normalize(\"not a url\")": "None"
+      }
+    },
+    {
+      "name": "baseline (baseline-expiry_from_last_click)",
+      "workspace": "workspaces/baseline-expiry_from_last_click",
+      "results": {
+        "shorten(url, now=day 0)": "'913347'",
+        "resolve(code, now=day 25)": "'https://example.com/a?b=1'",
+        "resolve(code, now=day 31)": "'https://example.com/a?b=1'",
+        "normalize(\"not a url\")": "None"
+      }
+    },
+    {
+      "name": "baseline (baseline-rejects_bad_urls)",
+      "workspace": "workspaces/baseline-rejects_bad_urls",
+      "results": {
+        "shorten(url, now=day 0)": "'951156'",
+        "resolve(code, now=day 25)": "'https://example.com/a?b=1'",
+        "resolve(code, now=day 31)": "None",
+        "normalize(\"not a url\")": "raises ValueError: unsupported scheme: ''"
+      }
+    }
+  ]
+}

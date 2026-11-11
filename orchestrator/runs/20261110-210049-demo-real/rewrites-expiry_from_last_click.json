@@ -1,0 +1,27 @@
+{
+  "culprit": "Links expire after 30 days.",
+  "check": "expiry_from_last_click",
+  "mode": "fix",
+  "rewrites": [
+    {
+      "text": "",
+      "kind": "delete"
+    },
+    {
+      "text": "Links expire.",
+      "kind": "shorten"
+    },
+    {
+      "text": "Links expire after 30 days unused.",
+      "kind": "disambiguate"
+    },
+    {
+      "text": "Expiry is 30 days after the last click.",
+      "kind": "rephrase"
+    },
+    {
+      "text": "Links expire 30 days after their last click.",
+      "kind": "disambiguate"
+    }
+  ]
+}

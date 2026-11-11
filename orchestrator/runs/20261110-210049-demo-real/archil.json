@@ -1,0 +1,628 @@
+{
+  "counterfactuals": {
+    "rebuild": "without a checkpoint, each copy replays steps 1..fork_step",
+    "restore": "git clone + dependency install restores code only, not the conversation"
+  },
+  "per_step_avg": {
+    "steps_in_run": 7,
+    "wall_s": 11.053857,
+    "model_calls": 2.0,
+    "usd": 0.002434
+  },
+  "restore_baseline": {
+    "git_clone_plus_install_s": 11.036,
+    "branch_plus_mount_s": 2.298,
+    "source": "spikes/disk_spike.json"
+  },
+  "prices_per_mtok": {
+    "claude-fable-5-2": {
+      "input": 8.0,
+      "output": 40.0,
+      "cache_read": 0.2
+    },
+    "claude-opus-5-5": {
+      "input": 4.0,
+      "output": 20.0,
+      "cache_read": 0.2
+    },
+    "claude-sonnet-5-5": {
+      "input": 2.0,
+      "output": 10.0,
+      "cache_read": 0.1
+    },
+    "claude-haiku-5-5": {
+      "input": 0.1,
+      "output": 0.5,
+      "cache_read": 0.01
+    }
+  },
+  "waves": [
+    {
+      "wave": "natural",
+      "fork_step": 0,
+      "wall_s": 63.191,
+      "copies": [
+        {
+          "id": "natural-natural-r1",
+          "branch_ms": 616.0,
+          "mount_ms": 1609.7,
+          "wall_s": 62.169,
+          "sandbox_ms": 1290.2
+        },
+        {
+          "id": "natural-natural-r2",
+          "branch_ms": 610.9,
+          "mount_ms": 1505.4,
+          "wall_s": 60.662,
+          "sandbox_ms": 1614.3
+        },
+        {
+          "id": "natural-natural-r3",
+          "branch_ms": 604.9,
+          "mount_ms": 1628.3,
+          "wall_s": 59.476,
+          "sandbox_ms": 1494.5
+        }
+      ],
+      "n_copies": 3,
+      "steps_reused_per_copy": 0,
+      "steps_reused": 0,
+      "sum_copy_s": 182.307,
+      "parallel_speedup": 2.89,
+      "saved": {
+        "steps": 0,
+        "minutes": 0.0,
+        "model_calls": 0.0,
+        "usd": 0.0,
+        "restore_minutes_vs_git": 0.44
+      }
+    },
+    {
+      "wave": "triage-expiry_from_last_click",
+      "fork_step": 3,
+      "wall_s": 21.766,
+      "copies": [
+        {
+          "id": "triage-expiry_from_last_click-rebuild-r1",
+          "branch_ms": 188.5,
+          "mount_ms": 1531.2,
+          "wall_s": 16.853,
+          "sandbox_ms": 1305.7
+        },
+        {
+          "id": "triage-expiry_from_last_click-rebuild-r2",
+          "branch_ms": 184.1,
+          "mount_ms": 1528.7,
+          "wall_s": 17.991,
+          "sandbox_ms": 1493.4
+        },
+        {
+          "id": "triage-expiry_from_last_click-rebuild-r3",
+          "branch_ms": 180.8,
+          "mount_ms": 1719.0,
+          "wall_s": 20.925,
+          "sandbox_ms": 1845.6
+        }
+      ],
+      "n_copies": 3,
+      "steps_reused_per_copy": 3,
+      "steps_reused": 9,
+      "sum_copy_s": 55.769,
+      "parallel_speedup": 2.56,
+      "saved": {
+        "steps": 9,
+        "minutes": 1.66,
+        "model_calls": 18.0,
+        "usd": 0.0219,
+        "restore_minutes_vs_git": 0.46
+      }
+    },
+    {
+      "wave": "triage-rejects_bad_urls",
+      "fork_step": 0,
+      "wall_s": 21.414,
+      "copies": [
+        {
+          "id": "triage-rejects_bad_urls-rebuild-r1",
+          "branch_ms": 149.4,
+          "mount_ms": 1580.4,
+          "wall_s": 19.891,
+          "sandbox_ms": 435.8
+        },
+        {
+          "id": "triage-rejects_bad_urls-rebuild-r2",
+          "branch_ms": 142.5,
+          "mount_ms": 1558.0,
+          "wall_s": 16.143,
+          "sandbox_ms": 456.4
+        },
+        {
+          "id": "triage-rejects_bad_urls-rebuild-r3",
+          "branch_ms": 158.0,
+          "mount_ms": 1491.6,
+          "wall_s": 17.977,
+          "sandbox_ms": 432.0
+        }
+      ],
+      "n_copies": 3,
+      "steps_reused_per_copy": 0,
+      "steps_reused": 0,
+      "sum_copy_s": 54.011,
+      "parallel_speedup": 2.52,
+      "saved": {
+        "steps": 0,
+        "minutes": 0.0,
+        "model_calls": 0.0,
+        "usd": 0.0,
+        "restore_minutes_vs_git": 0.47
+      }
+    },
+    {
+      "wave": "suspects-expiry_from_last_click",
+      "fork_step": 3,
+      "wall_s": 85.198,
+      "copies": [
+        {
+          "id": "suspects-expiry_from_last_click-spec-step4-r1",
+          "branch_ms": 145.0,
+          "mount_ms": 1581.1,
+          "wall_s": 54.228,
+          "sandbox_ms": 487.4
+        },
+        {
+          "id": "suspects-expiry_from_last_click-rule-errors-r1",
+          "branch_ms": 148.8,
+          "mount_ms": 1579.7,
+          "wall_s": 45.526,
+          "sandbox_ms": 485.9
+        },
+        {
+          "id": "suspects-expiry_from_last_click-control-r1",
+          "branch_ms": 255.8,
+          "mount_ms": 2028.8,
+          "wall_s": 84.291,
+          "sandbox_ms": 1537.4
+        },
+        {
+          "id": "suspects-expiry_from_last_click-spec-step4-r2",
+          "branch_ms": 259.7,
+          "mount_ms": 1713.8,
+          "wall_s": 62.417,
+          "sandbox_ms": 1334.2
+        },
+        {
+          "id": "suspects-expiry_from_last_click-rule-errors-r2",
+          "branch_ms": 278.4,
+          "mount_ms": 1497.5,
+          "wall_s": 45.38,
+          "sandbox_ms": 436.6
+        },
+        {
+          "id": "suspects-expiry_from_last_click-control-r2",
+          "branch_ms": 150.8,
+          "mount_ms": 1865.2,
+          "wall_s": 50.55,
+          "sandbox_ms": 1442.7
+        },
+        {
+          "id": "suspects-expiry_from_last_click-spec-step4-r3",
+          "branch_ms": 265.5,
+          "mount_ms": 1611.8,
+          "wall_s": 57.214,
+          "sandbox_ms": 1520.7
+        },
+        {
+          "id": "suspects-expiry_from_last_click-rule-errors-r3",
+          "branch_ms": 273.5,
+          "mount_ms": 1498.2,
+          "wall_s": 44.804,
+          "sandbox_ms": 438.9
+        },
+        {
+          "id": "suspects-expiry_from_last_click-control-r3",
+          "branch_ms": 275.0,
+          "mount_ms": 1678.4,
+          "wall_s": 45.524,
+          "sandbox_ms": 349.2
+        }
+      ],
+      "n_copies": 9,
+      "steps_reused_per_copy": 3,
+      "steps_reused": 27,
+      "sum_copy_s": 489.934,
+      "parallel_speedup": 5.75,
+      "saved": {
+        "steps": 27,
+        "minutes": 4.97,
+        "model_calls": 54.0,
+        "usd": 0.0657,
+        "restore_minutes_vs_git": 1.37
+      }
+    },
+    {
+      "wave": "swarm-expiry_from_last_click",
+      "fork_step": 3,
+      "wall_s": 99.567,
+      "copies": [
+        {
+          "id": "swarm-expiry_from_last_click-rw1-r1",
+          "branch_ms": 273.5,
+          "mount_ms": 1632.3,
+          "wall_s": 88.342,
+          "sandbox_ms": 1574.9
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw2-r1",
+          "branch_ms": 239.7,
+          "mount_ms": 1535.3,
+          "wall_s": 52.755,
+          "sandbox_ms": 510.6
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw3-r1",
+          "branch_ms": 243.3,
+          "mount_ms": 1430.7,
+          "wall_s": 50.649,
+          "sandbox_ms": 504.7
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw4-r1",
+          "branch_ms": 273.3,
+          "mount_ms": 1664.3,
+          "wall_s": 55.723,
+          "sandbox_ms": 482.1
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw5-r1",
+          "branch_ms": 251.4,
+          "mount_ms": 1436.1,
+          "wall_s": 45.288,
+          "sandbox_ms": 490.8
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw1-r2",
+          "branch_ms": 275.2,
+          "mount_ms": 1665.1,
+          "wall_s": 50.397,
+          "sandbox_ms": 480.1
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw2-r2",
+          "branch_ms": 254.1,
+          "mount_ms": 2133.0,
+          "wall_s": 97.564,
+          "sandbox_ms": 1580.8
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw3-r2",
+          "branch_ms": 285.4,
+          "mount_ms": 2063.7,
+          "wall_s": 89.854,
+          "sandbox_ms": 1556.4
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw4-r2",
+          "branch_ms": 278.3,
+          "mount_ms": 1660.0,
+          "wall_s": 46.319,
+          "sandbox_ms": 478.2
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw5-r2",
+          "branch_ms": 293.4,
+          "mount_ms": 2126.2,
+          "wall_s": 94.292,
+          "sandbox_ms": 1546.5
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw1-r3",
+          "branch_ms": 287.9,
+          "mount_ms": 2118.2,
+          "wall_s": 98.649,
+          "sandbox_ms": 1559.6
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw2-r3",
+          "branch_ms": 262.1,
+          "mount_ms": 1666.9,
+          "wall_s": 47.344,
+          "sandbox_ms": 486.4
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw3-r3",
+          "branch_ms": 257.9,
+          "mount_ms": 1659.6,
+          "wall_s": 89.639,
+          "sandbox_ms": 498.5
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw4-r3",
+          "branch_ms": 296.5,
+          "mount_ms": 1438.6,
+          "wall_s": 48.739,
+          "sandbox_ms": 439.2
+        },
+        {
+          "id": "swarm-expiry_from_last_click-rw5-r3",
+          "branch_ms": 253.7,
+          "mount_ms": 1530.9,
+          "wall_s": 82.218,
+          "sandbox_ms": 486.5
+        }
+      ],
+      "n_copies": 15,
+      "steps_reused_per_copy": 3,
+      "steps_reused": 45,
+      "sum_copy_s": 1037.772,
+      "parallel_speedup": 10.42,
+      "saved": {
+        "steps": 45,
+        "minutes": 8.29,
+        "model_calls": 90.0,
+        "usd": 0.1095,
+        "restore_minutes_vs_git": 2.26
+      }
+    },
+    {
+      "wave": "confirm-expiry_from_last_click",
+      "fork_step": 0,
+      "wall_s": 68.219,
+      "copies": [
+        {
+          "id": "confirm-expiry_from_last_click-confirm-rw3-r1",
+          "branch_ms": 125.7,
+          "mount_ms": 1102.7,
+          "wall_s": 67.375,
+          "sandbox_ms": 368.8
+        }
+      ],
+      "n_copies": 1,
+      "steps_reused_per_copy": 0,
+      "steps_reused": 0,
+      "sum_copy_s": 67.375,
+      "parallel_speedup": 0.99,
+      "saved": {
+        "steps": 0,
+        "minutes": 0.0,
+        "model_calls": 0.0,
+        "usd": 0.0,
+        "restore_minutes_vs_git": 0.16
+      }
+    },
+    {
+      "wave": "suspects-rejects_bad_urls",
+      "fork_step": 0,
+      "wall_s": 125.188,
+      "copies": [
+        {
+          "id": "suspects-rejects_bad_urls-spec-step4-r1",
+          "branch_ms": 252.6,
+          "mount_ms": 1260.3,
+          "wall_s": 72.147,
+          "sandbox_ms": 376.2
+        },
+        {
+          "id": "suspects-rejects_bad_urls-rule-errors-r1",
+          "branch_ms": 163.5,
+          "mount_ms": 1253.4,
+          "wall_s": 124.068,
+          "sandbox_ms": 458.9
+        },
+        {
+          "id": "suspects-rejects_bad_urls-control-r1",
+          "branch_ms": 240.0,
+          "mount_ms": 1470.4,
+          "wall_s": 67.761,
+          "sandbox_ms": 392.2
+        },
+        {
+          "id": "suspects-rejects_bad_urls-spec-step4-r2",
+          "branch_ms": 253.1,
+          "mount_ms": 1207.0,
+          "wall_s": 81.539,
+          "sandbox_ms": 375.6
+        },
+        {
+          "id": "suspects-rejects_bad_urls-rule-errors-r2",
+          "branch_ms": 167.3,
+          "mount_ms": 1521.8,
+          "wall_s": 71.014,
+          "sandbox_ms": 497.1
+        },
+        {
+          "id": "suspects-rejects_bad_urls-control-r2",
+          "branch_ms": 253.9,
+          "mount_ms": 1224.9,
+          "wall_s": 70.004,
+          "sandbox_ms": 355.4
+        },
+        {
+          "id": "suspects-rejects_bad_urls-spec-step4-r3",
+          "branch_ms": 254.2,
+          "mount_ms": 1442.2,
+          "wall_s": 68.868,
+          "sandbox_ms": 405.0
+        },
+        {
+          "id": "suspects-rejects_bad_urls-rule-errors-r3",
+          "branch_ms": 243.9,
+          "mount_ms": 1437.0,
+          "wall_s": 74.101,
+          "sandbox_ms": 418.7
+        },
+        {
+          "id": "suspects-rejects_bad_urls-control-r3",
+          "branch_ms": 165.7,
+          "mount_ms": 1218.2,
+          "wall_s": 77.376,
+          "sandbox_ms": 448.1
+        }
+      ],
+      "n_copies": 9,
+      "steps_reused_per_copy": 0,
+      "steps_reused": 0,
+      "sum_copy_s": 706.878,
+      "parallel_speedup": 5.65,
+      "saved": {
+        "steps": 0,
+        "minutes": 0.0,
+        "model_calls": 0.0,
+        "usd": 0.0,
+        "restore_minutes_vs_git": 1.42
+      }
+    },
+    {
+      "wave": "baseline-expiry_from_last_click",
+      "fork_step": 0,
+      "wall_s": 74.049,
+      "copies": [
+        {
+          "id": "baseline-expiry_from_last_click-baseline-r1",
+          "branch_ms": 133.5,
+          "mount_ms": 1236.0,
+          "wall_s": 67.75,
+          "sandbox_ms": 413.5
+        },
+        {
+          "id": "baseline-expiry_from_last_click-baseline-r2",
+          "branch_ms": 128.3,
+          "mount_ms": 1235.4,
+          "wall_s": 66.124,
+          "sandbox_ms": 419.6
+        },
+        {
+          "id": "baseline-expiry_from_last_click-baseline-r3",
+          "branch_ms": 136.3,
+          "mount_ms": 1232.1,
+          "wall_s": 73.133,
+          "sandbox_ms": 414.8
+        }
+      ],
+      "n_copies": 3,
+      "steps_reused_per_copy": 0,
+      "steps_reused": 0,
+      "sum_copy_s": 207.007,
+      "parallel_speedup": 2.8,
+      "saved": {
+        "steps": 0,
+        "minutes": 0.0,
+        "model_calls": 0.0,
+        "usd": 0.0,
+        "restore_minutes_vs_git": 0.48
+      }
+    },
+    {
+      "wave": "baseline-rejects_bad_urls",
+      "fork_step": 0,
+      "wall_s": 74.995,
+      "copies": [
+        {
+          "id": "baseline-rejects_bad_urls-baseline-r1",
+          "branch_ms": 115.4,
+          "mount_ms": 1227.3,
+          "wall_s": 73.35,
+          "sandbox_ms": 1515.0
+        },
+        {
+          "id": "baseline-rejects_bad_urls-baseline-r2",
+          "branch_ms": 120.7,
+          "mount_ms": 1259.0,
+          "wall_s": 66.964,
+          "sandbox_ms": 355.5
+        },
+        {
+          "id": "baseline-rejects_bad_urls-baseline-r3",
+          "branch_ms": 116.6,
+          "mount_ms": 1127.0,
+          "wall_s": 66.13,
+          "sandbox_ms": 361.0
+        }
+      ],
+      "n_copies": 3,
+      "steps_reused_per_copy": 0,
+      "steps_reused": 0,
+      "sum_copy_s": 206.444,
+      "parallel_speedup": 2.75,
+      "saved": {
+        "steps": 0,
+        "minutes": 0.0,
+        "model_calls": 0.0,
+        "usd": 0.0,
+        "restore_minutes_vs_git": 0.49
+      }
+    }
+  ],
+  "totals_saved": {
+    "steps": 81,
+    "minutes": 14.92,
+    "model_calls": 162.0,
+    "usd": 0.1971,
+    "restore_minutes_vs_git": 7.55,
+    "copies": 49,
+    "wall_s": 633.587,
+    "sum_copy_s": 3007.497
+  },
+  "spent": {
+    "model": "claude-haiku-5-5",
+    "build": {
+      "model_calls": 14,
+      "usd": 0.017
+    },
+    "waves": {
+      "natural": {
+        "model_calls": 43,
+        "usd": 0.0381
+      },
+      "triage-expiry_from_last_click": {
+        "model_calls": 6,
+        "usd": 0.0048
+      },
+      "triage-rejects_bad_urls": {
+        "model_calls": 7,
+        "usd": 0.0051
+      },
+      "suspects-expiry_from_last_click": {
+        "model_calls": 74,
+        "usd": 0.0981
+      },
+      "swarm-expiry_from_last_click": {
+        "model_calls": 125,
+        "usd": 0.1821
+      },
+      "confirm-expiry_from_last_click": {
+        "model_calls": 15,
+        "usd": 0.0142
+      },
+      "suspects-rejects_bad_urls": {
+        "model_calls": 142,
+        "usd": 0.1315
+      },
+      "baseline-expiry_from_last_click": {
+        "model_calls": 45,
+        "usd": 0.0463
+      },
+      "baseline-rejects_bad_urls": {
+        "model_calls": 44,
+        "usd": 0.0454
+      }
+    },
+    "total": {
+      "model_calls": 518,
+      "usd": 0.5843
+    },
+    "orchestrator_calls": {
+      "model_calls": 3,
+      "usd": 0.0017
+    }
+  },
+  "stages_s": {
+    "build": 107.009,
+    "natural": 64.748,
+    "triage": 43.192,
+    "suspects": 210.412,
+    "swarm": 104.115,
+    "confirm": 68.23,
+    "baseline": 158.768,
+    "total": 756.49
+  }
+}

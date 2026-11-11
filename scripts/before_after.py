@@ -1,6 +1,6 @@
 """Before / after, in the built code itself: the original build vs the CONFIRM build (and the baseline, if exported).
 
-    python3 scripts/before_after.py orchestrator/runs/<run>
+    python3 scripts/before_after.py orchestrator/runs/<run> [--json OUT]
 
 Loads the workspaces the pipeline exported into <run>/workspaces/ (build, confirm-<check>, baseline-<check>) and runs
 the same probes against each, side by side:
@@ -51,10 +51,16 @@ def probe(ws: Path) -> dict:
 
 
 def main() -> int:
-    if len(sys.argv) != 2:
+    args = sys.argv[1:]
+    out_json = None
+    if "--json" in args:
+        i = args.index("--json")
+        out_json = Path(args[i + 1])
+        del args[i:i + 2]
+    if len(args) != 1:
         print(__doc__)
         return 2
-    run = Path(sys.argv[1])
+    run = Path(args[0])
     wss = run / "workspaces"
     cols = [("before (original build)", wss / "build")]
     cols += [(f"after ({p.name})", p) for p in sorted(wss.glob("confirm-*"))]
@@ -64,6 +70,11 @@ def main() -> int:
         print(f"no exported workspaces in {wss}")
         return 1
     results = [(name, probe(p)) for name, p in cols]
+    if out_json:
+        out_json.write_text(json.dumps({"probes": ["shorten at day 0, resolve at day 25 (a click), resolve at day 31",
+                                                   'normalize("not a url")'],
+                                        "columns": [{"name": name, "workspace": str(p.relative_to(run)), "results": r}
+                                                    for (name, r), (_, p) in zip(results, cols)]}, indent=2) + "\n")
     rows = list(dict.fromkeys(k for _, r in results for k in r))
     w0 = max(len(r) for r in rows)
     widths = [max(len(name), *(len(str(r.get(k, ""))) for k in rows)) for name, r in results]

@@ -15,6 +15,7 @@ On Archil every sandbox is deleted (inside build and run_wave); the disk, checkp
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -358,9 +359,16 @@ def pipeline(store, run_dir: Path, *, fixture: Fixture | None = None, kit: Kit |
             sp["total"] = {k: ("unknown" if "unknown" in (sp["total"][k], sp["baseline_calls"][k])
                                else round(sp["total"][k] + sp["baseline_calls"][k], 4)) for k in sp["total"]}
     log.set_spent(sp, stages)
-    write_report(run_dir)
+    finish(run_dir, fx.spec, fx.rules)
     print(f"pipeline done in {stages['total']:.1f}s -> {run_dir}", flush=True)
     return {"triage": triage, "swarm": swarm}
+
+
+def finish(run_dir: Path, spec: str, rules: dict) -> Path:
+    """The files after the waves: spec.original.md, spec.fixed.md, specs.json, before_after.json, report.md/json."""
+    _write_json(run_dir / "specs.json", write_specs(run_dir, spec, rules))
+    write_before_after(run_dir)
+    return write_report(run_dir)
 
 
 def write_report(run_dir: Path) -> Path:
@@ -463,10 +471,70 @@ def write_report(run_dir: Path) -> Path:
               f"(build {sp.get('build')}; orchestrator calls {sp.get('orchestrator_calls')}).",
               f"- Wall: {st.get('total')} s; stages {st}.",
               f"- Branching saved (archil.json totals): {tot}.", ""]
+    specs = load("specs")  # written by write_specs via finish(): spec_files + culprits
+    if specs:
+        rj["spec_files"] = specs.get("spec_files")
+        rj["culprits"] = specs.get("culprits")
+        rj["culprit_lines"] = [c["line"] for c in specs.get("culprits", []) if c["kind"] == "spec_line"]
+    if (run_dir / "before_after.json").exists():
+        rj["before_after"] = "before_after.json"
     out = run_dir / "report.md"
     out.write_text("\n".join(lines))
     _write_json(run_dir / "report.json", rj)  # the same numbers for Keon's page (final screen)
     return out
+
+
+def _replace_in_step(spec: str, step: int, old: str, new: str) -> str:
+    m = re.search(rf"^## Step {step}\b.*?(?=^## Step |\Z)", spec, re.S | re.M)
+    section = m.group(0)
+    assert section.count(old) == 1, f"culprit line not found once in step {step}"
+    return spec[:m.start()] + section.replace(old, new) + spec[m.end():]
+
+
+def write_specs(run_dir: Path, spec: str, rules: dict) -> dict:
+    """spec.original.md (the spec as built + the harness rules it ran with) and spec.fixed.md (each CONFIRMed
+    winning rewrite applied in its step, each culprit rule marked switched off). From triage.json + swarm.json."""
+    load = lambda n: json.loads((run_dir / f"{n}.json").read_text()) if (run_dir / f"{n}.json").exists() else {}
+    tri, sw_doc = load("triage"), load("swarm")
+    swarms = {sw["check"]: sw for sw in sw_doc.get("swarms", [])}
+    fixed, off, culprits = spec, {}, []
+    for t in tri.get("checks", []):
+        cul = t.get("culprit")
+        if t["verdict"] != "real_problem" or not cul:
+            continue
+        sus = t.get("suspects", {})
+        if cul["kind"] == "rule_off":
+            off[cul["rule"]] = f"{t['check']}: {cul['score']} with it off vs control {sus.get('control')}"
+            culprits.append({"check": t["check"], "kind": "rule", "rule": cul["rule"],
+                             "rule_text": rules.get(cul["rule"], "").strip(), "fix": "switch the rule off"})
+            continue
+        sw = swarms.get(t["check"]) or {}
+        win = (sw.get("confirm") or {}) if (sw.get("confirm") or {}).get("passed") else {}
+        culprits.append({"check": t["check"], "kind": "spec_line", "step": cul["step"], "line": cul["old"],
+                         "fix": win.get("text"), "fix_route": win.get("route")})
+        if win:
+            fixed = _replace_in_step(fixed, cul["step"], cul["old"], win["text"])
+
+    def rules_md(mark: bool) -> str:
+        out = ["", "## Harness rules (rules/, read by the builder every turn; not part of spec.md)", ""]
+        for name, text in sorted(rules.items()):
+            if mark and name in off:
+                out += [f"### ~~{name}~~ SWITCHED OFF (culprit, {off[name]})", "", f"~~{text.strip()}~~", ""]
+            else:
+                out += [f"### {name}", "", text.strip(), ""]
+        return "\n".join(out)
+
+    (run_dir / "spec.original.md").write_text(spec.rstrip() + "\n" + rules_md(False))
+    (run_dir / "spec.fixed.md").write_text(fixed.rstrip() + "\n" + rules_md(True))
+    return {"spec_files": {"original": "spec.original.md", "fixed": "spec.fixed.md"}, "culprits": culprits}
+
+
+def write_before_after(run_dir: Path) -> str | None:
+    if not (run_dir / "workspaces").is_dir():
+        return None
+    r = subprocess.run([sys.executable, str(ROOT / "scripts" / "before_after.py"), str(run_dir), "--json",
+                        str(run_dir / "before_after.json")], capture_output=True, text=True)
+    return "before_after.json" if r.returncode == 0 else None
 
 
 def _arm_key(label: str) -> str:
@@ -528,8 +596,17 @@ def main() -> None:
                     help="builder processes at once across all waves (default 8 for real, 64 for stub)")
     ap.add_argument("--report", metavar="RUN_DIR", help="only regenerate report.md + report.json from a run folder")
     a = ap.parse_args()
-    if a.report:
-        print(write_report(Path(a.report)))
+    if a.report:  # regenerate the after-wave files of an existing run, with the fixture it was run with
+        rd = Path(a.report)
+        fx = load_fixture(a.fixture, Path(tempfile.mkdtemp(prefix="dryrun-scratch-")))
+        shas = {(c.get("builder") or {}).get("spec_sha_before") for w in json.loads(
+            (rd / "results.json").read_text())["waves"] if w["purpose"] in ("suspects", "swarm")
+            for c in w["copies"]} - {None}
+        mine = hashlib.sha256(fx.spec.encode()).hexdigest()
+        if shas and shas != {mine}:
+            raise SystemExit(f"--fixture {a.fixture} spec sha {mine[:12]} != the run's spec_sha_before {shas}")
+        print(f"spec verified against the run's spec_sha_before: {bool(shas)}")
+        print(finish(rd, fx.spec, fx.rules))
         return
     stamp = time.strftime("%Y%m%d-%H%M%S")
     run_dir = HERE / "runs" / f"{stamp}-{a.fixture}-{a.builder}{'-local' if a.local else ''}"

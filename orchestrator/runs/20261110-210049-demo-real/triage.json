@@ -1,0 +1,152 @@
+{
+  "run_id": "20261110-210049-demo-real",
+  "checks": [
+    {
+      "check": "expiry_from_last_click",
+      "surfaced_step": 4,
+      "origin_step": 4,
+      "heldout_checks": [
+        "heldout_expiry_keeps_alive"
+      ],
+      "fails_on_golden": false,
+      "rebuild": {
+        "checkpoint_id": "dsk-000000000019172a/c3",
+        "step": 4,
+        "fails": "3/3",
+        "errors": 0,
+        "invalid": 0,
+        "wave": "triage-expiry_from_last_click"
+      },
+      "verdict": "real_problem",
+      "fork_checkpoint_id": "dsk-000000000019172a/c3",
+      "suspects": {
+        "wave": "suspects-expiry_from_last_click",
+        "control": "0/3",
+        "suspects": [
+          {
+            "route": "spec-step4",
+            "kind": "spec_line",
+            "step": 4,
+            "old": "Links expire after 30 days.",
+            "new": "Links expire 30 days after their last click (a link that was never clicked expires 30 days after it was created).",
+            "rule": null,
+            "score": "3/3"
+          },
+          {
+            "route": "rule-errors",
+            "kind": "rule_off",
+            "step": null,
+            "old": null,
+            "new": null,
+            "rule": "errors.md",
+            "score": "0/3"
+          }
+        ]
+      },
+      "culprit": {
+        "route": "spec-step4",
+        "kind": "spec_line",
+        "step": 4,
+        "old": "Links expire after 30 days.",
+        "new": "Links expire 30 days after their last click (a link that was never clicked expires 30 days after it was created).",
+        "rule": null,
+        "score": "3/3"
+      },
+      "control_green": [
+        "alias_resolves",
+        "clicks_counted",
+        "codes_6_digits",
+        "delete_link",
+        "heldout_alias_digits_hyphens",
+        "same_url_same_code",
+        "shorten_resolve",
+        "unknown_code_is_none",
+        "urls_normalized"
+      ],
+      "swarm": {
+        "branches": 15,
+        "rewrites": 5,
+        "winners": 3
+      },
+      "confirm": {
+        "passed": true,
+        "text": "Links expire after 30 days unused."
+      },
+      "card": "Cause: spec step 4, \"Links expire after 30 days.\". Surfaced at step 4, origin step 4. Suspect test: 3/3 vs control 0/3. Swarm: 15 branches tried 5 rewrites, 3 pass 3/3 + held-out. Confirmed: a fresh build from step 0 with it passes."
+    },
+    {
+      "check": "rejects_bad_urls",
+      "surfaced_step": 1,
+      "origin_step": 1,
+      "heldout_checks": [
+        "heldout_shorten_rejects_bad_url"
+      ],
+      "fails_on_golden": false,
+      "rebuild": {
+        "checkpoint_id": "dsk-000000000019172a/c0",
+        "step": 1,
+        "fails": "3/3",
+        "errors": 0,
+        "invalid": 0,
+        "wave": "triage-rejects_bad_urls"
+      },
+      "verdict": "real_problem",
+      "fork_checkpoint_id": "dsk-000000000019172a/c0",
+      "suspects": {
+        "wave": "suspects-rejects_bad_urls",
+        "control": "0/3",
+        "suspects": [
+          {
+            "route": "spec-step4",
+            "kind": "spec_line",
+            "step": 4,
+            "old": "Links expire after 30 days.",
+            "new": "Links expire 30 days after their last click (a link that was never clicked expires 30 days after it was created).",
+            "rule": null,
+            "score": "0/3"
+          },
+          {
+            "route": "rule-errors",
+            "kind": "rule_off",
+            "step": null,
+            "old": null,
+            "new": null,
+            "rule": "errors.md",
+            "score": "3/3"
+          }
+        ]
+      },
+      "culprit": {
+        "route": "rule-errors",
+        "kind": "rule_off",
+        "step": null,
+        "old": null,
+        "new": null,
+        "rule": "errors.md",
+        "score": "3/3"
+      },
+      "control_green": [
+        "alias_resolves",
+        "clicks_counted",
+        "codes_6_digits",
+        "delete_link",
+        "heldout_alias_digits_hyphens",
+        "same_url_same_code",
+        "shorten_resolve",
+        "unknown_code_is_none",
+        "urls_normalized"
+      ],
+      "card": "Cause: rule errors.md. Surfaced at step 1, origin step 1. Suspect test: 3/3 vs control 0/3."
+    },
+    {
+      "check": "stats_json",
+      "surfaced_step": 6,
+      "origin_step": 3,
+      "heldout_checks": [],
+      "fails_on_golden": true,
+      "verdict": "test_wrong",
+      "rebuild": null,
+      "card": "stats_json: your test is wrong (it fails on golden/ too). The spec wasn't touched."
+    }
+  ]
+}

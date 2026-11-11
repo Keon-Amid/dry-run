@@ -1,0 +1,83 @@
+{
+  "run_id": "20261110-210049-demo-real",
+  "baselines": [
+    {
+      "check": "expiry_from_last_click",
+      "fixer": "claude-haiku-5-5",
+      "message": "clicked on day 20, gone on day 45 (None): expiry counts from creation",
+      "call": {
+        "model_calls": 1,
+        "usage": {
+          "input_tokens": 845,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 1372,
+          "output_tokens_details": {
+            "thinking_tokens": 581
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "wall_s": 6.016,
+        "stop_reason": "end_turn",
+        "usd": 0.000771
+      },
+      "diff": "--- spec.md (original)\n+++ spec.md (baseline fix)\n@@ -21,8 +21,11 @@\n   before looking it up.\n \n ## Step 4\n-Links expire after 30 days. Put the expiry logic in `expiry.py` and use it in `Shortlink.resolve`: an expired link\n-resolves to None.\n+Links expire 30 days (2592000 seconds) after their last activity. A link's last activity is its creation time,\n+or the time of its most recent successful `resolve` if it has been resolved since. Put the expiry logic in\n+`expiry.py` and use it in `Shortlink.resolve`. A link is expired when `now` is 30 days or more after its last\n+activity. An expired link resolves to None. A successful `resolve` of a live link sets its last activity to `now`,\n+which extends its life by another 30 days from that click.\n \n ## Step 5\n Users may pick an alias instead of a generated code: `shorten(url, now=0, alias=None)`. An alias is 3 to 30\n",
+      "fixed_spec": "# Shortlink\n\nA tiny URL shortener, written as a Python library (no web server, no command line). Standard library only.\nEverything is kept in memory. Time is passed in explicitly: every method that needs the time takes `now`, in\nseconds (an int or a float). Put every file directly in the workspace folder.\n\n## Step 1\nCreate `urls.py` with `normalize(url: str) -> str`. Accept only `http://` and `https://` URLs that have a host.\nLowercase the scheme and the host; keep the path, query and fragment exactly as given. Anything else is rejected\nwith a `ValueError`.\n\n## Step 2\nCreate `codes.py`. Codes are 6 digits: `is_valid_code(code)` is True only for a string of exactly 6 digits.\n`new_code(taken)` returns a random valid code that is not in the set `taken`.\n\n## Step 3\nCreate `links.py` with a class `Shortlink`:\n- `shorten(url, now=0) -> str` normalizes the URL with `urls.normalize` and returns its code. Shortening the same\n  URL twice returns the same code.\n- `resolve(code, now=0)` returns the URL, or None for an unknown code. Check the code with `codes.is_valid_code`\n  before looking it up.\n\n## Step 4\nLinks expire 30 days (2592000 seconds) after their last activity. A link's last activity is its creation time,\nor the time of its most recent successful `resolve` if it has been resolved since. Put the expiry logic in\n`expiry.py` and use it in `Shortlink.resolve`. A link is expired when `now` is 30 days or more after its last\nactivity. An expired link resolves to None. A successful `resolve` of a live link sets its last activity to `now`,\nwhich extends its life by another 30 days from that click.\n\n## Step 5\nUsers may pick an alias instead of a generated code: `shorten(url, now=0, alias=None)`. An alias is 3 to 30\ncharacters of lowercase letters, digits and hyphens, and it resolves like any other code.\n\n## Step 6\nEach successful `resolve` counts as a click. `stats(code)` returns `{\"url\": ..., \"clicks\": ...}` for a known code,\nor None for an unknown one.\n\n## Step 7\n`delete(code) -> bool` removes a link and returns True, or returns False if there was no such code. A deleted code\nresolves to None.\n",
+      "error": null,
+      "prompt": "A program is built from the spec below, one \"## Step N\" section per step. The finished build fails one check.\n\n<spec>\n# Shortlink\n\nA tiny URL shortener, written as a Python library (no web server, no command line). Standard library only.\nEverything is kept in memory. Time is passed in explicitly: every method that needs the time takes `now`, in\nseconds (an int or a float). Put every file directly in the workspace folder.\n\n## Step 1\nCreate `urls.py` with `normalize(url: str) -> str`. Accept only `http://` and `https://` URLs that have a host.\nLowercase the scheme and the host; keep the path, query and fragment exactly as given. Anything else is rejected\nwith a `ValueError`.\n\n## Step 2\nCreate `codes.py`. Codes are 6 digits: `is_valid_code(code)` is True only for a string of exactly 6 digits.\n`new_code(taken)` returns a random valid code that is not in the set `taken`.\n\n## Step 3\nCreate `links.py` with a class `Shortlink`:\n- `shorten(url, now=0) -> str` normalizes the URL with `urls.normalize` and returns its code. Shortening the same\n  URL twice returns the same code.\n- `resolve(code, now=0)` returns the URL, or None for an unknown code. Check the code with `codes.is_valid_code`\n  before looking it up.\n\n## Step 4\nLinks expire after 30 days. Put the expiry logic in `expiry.py` and use it in `Shortlink.resolve`: an expired link\nresolves to None.\n\n## Step 5\nUsers may pick an alias instead of a generated code: `shorten(url, now=0, alias=None)`. An alias is 3 to 30\ncharacters of lowercase letters, digits and hyphens, and it resolves like any other code.\n\n## Step 6\nEach successful `resolve` counts as a click. `stats(code)` returns `{\"url\": ..., \"clicks\": ...}` for a known code,\nor None for an unknown one.\n\n## Step 7\n`delete(code) -> bool` removes a link and returns True, or returns False if there was no such code. A deleted code\nresolves to None.\n</spec>\n\nFailing check: expiry_from_last_click\nCheck message: clicked on day 20, gone on day 45 (None): expiry counts from creation\n\nRewrite the spec so a build from it passes this check. Keep the same \"## Step N\" sections in the same order, and change as little as you need. Reply with the complete fixed spec inside <spec></spec> tags and nothing else.",
+      "reply": "<spec>\n# Shortlink\n\nA tiny URL shortener, written as a Python library (no web server, no command line). Standard library only.\nEverything is kept in memory. Time is passed in explicitly: every method that needs the time takes `now`, in\nseconds (an int or a float). Put every file directly in the workspace folder.\n\n## Step 1\nCreate `urls.py` with `normalize(url: str) -> str`. Accept only `http://` and `https://` URLs that have a host.\nLowercase the scheme and the host; keep the path, query and fragment exactly as given. Anything else is rejected\nwith a `ValueError`.\n\n## Step 2\nCreate `codes.py`. Codes are 6 digits: `is_valid_code(code)` is True only for a string of exactly 6 digits.\n`new_code(taken)` returns a random valid code that is not in the set `taken`.\n\n## Step 3\nCreate `links.py` with a class `Shortlink`:\n- `shorten(url, now=0) -> str` normalizes the URL with `urls.normalize` and returns its code. Shortening the same\n  URL twice returns the same code.\n- `resolve(code, now=0)` returns the URL, or None for an unknown code. Check the code with `codes.is_valid_code`\n  before looking it up.\n\n## Step 4\nLinks expire 30 days (2592000 seconds) after their last activity. A link's last activity is its creation time,\nor the time of its most recent successful `resolve` if it has been resolved since. Put the expiry logic in\n`expiry.py` and use it in `Shortlink.resolve`. A link is expired when `now` is 30 days or more after its last\nactivity. An expired link resolves to None. A successful `resolve` of a live link sets its last activity to `now`,\nwhich extends its life by another 30 days from that click.\n\n## Step 5\nUsers may pick an alias instead of a generated code: `shorten(url, now=0, alias=None)`. An alias is 3 to 30\ncharacters of lowercase letters, digits and hyphens, and it resolves like any other code.\n\n## Step 6\nEach successful `resolve` counts as a click. `stats(code)` returns `{\"url\": ..., \"clicks\": ...}` for a known code,\nor None for an unknown one.\n\n## Step 7\n`delete(code) -> bool` removes a link and returns True, or returns False if there was no such code. A deleted code\nresolves to None.\n</spec>",
+      "wave": "baseline-expiry_from_last_click",
+      "n_builds": 3,
+      "visible": "3/3",
+      "heldout": "3/3",
+      "regressions": [],
+      "errors": 0,
+      "passes_all": true
+    },
+    {
+      "check": "rejects_bad_urls",
+      "fixer": "claude-haiku-5-5",
+      "message": "normalize('ftp://example.com/x') returned None instead of raising ValueError",
+      "call": {
+        "model_calls": 1,
+        "usage": {
+          "input_tokens": 845,
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cache_creation": {
+            "ephemeral_5m_input_tokens": 0,
+            "ephemeral_1h_input_tokens": 0
+          },
+          "output_tokens": 937,
+          "output_tokens_details": {
+            "thinking_tokens": 229
+          },
+          "service_tier": "standard",
+          "inference_geo": "global",
+          "speed": "standard"
+        },
+        "wall_s": 3.674,
+        "stop_reason": "end_turn",
+        "usd": 0.000553
+      },
+      "diff": "--- spec.md (original)\n+++ spec.md (baseline fix)\n@@ -6,8 +6,8 @@\n \n ## Step 1\n Create `urls.py` with `normalize(url: str) -> str`. Accept only `http://` and `https://` URLs that have a host.\n-Lowercase the scheme and the host; keep the path, query and fragment exactly as given. Anything else is rejected\n-with a `ValueError`.\n+Lowercase the scheme and the host; keep the path, query and fragment exactly as given. Anything else, including\n+URLs with other schemes such as `ftp://`, must raise a `ValueError`. Never return None for a rejected URL.\n \n ## Step 2\n Create `codes.py`. Codes are 6 digits: `is_valid_code(code)` is True only for a string of exactly 6 digits.\n",
+      "fixed_spec": "# Shortlink\n\nA tiny URL shortener, written as a Python library (no web server, no command line). Standard library only.\nEverything is kept in memory. Time is passed in explicitly: every method that needs the time takes `now`, in\nseconds (an int or a float). Put every file directly in the workspace folder.\n\n## Step 1\nCreate `urls.py` with `normalize(url: str) -> str`. Accept only `http://` and `https://` URLs that have a host.\nLowercase the scheme and the host; keep the path, query and fragment exactly as given. Anything else, including\nURLs with other schemes such as `ftp://`, must raise a `ValueError`. Never return None for a rejected URL.\n\n## Step 2\nCreate `codes.py`. Codes are 6 digits: `is_valid_code(code)` is True only for a string of exactly 6 digits.\n`new_code(taken)` returns a random valid code that is not in the set `taken`.\n\n## Step 3\nCreate `links.py` with a class `Shortlink`:\n- `shorten(url, now=0) -> str` normalizes the URL with `urls.normalize` and returns its code. Shortening the same\n  URL twice returns the same code.\n- `resolve(code, now=0)` returns the URL, or None for an unknown code. Check the code with `codes.is_valid_code`\n  before looking it up.\n\n## Step 4\nLinks expire after 30 days. Put the expiry logic in `expiry.py` and use it in `Shortlink.resolve`: an expired link\nresolves to None.\n\n## Step 5\nUsers may pick an alias instead of a generated code: `shorten(url, now=0, alias=None)`. An alias is 3 to 30\ncharacters of lowercase letters, digits and hyphens, and it resolves like any other code.\n\n## Step 6\nEach successful `resolve` counts as a click. `stats(code)` returns `{\"url\": ..., \"clicks\": ...}` for a known code,\nor None for an unknown one.\n\n## Step 7\n`delete(code) -> bool` removes a link and returns True, or returns False if there was no such code. A deleted code\nresolves to None.\n",
+      "error": null,
+      "prompt": "A program is built from the spec below, one \"## Step N\" section per step. The finished build fails one check.\n\n<spec>\n# Shortlink\n\nA tiny URL shortener, written as a Python library (no web server, no command line). Standard library only.\nEverything is kept in memory. Time is passed in explicitly: every method that needs the time takes `now`, in\nseconds (an int or a float). Put every file directly in the workspace folder.\n\n## Step 1\nCreate `urls.py` with `normalize(url: str) -> str`. Accept only `http://` and `https://` URLs that have a host.\nLowercase the scheme and the host; keep the path, query and fragment exactly as given. Anything else is rejected\nwith a `ValueError`.\n\n## Step 2\nCreate `codes.py`. Codes are 6 digits: `is_valid_code(code)` is True only for a string of exactly 6 digits.\n`new_code(taken)` returns a random valid code that is not in the set `taken`.\n\n## Step 3\nCreate `links.py` with a class `Shortlink`:\n- `shorten(url, now=0) -> str` normalizes the URL with `urls.normalize` and returns its code. Shortening the same\n  URL twice returns the same code.\n- `resolve(code, now=0)` returns the URL, or None for an unknown code. Check the code with `codes.is_valid_code`\n  before looking it up.\n\n## Step 4\nLinks expire after 30 days. Put the expiry logic in `expiry.py` and use it in `Shortlink.resolve`: an expired link\nresolves to None.\n\n## Step 5\nUsers may pick an alias instead of a generated code: `shorten(url, now=0, alias=None)`. An alias is 3 to 30\ncharacters of lowercase letters, digits and hyphens, and it resolves like any other code.\n\n## Step 6\nEach successful `resolve` counts as a click. `stats(code)` returns `{\"url\": ..., \"clicks\": ...}` for a known code,\nor None for an unknown one.\n\n## Step 7\n`delete(code) -> bool` removes a link and returns True, or returns False if there was no such code. A deleted code\nresolves to None.\n</spec>\n\nFailing check: rejects_bad_urls\nCheck message: normalize('ftp://example.com/x') returned None instead of raising ValueError\n\nRewrite the spec so a build from it passes this check. Keep the same \"## Step N\" sections in the same order, and change as little as you need. Reply with the complete fixed spec inside <spec></spec> tags and nothing else.",
+      "reply": "<spec>\n# Shortlink\n\nA tiny URL shortener, written as a Python library (no web server, no command line). Standard library only.\nEverything is kept in memory. Time is passed in explicitly: every method that needs the time takes `now`, in\nseconds (an int or a float). Put every file directly in the workspace folder.\n\n## Step 1\nCreate `urls.py` with `normalize(url: str) -> str`. Accept only `http://` and `https://` URLs that have a host.\nLowercase the scheme and the host; keep the path, query and fragment exactly as given. Anything else, including\nURLs with other schemes such as `ftp://`, must raise a `ValueError`. Never return None for a rejected URL.\n\n## Step 2\nCreate `codes.py`. Codes are 6 digits: `is_valid_code(code)` is True only for a string of exactly 6 digits.\n`new_code(taken)` returns a random valid code that is not in the set `taken`.\n\n## Step 3\nCreate `links.py` with a class `Shortlink`:\n- `shorten(url, now=0) -> str` normalizes the URL with `urls.normalize` and returns its code. Shortening the same\n  URL twice returns the same code.\n- `resolve(code, now=0)` returns the URL, or None for an unknown code. Check the code with `codes.is_valid_code`\n  before looking it up.\n\n## Step 4\nLinks expire after 30 days. Put the expiry logic in `expiry.py` and use it in `Shortlink.resolve`: an expired link\nresolves to None.\n\n## Step 5\nUsers may pick an alias instead of a generated code: `shorten(url, now=0, alias=None)`. An alias is 3 to 30\ncharacters of lowercase letters, digits and hyphens, and it resolves like any other code.\n\n## Step 6\nEach successful `resolve` counts as a click. `stats(code)` returns `{\"url\": ..., \"clicks\": ...}` for a known code,\nor None for an unknown one.\n\n## Step 7\n`delete(code) -> bool` removes a link and returns True, or returns False if there was no such code. A deleted code\nresolves to None.\n</spec>",
+      "wave": "baseline-rejects_bad_urls",
+      "n_builds": 3,
+      "visible": "3/3",
+      "heldout": "0/3",
+      "regressions": [],
+      "errors": 0,
+      "passes_all": false
+    }
+  ]
+}

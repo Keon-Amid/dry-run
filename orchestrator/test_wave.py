@@ -154,6 +154,14 @@ class BaselineTest(unittest.TestCase):
         self.assertEqual(arms["baseline"], ("0/3", "0/3"))
         self.assertEqual(rj["winning_rewrites"][0]["route"], "rw1")
         self.assertEqual(rj["archil_totals"], json.loads((tmp / "run" / "archil.json").read_text())["totals_saved"])
+        self.assertEqual(rj["spec_files"], {"original": "spec.original.md", "fixed": "spec.fixed.md"})
+        self.assertEqual(rj["culprit_lines"], ["Links expire after 30 days."])
+        orig, fixed = ((tmp / "run" / f).read_text() for f in ("spec.original.md", "spec.fixed.md"))
+        self.assertIn("Links expire after 30 days.", orig)
+        self.assertIn("Links expire 30 days after their last click.", fixed)  # CONFIRMed winner rw1, in step 3
+        self.assertNotIn("Links expire after 30 days.", fixed)
+        self.assertIn("### short-answers.md", fixed)  # not a culprit here: listed, not struck through
+        self.assertEqual(rj["before_after"], "before_after.json")
 
     def test_before_after_script_runs_the_exported_workspaces(self):
         tmp = Path(tempfile.mkdtemp())

@@ -1,0 +1,277 @@
+{
+  "run_id": "20261110-210049-demo-real",
+  "disk_id": "dsk-000000000019172a",
+  "store": "archil",
+  "builder": "builder/ (real)",
+  "checks_source": "demo_checks.py",
+  "n_steps": 7,
+  "model": "claude-haiku-5-5",
+  "simulated_slip": null,
+  "checkpoints": {
+    "0": "dsk-000000000019172a/c0",
+    "1": "dsk-000000000019172a/c1",
+    "2": "dsk-000000000019172a/c2",
+    "3": "dsk-000000000019172a/c3",
+    "4": "dsk-000000000019172a/c4",
+    "5": "dsk-000000000019172a/c5",
+    "6": "dsk-000000000019172a/c6",
+    "7": "dsk-000000000019172a/c7"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "wall_s": 14.522,
+      "wrote": [
+        "conversation.jsonl",
+        "routes/build.md",
+        "state.json",
+        "workspace/__pycache__/urls.cpython-313.pyc",
+        "workspace/urls.py"
+      ],
+      "checks": {
+        "rejects_bad_urls": false,
+        "urls_normalized": true
+      },
+      "checks_hidden_during_build": true,
+      "checkpoint_ms": 721.6,
+      "model_calls": 2,
+      "usage": {
+        "input_tokens": 6,
+        "output_tokens": 2762,
+        "cache_creation_input_tokens": 4083,
+        "cache_read_input_tokens": 1201
+      },
+      "tool_calls": 2,
+      "commit": "f7c4774a681be8ca5d8c7ce7447b167ecb8851bb"
+    },
+    {
+      "step": 2,
+      "wall_s": 15.668,
+      "wrote": [
+        "conversation.jsonl",
+        "routes/build.md",
+        "state.json",
+        "workspace/__pycache__/codes.cpython-313.pyc",
+        "workspace/codes.py"
+      ],
+      "checks": {
+        "codes_6_digits": true,
+        "rejects_bad_urls": false,
+        "urls_normalized": true
+      },
+      "checks_hidden_during_build": true,
+      "checkpoint_ms": 717.8,
+      "model_calls": 2,
+      "usage": {
+        "input_tokens": 6,
+        "output_tokens": 1990,
+        "cache_creation_input_tokens": 6235,
+        "cache_read_input_tokens": 4360
+      },
+      "tool_calls": 2,
+      "commit": "d8247d39a8326dd8eb574911fa62871c5314e836"
+    },
+    {
+      "step": 3,
+      "wall_s": 6.414,
+      "wrote": [
+        "conversation.jsonl",
+        "routes/build.md",
+        "state.json",
+        "workspace/__pycache__/links.cpython-313.pyc",
+        "workspace/links.py"
+      ],
+      "checks": {
+        "codes_6_digits": true,
+        "heldout_shorten_rejects_bad_url": false,
+        "rejects_bad_urls": false,
+        "same_url_same_code": true,
+        "shorten_resolve": true,
+        "unknown_code_is_none": true,
+        "urls_normalized": true
+      },
+      "checks_hidden_during_build": true,
+      "checkpoint_ms": 897.2,
+      "model_calls": 2,
+      "usage": {
+        "input_tokens": 6,
+        "output_tokens": 1152,
+        "cache_creation_input_tokens": 7808,
+        "cache_read_input_tokens": 6622
+      },
+      "tool_calls": 2,
+      "commit": "e9a51ac45886840f2189bec45972de071f5ba5d2"
+    },
+    {
+      "step": 4,
+      "wall_s": 10.191,
+      "wrote": [
+        "conversation.jsonl",
+        "routes/build.md",
+        "state.json",
+        "workspace/__pycache__/expiry.cpython-313.pyc",
+        "workspace/__pycache__/links.cpython-313.pyc",
+        "workspace/expiry.py",
+        "workspace/links.py"
+      ],
+      "checks": {
+        "codes_6_digits": true,
+        "expiry_from_last_click": false,
+        "heldout_expiry_keeps_alive": false,
+        "heldout_shorten_rejects_bad_url": false,
+        "rejects_bad_urls": false,
+        "same_url_same_code": true,
+        "shorten_resolve": true,
+        "unknown_code_is_none": true,
+        "urls_normalized": true
+      },
+      "checks_hidden_during_build": true,
+      "checkpoint_ms": 774.9,
+      "model_calls": 2,
+      "usage": {
+        "input_tokens": 6,
+        "output_tokens": 1992,
+        "cache_creation_input_tokens": 9990,
+        "cache_read_input_tokens": 7953
+      },
+      "tool_calls": 3,
+      "commit": "a020028ce29abfdd468c53b0dd9e37fdb2cec5ac"
+    },
+    {
+      "step": 5,
+      "wall_s": 15.784,
+      "wrote": [
+        "conversation.jsonl",
+        "routes/build.md",
+        "state.json",
+        "workspace/__pycache__/codes.cpython-313.pyc",
+        "workspace/__pycache__/links.cpython-313.pyc",
+        "workspace/codes.py",
+        "workspace/links.py"
+      ],
+      "checks": {
+        "alias_resolves": true,
+        "codes_6_digits": true,
+        "expiry_from_last_click": false,
+        "heldout_alias_digits_hyphens": true,
+        "heldout_expiry_keeps_alive": false,
+        "heldout_shorten_rejects_bad_url": false,
+        "rejects_bad_urls": false,
+        "same_url_same_code": true,
+        "shorten_resolve": true,
+        "unknown_code_is_none": true,
+        "urls_normalized": true
+      },
+      "checks_hidden_during_build": true,
+      "checkpoint_ms": 638.6,
+      "model_calls": 2,
+      "usage": {
+        "input_tokens": 6,
+        "output_tokens": 3486,
+        "cache_creation_input_tokens": 13648,
+        "cache_read_input_tokens": 10182
+      },
+      "tool_calls": 3,
+      "commit": "4e94a87be6ed2289901b1e2b3b1010ef553a771a"
+    },
+    {
+      "step": 6,
+      "wall_s": 10.132,
+      "wrote": [
+        "conversation.jsonl",
+        "routes/build.md",
+        "state.json",
+        "workspace/__pycache__/links.cpython-313.pyc",
+        "workspace/links.py"
+      ],
+      "checks": {
+        "alias_resolves": true,
+        "clicks_counted": true,
+        "codes_6_digits": true,
+        "expiry_from_last_click": false,
+        "heldout_alias_digits_hyphens": true,
+        "heldout_expiry_keeps_alive": false,
+        "heldout_shorten_rejects_bad_url": false,
+        "rejects_bad_urls": false,
+        "same_url_same_code": true,
+        "shorten_resolve": true,
+        "stats_json": false,
+        "unknown_code_is_none": true,
+        "urls_normalized": true
+      },
+      "checks_hidden_during_build": true,
+      "checkpoint_ms": 726.2,
+      "model_calls": 2,
+      "usage": {
+        "input_tokens": 6,
+        "output_tokens": 2104,
+        "cache_creation_input_tokens": 15973,
+        "cache_read_input_tokens": 13919
+      },
+      "tool_calls": 2,
+      "commit": "ce06c6159bccf90e1d390658e39bccd869c95f03"
+    },
+    {
+      "step": 7,
+      "wall_s": 4.666,
+      "wrote": [
+        "conversation.jsonl",
+        "routes/build.md",
+        "state.json",
+        "workspace/__pycache__/links.cpython-313.pyc",
+        "workspace/links.py"
+      ],
+      "checks": {
+        "alias_resolves": true,
+        "clicks_counted": true,
+        "codes_6_digits": true,
+        "delete_link": true,
+        "expiry_from_last_click": false,
+        "heldout_alias_digits_hyphens": true,
+        "heldout_expiry_keeps_alive": false,
+        "heldout_shorten_rejects_bad_url": false,
+        "rejects_bad_urls": false,
+        "same_url_same_code": true,
+        "shorten_resolve": true,
+        "stats_json": false,
+        "unknown_code_is_none": true,
+        "urls_normalized": true
+      },
+      "checks_hidden_during_build": true,
+      "checkpoint_ms": 1034.9,
+      "model_calls": 2,
+      "usage": {
+        "input_tokens": 6,
+        "output_tokens": 712,
+        "cache_creation_input_tokens": 16894,
+        "cache_read_input_tokens": 16285
+      },
+      "tool_calls": 1,
+      "commit": "8f784f6d2f2f3e8feebf5d3803e2335592ddf931"
+    }
+  ],
+  "final_checks": {
+    "alias_resolves": true,
+    "clicks_counted": true,
+    "codes_6_digits": true,
+    "delete_link": true,
+    "expiry_from_last_click": false,
+    "heldout_alias_digits_hyphens": true,
+    "heldout_expiry_keeps_alive": false,
+    "heldout_shorten_rejects_bad_url": false,
+    "rejects_bad_urls": false,
+    "same_url_same_code": true,
+    "shorten_resolve": true,
+    "stats_json": false,
+    "unknown_code_is_none": true,
+    "urls_normalized": true
+  },
+  "final_messages": {
+    "expiry_from_last_click": "clicked on day 20, gone on day 45 (None): expiry counts from creation",
+    "heldout_expiry_keeps_alive": "clicked every 29 days, gone on day 58 (None)",
+    "heldout_shorten_rejects_bad_url": "shorten('javascript:alert(1)') returned None instead of raising ValueError",
+    "rejects_bad_urls": "normalize('ftp://example.com/x') returned None instead of raising ValueError",
+    "stats_json": "stats() returned dict, not a JSON string"
+  },
+  "workspace_export": "workspaces/build"
+}
