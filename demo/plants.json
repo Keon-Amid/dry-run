@@ -1,0 +1,13 @@
+[
+  {"id": "ambiguity", "check": "TODO_ambiguity_check",
+   "patch": {"route": "flip-ambiguity", "kind": "spec_line", "step": 0, "old": "TODO(phase 2): the ambiguous line",
+             "new": "TODO(phase 2): the disambiguated line", "rule": null,
+             "hypothesis": "the ambiguous spec line causes the check to fail"}},
+  {"id": "contradiction", "check": "TODO_contradiction_check",
+   "patch": {"route": "flip-contradiction", "kind": "spec_line", "step": 0, "old": "TODO(phase 2): the origin line",
+             "new": "TODO(phase 2): the origin line without the contradiction", "rule": null,
+             "hypothesis": "the early spec line contradicts a later step"}},
+  {"id": "bad_rule", "check": "TODO_bad_rule_check",
+   "patch": {"route": "flip-bad-rule", "kind": "rule_off", "step": null, "old": null, "new": null,
+             "rule": "TODO_bad_rule.md", "hypothesis": "the harness rule causes the check to fail"}}
+]
