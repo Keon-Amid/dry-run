@@ -46,7 +46,7 @@ control 0/3. Swarm: 15 branches tried 5 rewrites, 2 pass 3/3 + held-out."*
 | Plant | Expected verdict |
 |---|---|
 | Ambiguity: "links expire after 30 days" (checks want 30 days from the last click) | spec line; swarm shows both readings |
-| Contradiction: step 2 "codes are 6 digits" vs step 5 "users may pick an alias" | surfaced at step 5, origin step 2 |
+| ~~Contradiction: step 2 "codes are 6 digits" vs step 5 "users may pick an alias"~~ | **Dropped 20:50:** no flip with Haiku 5.5 (3/3 pass with the plant); see `demo/verdicts.md` |
 | A bad harness rule (P2 picks it) | harness, not spec |
 | Bad check (decoy): fails on `golden/` | your test is wrong |
 | Control: one correct step + one good rule | untouched, stays green |
@@ -133,7 +133,7 @@ against fakes first. `python -m orchestrator.pipeline [--local]` writes all five
 | 2:50 | Recorded full run as a fallback video |
 | 3:00 | Rehearse; one live suspect wave on stage |
 
-**Cut first → last:** confirm build → swarm to 3 rewrites × 2 → harness-rule plant → contradiction plant → share links →
+**Cut first → last:** confirm build → swarm to 3 rewrites × 2 → harness-rule plant → share links →
 live run (play the recording).
 **Never cut:** Keon's game (the pixel-roguelike page that shows the run: each copy is a character that dies when its check fails), the 1:25 flip test, triage before suspects, control branches, held-out checks for swarm winners, counts.
 
