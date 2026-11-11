@@ -58,5 +58,16 @@ class DungeonDemoTest(unittest.TestCase):
                 self.assertNotIn(f[:-3], names)
 
 
+    def test_play_side_by_side_scripted(self):
+        import contextlib
+        import io
+        from demo_game import play
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            play.main(["--side-by-side", play.GOLDEN, play.GOLDEN, "--moves", "eese"])
+        last = [ln for ln in out.getvalue().splitlines() if ln.startswith("lives")][-1]
+        self.assertEqual(last.count("lives 2"), 2, last)  # both boards took the pit
+
+
 if __name__ == "__main__":
     unittest.main()
