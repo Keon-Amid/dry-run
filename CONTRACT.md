@@ -31,7 +31,7 @@ it went wrong, prove which one it was, then send a swarm of branches to find the
    - **Ambiguous line:** each reading gets its own branch; the card shows what each builds; the human picks.
    - **Spec defect:** a rewrite wins only if it passes 3/3, passes the **held-out checks** it never saw, and leaves the
      control untouched. All rewrites are shown, losers included.
-7. **CONFIRM.** One fresh build from step 0 with the winning fix. This is the finished game, the demo's ending. Never cut.
+7. **CONFIRM.** One fresh build from step 0 with the winning fix.
 
 Every branch keeps its own `routes/<id>.md` (hypothesis, edit, result, verdict) and has a share link: anyone can open
 the disk at that exact moment. Steps before the fork point are never rebuilt; only CONFIRM starts from step 0.
@@ -128,9 +128,9 @@ against fakes first. `python -m orchestrator.pipeline [--local]` writes all five
 | 2:50 | Recorded full run as a fallback video |
 | 3:00 | Rehearse; one live suspect wave on stage |
 
-**Cut first → last:** swarm to 3 rewrites × 2 → harness-rule plant → contradiction plant → share links →
+**Cut first → last:** confirm build → swarm to 3 rewrites × 2 → harness-rule plant → contradiction plant → share links →
 live run (play the recording).
-**Never cut:** the finished game (the CONFIRM build: a fresh build from step 0 with the fixed spec, playable), the 1:25 flip test, triage before suspects, control branches, held-out checks for swarm winners, counts.
+**Never cut:** Keon's game (the pixel-roguelike page that shows the run: each copy is a character that dies when its check fails), the 1:25 flip test, triage before suspects, control branches, held-out checks for swarm winners, counts.
 
 ## Pitch (90 s)
 
