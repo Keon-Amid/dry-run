@@ -506,6 +506,8 @@ def card(t: dict) -> str:
 
 
 def _load_env() -> None:
+    if not (ROOT / ".env").exists():   # keys may come from the environment instead
+        return
     for line in (ROOT / ".env").read_text().splitlines():
         if "=" in line and not line.lstrip().startswith("#"):
             k, v = line.split("=", 1)
