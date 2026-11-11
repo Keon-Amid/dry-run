@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { frac, listWorkspaces, show, workspaceFile, workspaceTgz, type RunData, type Workspace } from './data'
+import { frac, listWorkspaces, runFileUrl, show, workspaceFile, workspaceSvg, workspaceTgz, type RunData, type Workspace } from './data'
 import { Spr } from './Spr'
 
 export function Slots({ score, fails }: { score: any; fails?: boolean }) {
@@ -23,6 +23,24 @@ export function headline(c: any): string {
   if (c.verdict === 'model_slip') return 'THE MODEL SLIPPED'
   if (c.verdict === 'inconclusive') return 'INCONCLUSIVE'
   return 'VERDICT PENDING'
+}
+
+function SpecDownloads({ data }: { data: RunData }) {
+  if (typeof data.specFixed !== 'string' && typeof data.specOriginal !== 'string') return null
+  return (
+    <div className="prodbar">
+      {typeof data.specOriginal === 'string' && (
+        <a className="btn" href={runFileUrl(data.id, 'spec.original.md')} download={`${data.id}-spec.original.md`}>
+          DOWNLOAD ORIGINAL SPEC
+        </a>
+      )}
+      {typeof data.specFixed === 'string' && (
+        <a className="btn dl" href={runFileUrl(data.id, 'spec.fixed.md')} download={`${data.id}-spec.fixed.md`}>
+          DOWNLOAD FIXED SPEC
+        </a>
+      )}
+    </div>
+  )
 }
 
 type DiffRow = { l: string | null; r: string | null; kind: 'same' | 'chg' | 'del' | 'add' }
@@ -61,6 +79,7 @@ function SpecDiff({ data }: { data: RunData }) {
   return (
     <div className="scroll diff" onClick={(e) => e.stopPropagation()}>
       <h2>THE SPEC, BEFORE AND AFTER</h2>
+      <SpecDownloads data={data} />
       <div className="check">
         {changed === 0 ? 'The two files are identical.' : `${changed} line${changed === 1 ? '' : 's'} changed.`}
       </div>
@@ -102,9 +121,66 @@ function Product({ data, spaces }: { data: RunData; spaces: Workspace[] }) {
     }
   }, [cur?.name, file])
   if (!cur) return null
+  const beforeWs = spaces.find((w) => w.name === 'build')
+  const afterWs = spaces.find((w) => w.name === 'confirm-both') ?? [...spaces].reverse().find((w) => w.name.startsWith('confirm'))
+  const drawable = (w?: Workspace) => !!w && w.files.some((f) => f.path === 'scene.py')
+  const ba = data.before_after
   return (
     <div className="scroll diff product" onClick={(e) => e.stopPropagation()}>
       <h2>THE FINISHED PRODUCT</h2>
+      <SpecDownloads data={data} />
+      <div className="bagrid">
+        {[
+          ['BEFORE: built from the original spec', beforeWs],
+          ['AFTER: built from the fixed spec', afterWs],
+        ].map(([label, w]: any) => (
+          <div key={label} className={'bacol ' + (w === afterWs ? 'after' : 'before')}>
+            <b>{label}</b>
+            {!w ? (
+              <p className="cardtext">{w === afterWs ? 'Not built yet: the after build appears when the run confirms a fix.' : 'Not built yet.'}</p>
+            ) : (
+              <>
+                {drawable(w) && <img className="render" src={workspaceSvg(data.id, w.name)} alt={label} />}
+                <div className="prodbar">
+                  <button className="btn" onClick={() => setWs(w.name)}>
+                    VIEW CODE
+                  </button>
+                  <a className="btn dl" href={workspaceTgz(data.id, w.name)}>
+                    DOWNLOAD
+                  </a>
+                </div>
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+      {Array.isArray(ba?.columns) && ba.columns.length > 1 && (
+        <table className="arms probes">
+          <thead>
+            <tr>
+              <th>same call on each build</th>
+              {ba.columns.map((c: any, i: number) => (
+                <th key={i}>{String(c.name ?? '')}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {Object.keys(ba.columns[0].results ?? {}).map((k) => {
+              const vals = ba.columns.map((c: any) => String(c.results?.[k] ?? 'unknown'))
+              return (
+                <tr key={k}>
+                  <td>{k}</td>
+                  {vals.map((v: string, i: number) => (
+                    <td key={i} className={i > 0 && v !== vals[0] ? 'chg' : ''}>
+                      {v}
+                    </td>
+                  ))}
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      )}
       <div className="prodbar">
         {spaces.map((w) => (
           <button key={w.name} className={'btn' + (w.name === cur.name ? ' on' : '')} onClick={() => setWs(w.name)} title={what(w.name)}>

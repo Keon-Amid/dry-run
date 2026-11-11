@@ -76,6 +76,8 @@ export const workspaceFile = (runId: string, ws: string, file: string): Promise<
   fetch(`/api/runs/${encodeURIComponent(runId)}/workspaces/${encodeURIComponent(ws)}/${file.split('/').map(encodeURIComponent).join('/')}`, { cache: 'no-store' }).then((r) =>
     r.ok ? r.text() : 'could not read this file',
   )
+export const runFileUrl = (runId: string, file: string): string => runsUrl(runId, file)
+export const workspaceSvg = (runId: string, ws: string): string => `/api/runs/${encodeURIComponent(runId)}/workspaces/${encodeURIComponent(ws)}.svg`
 export const workspaceTgz = (runId: string, ws: string): string => `/api/runs/${encodeURIComponent(runId)}/workspaces/${encodeURIComponent(ws)}.tgz`
 export const stopRun = () => fetch('/api/stop', { method: 'POST' }).then((r) => r.json())
 

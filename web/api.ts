@@ -269,6 +269,20 @@ export function makeApi(repoRoot: string, RUNS: string) {
             const names = fs.existsSync(root) ? fs.readdirSync(root).filter((d) => NAME.test(d) && fs.statSync(path.join(root, d)).isDirectory()) : []
             return send(res, 200, { workspaces: names.sort().map((name) => ({ name, files: walk(path.join(root, name)) })) })
           }
+          // a picture of a build, for projects that can draw themselves (demo2's render.py)
+          if (parts.length === 3 && parts[2].endsWith('.svg')) {
+            const ws = parts[2].slice(0, -4)
+            const renderer = path.join(repoRoot, 'demo2/render.py')
+            if (!NAME.test(ws) || !fs.existsSync(path.join(root, ws)) || !fs.existsSync(renderer)) return send(res, 404, { error: 'not renderable' })
+            if (!fs.existsSync(path.join(root, ws, 'scene.py'))) return send(res, 404, { error: 'not renderable' })
+            const out = path.join(repoRoot, 'web/.tmp', `render-${parts[0]}-${ws}.svg`)
+            fs.mkdirSync(path.dirname(out), { recursive: true })
+            const r = spawnSync(py, [renderer, path.join(root, ws), out], { cwd: repoRoot, timeout: 40000 })
+            if (!fs.existsSync(out)) return send(res, 500, { error: 'render failed: ' + String(r.stderr || '').slice(0, 300) })
+            res.setHeader('Content-Type', 'image/svg+xml')
+            res.end(fs.readFileSync(out))
+            return
+          }
           if (parts.length === 3 && parts[2].endsWith('.tgz')) {
             const ws = parts[2].slice(0, -4)
             if (!NAME.test(ws) || !fs.existsSync(path.join(root, ws))) return send(res, 404, { error: 'not found' })
