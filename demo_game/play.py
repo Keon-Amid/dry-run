@@ -27,6 +27,19 @@ LEVEL = [
 ]
 
 
+def fallback_render(state) -> str:
+    """Draw the board from the state's level dict (load() fields), for builds without render.py."""
+    lv = state["level"]
+    grid = [["." for _ in range(lv["width"])] for _ in range(lv["height"])]
+    for ch, ps in (("#", lv["walls"]), ("^", lv["pits"]), ("E", [lv["exit"]] if lv.get("exit") else []),
+                   ("k", [lv["key"]] if lv.get("key") and not state.get("has_key") else [])):
+        for r, c in ps:
+            grid[r][c] = ch
+    r, c = state["pos"]
+    grid[r][c] = "@"
+    return "\n".join("".join(row) for row in grid)
+
+
 class Build:
     """One workspace's new_game/step/render, loaded under its own copies of the modules."""
 
@@ -37,12 +50,16 @@ class Build:
         sys.path.insert(0, ws)
         try:
             game = importlib.import_module("game")
-            render = importlib.import_module("render")
+            try:
+                render_fn = importlib.import_module("render").render
+                self.own_render = True
+            except ModuleNotFoundError:  # builds stopped before step 7 have no render.py
+                render_fn, self.own_render = fallback_render, False
         finally:
             sys.path.remove(ws)
             for m in MODULES:  # functions keep their own globals; free the names for the next build
                 sys.modules.pop(m, None)
-        self.new_game, self.step, self.render = game.new_game, game.step, render.render
+        self.new_game, self.step, self.render = game.new_game, game.step, render_fn
         self.state = self.new_game(LEVEL)
         self.error = None
 
@@ -62,7 +79,8 @@ class Build:
         s = self.state
         status = (f"lives {s.get('lives')}  key {'yes' if s.get('has_key') else 'no'}  "
                   f"moves {s.get('moves_left', '-')}  {s.get('status')}")
-        return [self.label, *board, status, *([self.error] if self.error else [])]
+        note = [] if self.own_render else ["(board drawn by play.py: no render.py)"]
+        return [self.label, *board, status, *note, *([self.error] if self.error else [])]
 
 
 def show(builds: list) -> None:

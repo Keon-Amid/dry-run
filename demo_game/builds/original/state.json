@@ -1,0 +1,74 @@
+{
+  "last_done": 4,
+  "model": "claude-haiku-5-5",
+  "params": {
+    "anthropic_version": "2026-10-21",
+    "max_calls": 25,
+    "max_retries": 6,
+    "max_tokens": 8192,
+    "temperature": "api-default",
+    "thinking": "api-default"
+  },
+  "patch_applied": false,
+  "patch_id": null,
+  "spec_sha_after": null,
+  "spec_sha_before": null,
+  "steps": [
+    {
+      "capped": false,
+      "commit": "b79f8552a0242b54a1c822fbc7d0399fb76a633a",
+      "model_calls": 3,
+      "step": 1,
+      "tool_calls": 4,
+      "usage": {
+        "cache_creation_input_tokens": 2654,
+        "cache_read_input_tokens": 2858,
+        "input_tokens": 8,
+        "output_tokens": 1058
+      },
+      "wall_s": 6.559
+    },
+    {
+      "capped": false,
+      "commit": "8d84602b2ffeb99179268f98787c2a3aadf08100",
+      "model_calls": 3,
+      "step": 2,
+      "tool_calls": 2,
+      "usage": {
+        "cache_creation_input_tokens": 4684,
+        "cache_read_input_tokens": 7183,
+        "input_tokens": 8,
+        "output_tokens": 1807
+      },
+      "wall_s": 9.864
+    },
+    {
+      "capped": false,
+      "commit": "360a8c87dac8f3644cde763c23b84c8e986f7391",
+      "model_calls": 3,
+      "step": 3,
+      "tool_calls": 2,
+      "usage": {
+        "cache_creation_input_tokens": 6362,
+        "cache_read_input_tokens": 11010,
+        "input_tokens": 8,
+        "output_tokens": 1481
+      },
+      "wall_s": 8.768
+    },
+    {
+      "capped": false,
+      "commit": "1c209da93408d99def84252978812d6142ae7faf",
+      "model_calls": 2,
+      "step": 4,
+      "tool_calls": 1,
+      "usage": {
+        "cache_creation_input_tokens": 7932,
+        "cache_read_input_tokens": 6502,
+        "input_tokens": 6,
+        "output_tokens": 1190
+      },
+      "wall_s": 6.82
+    }
+  ]
+}

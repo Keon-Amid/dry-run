@@ -1,0 +1,68 @@
+# python3 demo_game/play.py --side-by-side demo_game/builds/original/workspace demo_game/builds/clarified/workspace --moves eesee
+# Both builds: claude-haiku-5-5, steps 1-4 (state.json in each folder). Only difference: spec step 4's pit line.
+
+spec as-is: 'The pit costs a life.'                clarified: 'stays on the square they came from'
+########                                           ########
+#@..#.k#                                           #@..#.k#
+#.#.^..#                                           #.#.^..#
+#.#..#.#                                           #.#..#.#
+#...^.E#                                           #...^.E#
+########                                           ########
+lives 3  key no  moves -  playing                  lives 3  key no  moves -  playing
+(board drawn by play.py: no render.py)             (board drawn by play.py: no render.py)
+
+> e
+spec as-is: 'The pit costs a life.'                clarified: 'stays on the square they came from'
+########                                           ########
+#.@.#.k#                                           #.@.#.k#
+#.#.^..#                                           #.#.^..#
+#.#..#.#                                           #.#..#.#
+#...^.E#                                           #...^.E#
+########                                           ########
+lives 3  key no  moves -  playing                  lives 3  key no  moves -  playing
+(board drawn by play.py: no render.py)             (board drawn by play.py: no render.py)
+
+> e
+spec as-is: 'The pit costs a life.'                clarified: 'stays on the square they came from'
+########                                           ########
+#..@#.k#                                           #..@#.k#
+#.#.^..#                                           #.#.^..#
+#.#..#.#                                           #.#..#.#
+#...^.E#                                           #...^.E#
+########                                           ########
+lives 3  key no  moves -  playing                  lives 3  key no  moves -  playing
+(board drawn by play.py: no render.py)             (board drawn by play.py: no render.py)
+
+> s
+spec as-is: 'The pit costs a life.'                clarified: 'stays on the square they came from'
+########                                           ########
+#...#.k#                                           #...#.k#
+#.#@^..#                                           #.#@^..#
+#.#..#.#                                           #.#..#.#
+#...^.E#                                           #...^.E#
+########                                           ########
+lives 3  key no  moves -  playing                  lives 3  key no  moves -  playing
+(board drawn by play.py: no render.py)             (board drawn by play.py: no render.py)
+
+> e
+spec as-is: 'The pit costs a life.'                clarified: 'stays on the square they came from'
+########                                           ########
+#...#.k#                                           #...#.k#
+#.#.@..#                                           #.#@^..#
+#.#..#.#                                           #.#..#.#
+#...^.E#                                           #...^.E#
+########                                           ########
+lives 2  key no  moves -  playing                  lives 2  key no  moves -  playing
+(board drawn by play.py: no render.py)             (board drawn by play.py: no render.py)
+
+> e
+spec as-is: 'The pit costs a life.'                clarified: 'stays on the square they came from'
+########                                           ########
+#...#.k#                                           #...#.k#
+#.#.^@.#                                           #.#@^..#
+#.#..#.#                                           #.#..#.#
+#...^.E#                                           #...^.E#
+########                                           ########
+lives 2  key no  moves -  playing                  lives 1  key no  moves -  playing
+(board drawn by play.py: no render.py)             (board drawn by play.py: no render.py)
+
