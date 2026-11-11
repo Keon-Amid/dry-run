@@ -1,15 +1,28 @@
 [
-  {"id": "ambiguity", "check": "expiry_from_last_click",
-   "patch": {"route": "flip-ambiguity", "kind": "spec_line", "step": 4,
-             "old": "Links expire after 30 days.",
-             "new": "Links expire 30 days after their last click (a link that was never clicked expires 30 days after it was created).",
-             "rule": null, "hypothesis": "'expire after 30 days' is read as 30 days from creation"}},
-  {"id": "contradiction", "check": "alias_resolves",
-   "patch": {"route": "flip-contradiction", "kind": "spec_line", "step": 2,
-             "old": "Codes are 6 digits: `is_valid_code(code)` is True only for a string of exactly 6 digits.",
-             "new": "Generated codes are 6 digits. `is_valid_code(code)` is True for a 6-digit string and for any string of 3 to 30 lowercase letters, digits and hyphens.",
-             "rule": null, "hypothesis": "step 2 '6 digits only' blocks the step 5 aliases"}},
-  {"id": "bad_rule", "check": "rejects_bad_urls",
-   "patch": {"route": "flip-bad-rule", "kind": "rule_off", "step": null, "old": null, "new": null,
-             "rule": "errors.md", "hypothesis": "harness rule 'never raise' overrides the spec's ValueError"}}
+  {
+    "id": "ambiguity",
+    "check": "expiry_from_last_click",
+    "patch": {
+      "route": "flip-ambiguity",
+      "kind": "spec_line",
+      "step": 4,
+      "old": "Links expire after 30 days.",
+      "new": "Links expire 30 days after their last click (a link that was never clicked expires 30 days after it was created).",
+      "rule": null,
+      "hypothesis": "'expire after 30 days' is read as 30 days from creation"
+    }
+  },
+  {
+    "id": "bad_rule",
+    "check": "rejects_bad_urls",
+    "patch": {
+      "route": "flip-bad-rule",
+      "kind": "rule_off",
+      "step": null,
+      "old": null,
+      "new": null,
+      "rule": "errors.md",
+      "hypothesis": "harness rule 'never raise' overrides the spec's ValueError"
+    }
+  }
 ]

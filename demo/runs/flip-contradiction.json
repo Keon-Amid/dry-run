@@ -1,0 +1,972 @@
+{
+  "params": {
+    "runs": 3,
+    "to_step": 5,
+    "matrix": true,
+    "template": "/Users/edan/dev/dry-run-p2/demo/disk",
+    "fake_llm": null,
+    "check_cmd": "python3 demo/grade.py",
+    "plants": [
+      {
+        "id": "contradiction",
+        "check": "alias_resolves"
+      }
+    ]
+  },
+  "runs": [
+    {
+      "plant": "contradiction",
+      "arm": "with",
+      "run": 1,
+      "check": "alias_resolves",
+      "valid": true,
+      "pass": true,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "alias_resolves": {
+          "pass": true,
+          "msg": "alias resolves"
+        },
+        "clicks_counted": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "codes_6_digits": {
+          "pass": false,
+          "msg": "timeout after 10s"
+        },
+        "delete_link": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'delete'"
+        },
+        "expiry_from_last_click": {
+          "pass": false,
+          "msg": "clicked on day 20, gone on day 45 (None): expiry counts from creation"
+        },
+        "heldout_alias_digits_hyphens": {
+          "pass": true,
+          "msg": "aliases with digits and hyphens"
+        },
+        "heldout_expiry_keeps_alive": {
+          "pass": false,
+          "msg": "clicked every 29 days, gone on day 58 (None)"
+        },
+        "heldout_shorten_rejects_bad_url": {
+          "pass": false,
+          "msg": "shorten('javascript:alert(1)') returned None instead of raising ValueError"
+        },
+        "rejects_bad_urls": {
+          "pass": false,
+          "msg": "normalize('ftp://example.com/x') returned None instead of raising ValueError"
+        },
+        "same_url_same_code": {
+          "pass": true,
+          "msg": "same code"
+        },
+        "shorten_resolve": {
+          "pass": true,
+          "msg": "round trip"
+        },
+        "stats_json": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "unknown_code_is_none": {
+          "pass": true,
+          "msg": "None"
+        },
+        "urls_normalized": {
+          "pass": true,
+          "msg": "scheme+host lowercased, rest kept"
+        }
+      },
+      "wall_s": 59.112,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-6lk0co0y/disk",
+        "route": null,
+        "from_step": 1,
+        "to_step": 5,
+        "last_done": 5,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": false,
+        "spec_sha_before": null,
+        "spec_sha_after": null,
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "a5d4a97e36457ef31930acbb4dcd129df83bb743",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 12.708,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2677,
+              "cache_creation_input_tokens": 2813,
+              "cache_read_input_tokens": 2402
+            }
+          },
+          {
+            "step": 2,
+            "commit": "bdeb81eb769377a92a57308b9e226b94036cdaac",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 16.527,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1549,
+              "cache_creation_input_tokens": 4523,
+              "cache_read_input_tokens": 5472
+            }
+          },
+          {
+            "step": 3,
+            "commit": "69715abbbbe83c7287f7c44ad98bb584f5651e44",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 5.075,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 956,
+              "cache_creation_input_tokens": 5715,
+              "cache_read_input_tokens": 7407
+            }
+          },
+          {
+            "step": 4,
+            "commit": "2c05b71785787e318f7be1e84195eebd536e3184",
+            "tool_calls": 3,
+            "capped": false,
+            "wall_s": 10.705,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2117,
+              "cache_creation_input_tokens": 7934,
+              "cache_read_input_tokens": 8601
+            }
+          },
+          {
+            "step": 5,
+            "commit": "a8697e5a47bd9d5425f05404c078bff606761b10",
+            "tool_calls": 1,
+            "capped": false,
+            "wall_s": 12.422,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2754,
+              "cache_creation_input_tokens": 10695,
+              "cache_read_input_tokens": 11030
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    },
+    {
+      "plant": "contradiction",
+      "arm": "with",
+      "run": 2,
+      "check": "alias_resolves",
+      "valid": true,
+      "pass": true,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "alias_resolves": {
+          "pass": true,
+          "msg": "alias resolves"
+        },
+        "clicks_counted": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "codes_6_digits": {
+          "pass": false,
+          "msg": "timeout after 10s"
+        },
+        "delete_link": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'delete'"
+        },
+        "expiry_from_last_click": {
+          "pass": false,
+          "msg": "clicked on day 20, gone on day 45 (None): expiry counts from creation"
+        },
+        "heldout_alias_digits_hyphens": {
+          "pass": true,
+          "msg": "aliases with digits and hyphens"
+        },
+        "heldout_expiry_keeps_alive": {
+          "pass": false,
+          "msg": "clicked every 29 days, gone on day 58 (None)"
+        },
+        "heldout_shorten_rejects_bad_url": {
+          "pass": false,
+          "msg": "shorten('javascript:alert(1)') returned None instead of raising ValueError"
+        },
+        "rejects_bad_urls": {
+          "pass": false,
+          "msg": "normalize('ftp://example.com/x') returned None instead of raising ValueError"
+        },
+        "same_url_same_code": {
+          "pass": true,
+          "msg": "same code"
+        },
+        "shorten_resolve": {
+          "pass": true,
+          "msg": "round trip"
+        },
+        "stats_json": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "unknown_code_is_none": {
+          "pass": true,
+          "msg": "None"
+        },
+        "urls_normalized": {
+          "pass": true,
+          "msg": "scheme+host lowercased, rest kept"
+        }
+      },
+      "wall_s": 64.48,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-9c_u7827/disk",
+        "route": null,
+        "from_step": 1,
+        "to_step": 5,
+        "last_done": 5,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": false,
+        "spec_sha_before": null,
+        "spec_sha_after": null,
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "9ea2c68d4ed29269a7706de3adb0bf2bcfdc2be2",
+            "tool_calls": 3,
+            "capped": false,
+            "wall_s": 12.588,
+            "model_calls": 3,
+            "usage": {
+              "input_tokens": 8,
+              "output_tokens": 2233,
+              "cache_creation_input_tokens": 2580,
+              "cache_read_input_tokens": 5696
+            }
+          },
+          {
+            "step": 2,
+            "commit": "c18d476c5f0d2b50ea36fa06b2888d58b0b02aed",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 17.974,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1351,
+              "cache_creation_input_tokens": 4101,
+              "cache_read_input_tokens": 5178
+            }
+          },
+          {
+            "step": 3,
+            "commit": "30fd57767e0d3aa4a2e0df456c15fb8ed96ea844",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 5.386,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1095,
+              "cache_creation_input_tokens": 5327,
+              "cache_read_input_tokens": 6920
+            }
+          },
+          {
+            "step": 4,
+            "commit": "8616322beb9eb2778bfb688f0e70faeeab6f58b7",
+            "tool_calls": 3,
+            "capped": false,
+            "wall_s": 13.222,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2798,
+              "cache_creation_input_tokens": 8279,
+              "cache_read_input_tokens": 8259
+            }
+          },
+          {
+            "step": 5,
+            "commit": "33fa79fe23ed6d625eccdaa397d8d7ac9c93addd",
+            "tool_calls": 1,
+            "capped": false,
+            "wall_s": 14.369,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 3110,
+              "cache_creation_input_tokens": 11278,
+              "cache_read_input_tokens": 11402
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    },
+    {
+      "plant": "contradiction",
+      "arm": "with",
+      "run": 3,
+      "check": "alias_resolves",
+      "valid": true,
+      "pass": true,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "alias_resolves": {
+          "pass": true,
+          "msg": "alias resolves"
+        },
+        "clicks_counted": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "codes_6_digits": {
+          "pass": true,
+          "msg": "6 digits, never taken"
+        },
+        "delete_link": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'delete'"
+        },
+        "expiry_from_last_click": {
+          "pass": false,
+          "msg": "clicked on day 20, gone on day 45 (None): expiry counts from creation"
+        },
+        "heldout_alias_digits_hyphens": {
+          "pass": true,
+          "msg": "aliases with digits and hyphens"
+        },
+        "heldout_expiry_keeps_alive": {
+          "pass": false,
+          "msg": "clicked every 29 days, gone on day 58 (None)"
+        },
+        "heldout_shorten_rejects_bad_url": {
+          "pass": false,
+          "msg": "shorten('javascript:alert(1)') returned None instead of raising ValueError"
+        },
+        "rejects_bad_urls": {
+          "pass": false,
+          "msg": "normalize('ftp://example.com/x') returned None instead of raising ValueError"
+        },
+        "same_url_same_code": {
+          "pass": true,
+          "msg": "same code"
+        },
+        "shorten_resolve": {
+          "pass": true,
+          "msg": "round trip"
+        },
+        "stats_json": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "unknown_code_is_none": {
+          "pass": true,
+          "msg": "None"
+        },
+        "urls_normalized": {
+          "pass": true,
+          "msg": "scheme+host lowercased, rest kept"
+        }
+      },
+      "wall_s": 65.564,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-3o76l21k/disk",
+        "route": null,
+        "from_step": 1,
+        "to_step": 5,
+        "last_done": 5,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": false,
+        "spec_sha_before": null,
+        "spec_sha_after": null,
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "9c795815586142005db441df3d66cc9216dd8c80",
+            "tool_calls": 7,
+            "capped": false,
+            "wall_s": 20.577,
+            "model_calls": 5,
+            "usage": {
+              "input_tokens": 12,
+              "output_tokens": 3823,
+              "cache_creation_input_tokens": 4615,
+              "cache_read_input_tokens": 14280
+            }
+          },
+          {
+            "step": 2,
+            "commit": "c332cd4f33c3fcc3697b38d048ee47be8252cfd4",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 9.552,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1197,
+              "cache_creation_input_tokens": 6065,
+              "cache_read_input_tokens": 7278
+            }
+          },
+          {
+            "step": 3,
+            "commit": "ae6aaba79c9272317f521c63965e988a2078c353",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 5.798,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1068,
+              "cache_creation_input_tokens": 7293,
+              "cache_read_input_tokens": 8867
+            }
+          },
+          {
+            "step": 4,
+            "commit": "0960bce8ac25246d916359585a6282c5e166a3a0",
+            "tool_calls": 3,
+            "capped": false,
+            "wall_s": 14.696,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2933,
+              "cache_creation_input_tokens": 10392,
+              "cache_read_input_tokens": 10171
+            }
+          },
+          {
+            "step": 5,
+            "commit": "1d0e0a7a79bd39a012076f355fad0a122de9765a",
+            "tool_calls": 1,
+            "capped": false,
+            "wall_s": 14.139,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2847,
+              "cache_creation_input_tokens": 13078,
+              "cache_read_input_tokens": 13426
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    },
+    {
+      "plant": "contradiction",
+      "arm": "without",
+      "run": 1,
+      "check": "alias_resolves",
+      "valid": true,
+      "pass": true,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "alias_resolves": {
+          "pass": true,
+          "msg": "alias resolves"
+        },
+        "clicks_counted": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "codes_6_digits": {
+          "pass": true,
+          "msg": "6 digits, never taken"
+        },
+        "delete_link": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'delete'"
+        },
+        "expiry_from_last_click": {
+          "pass": false,
+          "msg": "clicked on day 20, gone on day 45 (None): expiry counts from creation"
+        },
+        "heldout_alias_digits_hyphens": {
+          "pass": true,
+          "msg": "aliases with digits and hyphens"
+        },
+        "heldout_expiry_keeps_alive": {
+          "pass": false,
+          "msg": "clicked every 29 days, gone on day 58 (None)"
+        },
+        "heldout_shorten_rejects_bad_url": {
+          "pass": false,
+          "msg": "shorten('javascript:alert(1)') returned None instead of raising ValueError"
+        },
+        "rejects_bad_urls": {
+          "pass": false,
+          "msg": "normalize('ftp://example.com/x') returned None instead of raising ValueError"
+        },
+        "same_url_same_code": {
+          "pass": true,
+          "msg": "same code"
+        },
+        "shorten_resolve": {
+          "pass": true,
+          "msg": "round trip"
+        },
+        "stats_json": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "unknown_code_is_none": {
+          "pass": true,
+          "msg": "None"
+        },
+        "urls_normalized": {
+          "pass": true,
+          "msg": "scheme+host lowercased, rest kept"
+        }
+      },
+      "wall_s": 55.087,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-ym20g40g/disk",
+        "route": "flip-contradiction",
+        "from_step": 1,
+        "to_step": 5,
+        "last_done": 5,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": true,
+        "spec_sha_before": "48dd9b386e8ef92ae6a02d693a0093bf86f49e64136654bf0bee939617c9d148",
+        "spec_sha_after": "c755ec632fcb1837d8278061dca59fc88c85ae449c864a8a94d8f6b9cbc4b5da",
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "c8e5b669dbc40064ff1a9afc98a4fc2f635205b5",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 12.227,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1980,
+              "cache_creation_input_tokens": 2146,
+              "cache_read_input_tokens": 2402
+            }
+          },
+          {
+            "step": 2,
+            "commit": "f89c1ead772e048ee12989c0586c2874632128ac",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 14.886,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1733,
+              "cache_creation_input_tokens": 5314,
+              "cache_read_input_tokens": 3555
+            }
+          },
+          {
+            "step": 3,
+            "commit": "4e45381f6ba16e1f419dbe742d0e15f59707afe0",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 5.308,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 941,
+              "cache_creation_input_tokens": 6514,
+              "cache_read_input_tokens": 5531
+            }
+          },
+          {
+            "step": 4,
+            "commit": "f353dd31b5352fe753dd955995baa3fe9783b1ec",
+            "tool_calls": 3,
+            "capped": false,
+            "wall_s": 8.999,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1927,
+              "cache_creation_input_tokens": 8646,
+              "cache_read_input_tokens": 6647
+            }
+          },
+          {
+            "step": 5,
+            "commit": "19d46941563c542a8266d98b09a554bea3f197a2",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 12.829,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2868,
+              "cache_creation_input_tokens": 11623,
+              "cache_read_input_tokens": 8805
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    },
+    {
+      "plant": "contradiction",
+      "arm": "without",
+      "run": 2,
+      "check": "alias_resolves",
+      "valid": true,
+      "pass": true,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "alias_resolves": {
+          "pass": true,
+          "msg": "alias resolves"
+        },
+        "clicks_counted": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "codes_6_digits": {
+          "pass": true,
+          "msg": "6 digits, never taken"
+        },
+        "delete_link": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'delete'"
+        },
+        "expiry_from_last_click": {
+          "pass": false,
+          "msg": "clicked on day 20, gone on day 45 (None): expiry counts from creation"
+        },
+        "heldout_alias_digits_hyphens": {
+          "pass": true,
+          "msg": "aliases with digits and hyphens"
+        },
+        "heldout_expiry_keeps_alive": {
+          "pass": false,
+          "msg": "clicked every 29 days, gone on day 58 (None)"
+        },
+        "heldout_shorten_rejects_bad_url": {
+          "pass": false,
+          "msg": "shorten('javascript:alert(1)') returned None instead of raising ValueError"
+        },
+        "rejects_bad_urls": {
+          "pass": false,
+          "msg": "normalize('ftp://example.com/x') returned None instead of raising ValueError"
+        },
+        "same_url_same_code": {
+          "pass": true,
+          "msg": "same code"
+        },
+        "shorten_resolve": {
+          "pass": true,
+          "msg": "round trip"
+        },
+        "stats_json": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "unknown_code_is_none": {
+          "pass": true,
+          "msg": "None"
+        },
+        "urls_normalized": {
+          "pass": true,
+          "msg": "scheme+host lowercased, rest kept"
+        }
+      },
+      "wall_s": 53.123,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-jyqf8b7v/disk",
+        "route": "flip-contradiction",
+        "from_step": 1,
+        "to_step": 5,
+        "last_done": 5,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": true,
+        "spec_sha_before": "48dd9b386e8ef92ae6a02d693a0093bf86f49e64136654bf0bee939617c9d148",
+        "spec_sha_after": "c755ec632fcb1837d8278061dca59fc88c85ae449c864a8a94d8f6b9cbc4b5da",
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "01d74858500cab49fe319ee13b7060b87f86c4ca",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 9.617,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1752,
+              "cache_creation_input_tokens": 1919,
+              "cache_read_input_tokens": 2402
+            }
+          },
+          {
+            "step": 2,
+            "commit": "941b41ca103c8dc70f9d232809f43c85e89d8314",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 14.103,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2106,
+              "cache_creation_input_tokens": 4196,
+              "cache_read_input_tokens": 4558
+            }
+          },
+          {
+            "step": 3,
+            "commit": "de4800a9ad510e8538a1e3d5870c1b88c5e5599e",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 5.98,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1091,
+              "cache_creation_input_tokens": 5455,
+              "cache_read_input_tokens": 7044
+            }
+          },
+          {
+            "step": 4,
+            "commit": "ecfeac4ea4a3c43a63d5a3c99c96c8584f785b0d",
+            "tool_calls": 3,
+            "capped": false,
+            "wall_s": 9.838,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1979,
+              "cache_creation_input_tokens": 7554,
+              "cache_read_input_tokens": 8372
+            }
+          },
+          {
+            "step": 5,
+            "commit": "29136a78bb79112eea57047abeb02c54f72901fd",
+            "tool_calls": 1,
+            "capped": false,
+            "wall_s": 12.664,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2668,
+              "cache_creation_input_tokens": 10163,
+              "cache_read_input_tokens": 10659
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    },
+    {
+      "plant": "contradiction",
+      "arm": "without",
+      "run": 3,
+      "check": "alias_resolves",
+      "valid": true,
+      "pass": true,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "alias_resolves": {
+          "pass": true,
+          "msg": "alias resolves"
+        },
+        "clicks_counted": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "codes_6_digits": {
+          "pass": true,
+          "msg": "6 digits, never taken"
+        },
+        "delete_link": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'delete'"
+        },
+        "expiry_from_last_click": {
+          "pass": false,
+          "msg": "clicked on day 20, gone on day 45 (None): expiry counts from creation"
+        },
+        "heldout_alias_digits_hyphens": {
+          "pass": true,
+          "msg": "aliases with digits and hyphens"
+        },
+        "heldout_expiry_keeps_alive": {
+          "pass": false,
+          "msg": "clicked every 29 days, gone on day 58 (None)"
+        },
+        "heldout_shorten_rejects_bad_url": {
+          "pass": false,
+          "msg": "shorten('javascript:alert(1)') returned None instead of raising ValueError"
+        },
+        "rejects_bad_urls": {
+          "pass": false,
+          "msg": "normalize('ftp://example.com/x') returned None instead of raising ValueError"
+        },
+        "same_url_same_code": {
+          "pass": true,
+          "msg": "same code"
+        },
+        "shorten_resolve": {
+          "pass": true,
+          "msg": "round trip"
+        },
+        "stats_json": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "unknown_code_is_none": {
+          "pass": true,
+          "msg": "None"
+        },
+        "urls_normalized": {
+          "pass": true,
+          "msg": "scheme+host lowercased, rest kept"
+        }
+      },
+      "wall_s": 56.336,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-34ep2ld7/disk",
+        "route": "flip-contradiction",
+        "from_step": 1,
+        "to_step": 5,
+        "last_done": 5,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": true,
+        "spec_sha_before": "48dd9b386e8ef92ae6a02d693a0093bf86f49e64136654bf0bee939617c9d148",
+        "spec_sha_after": "c755ec632fcb1837d8278061dca59fc88c85ae449c864a8a94d8f6b9cbc4b5da",
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "a804e4a496302c253b9cb4b164aa8e02ce5567f5",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 14.001,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2846,
+              "cache_creation_input_tokens": 2957,
+              "cache_read_input_tokens": 2402
+            }
+          },
+          {
+            "step": 2,
+            "commit": "125bb367b14ff9989aa3fecb13923798a39bcfb8",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 11.369,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1570,
+              "cache_creation_input_tokens": 4854,
+              "cache_read_input_tokens": 5744
+            }
+          },
+          {
+            "step": 3,
+            "commit": "c55eccb82dfd12229cbc62f35002b8dda337c81f",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 7.263,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1306,
+              "cache_creation_input_tokens": 6343,
+              "cache_read_input_tokens": 7712
+            }
+          },
+          {
+            "step": 4,
+            "commit": "62305fe0d74bfcaf026ed1717f422658f866d284",
+            "tool_calls": 3,
+            "capped": false,
+            "wall_s": 11.061,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2340,
+              "cache_creation_input_tokens": 8782,
+              "cache_read_input_tokens": 9263
+            }
+          },
+          {
+            "step": 5,
+            "commit": "62bf9b7915b08a90b2e570eb005e66dd4a0893ae",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 11.972,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2577,
+              "cache_creation_input_tokens": 11530,
+              "cache_read_input_tokens": 11908
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    }
+  ]
+}

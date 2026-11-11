@@ -1,0 +1,636 @@
+{
+  "params": {
+    "runs": 3,
+    "to_step": 1,
+    "matrix": true,
+    "template": "/Users/edan/dev/dry-run-p2/demo/disk",
+    "fake_llm": null,
+    "check_cmd": "python3 demo/grade.py",
+    "plants": [
+      {
+        "id": "bad_rule",
+        "check": "rejects_bad_urls"
+      }
+    ]
+  },
+  "runs": [
+    {
+      "plant": "bad_rule",
+      "arm": "with",
+      "run": 1,
+      "check": "rejects_bad_urls",
+      "valid": true,
+      "pass": false,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "alias_resolves": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "clicks_counted": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "codes_6_digits": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'codes'"
+        },
+        "delete_link": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "expiry_from_last_click": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "heldout_alias_digits_hyphens": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "heldout_expiry_keeps_alive": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "heldout_shorten_rejects_bad_url": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "rejects_bad_urls": {
+          "pass": false,
+          "msg": "normalize('ftp://example.com/x') returned None instead of raising ValueError"
+        },
+        "same_url_same_code": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "shorten_resolve": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "stats_json": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "unknown_code_is_none": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "urls_normalized": {
+          "pass": true,
+          "msg": "scheme+host lowercased, rest kept"
+        }
+      },
+      "wall_s": 13.028,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-8rjqoj77/disk",
+        "route": null,
+        "from_step": 1,
+        "to_step": 1,
+        "last_done": 1,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": false,
+        "spec_sha_before": null,
+        "spec_sha_after": null,
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "2ebf485a62a60a72f919bd68e1d81959e6ca0557",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 11.218,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2170,
+              "cache_creation_input_tokens": 2350,
+              "cache_read_input_tokens": 2402
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    },
+    {
+      "plant": "bad_rule",
+      "arm": "with",
+      "run": 2,
+      "check": "rejects_bad_urls",
+      "valid": true,
+      "pass": false,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "alias_resolves": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "clicks_counted": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "codes_6_digits": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'codes'"
+        },
+        "delete_link": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "expiry_from_last_click": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "heldout_alias_digits_hyphens": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "heldout_expiry_keeps_alive": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "heldout_shorten_rejects_bad_url": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "rejects_bad_urls": {
+          "pass": false,
+          "msg": "normalize('ftp://example.com/x') returned None instead of raising ValueError"
+        },
+        "same_url_same_code": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "shorten_resolve": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "stats_json": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "unknown_code_is_none": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "urls_normalized": {
+          "pass": true,
+          "msg": "scheme+host lowercased, rest kept"
+        }
+      },
+      "wall_s": 11.363,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-vt7rx9eg/disk",
+        "route": null,
+        "from_step": 1,
+        "to_step": 1,
+        "last_done": 1,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": false,
+        "spec_sha_before": null,
+        "spec_sha_after": null,
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "b66fa1f36dcdaf87b3de5f95b5735c2fbf50cee4",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 10.473,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1846,
+              "cache_creation_input_tokens": 1980,
+              "cache_read_input_tokens": 2402
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    },
+    {
+      "plant": "bad_rule",
+      "arm": "with",
+      "run": 3,
+      "check": "rejects_bad_urls",
+      "valid": true,
+      "pass": false,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "alias_resolves": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "clicks_counted": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "codes_6_digits": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'codes'"
+        },
+        "delete_link": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "expiry_from_last_click": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "heldout_alias_digits_hyphens": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "heldout_expiry_keeps_alive": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "heldout_shorten_rejects_bad_url": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "rejects_bad_urls": {
+          "pass": false,
+          "msg": "normalize('ftp://example.com/x') returned None instead of raising ValueError"
+        },
+        "same_url_same_code": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "shorten_resolve": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "stats_json": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "unknown_code_is_none": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "urls_normalized": {
+          "pass": true,
+          "msg": "scheme+host lowercased, rest kept"
+        }
+      },
+      "wall_s": 14.265,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-0dup4ry8/disk",
+        "route": null,
+        "from_step": 1,
+        "to_step": 1,
+        "last_done": 1,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": false,
+        "spec_sha_before": null,
+        "spec_sha_after": null,
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "12bbc2ab5f6342c94edb8916e8d5b848c3130e3a",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 12.707,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2460,
+              "cache_creation_input_tokens": 2604,
+              "cache_read_input_tokens": 2402
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    },
+    {
+      "plant": "bad_rule",
+      "arm": "without",
+      "run": 1,
+      "check": "rejects_bad_urls",
+      "valid": true,
+      "pass": true,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "alias_resolves": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "clicks_counted": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "codes_6_digits": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'codes'"
+        },
+        "delete_link": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "expiry_from_last_click": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "heldout_alias_digits_hyphens": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "heldout_expiry_keeps_alive": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "heldout_shorten_rejects_bad_url": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "rejects_bad_urls": {
+          "pass": true,
+          "msg": "ValueError for ftp://, no scheme, no host"
+        },
+        "same_url_same_code": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "shorten_resolve": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "stats_json": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "unknown_code_is_none": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "urls_normalized": {
+          "pass": true,
+          "msg": "scheme+host lowercased, rest kept"
+        }
+      },
+      "wall_s": 15.008,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-f0kf3m46/disk",
+        "route": "flip-bad-rule",
+        "from_step": 1,
+        "to_step": 1,
+        "last_done": 1,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": true,
+        "spec_sha_before": "48dd9b386e8ef92ae6a02d693a0093bf86f49e64136654bf0bee939617c9d148",
+        "spec_sha_after": "48dd9b386e8ef92ae6a02d693a0093bf86f49e64136654bf0bee939617c9d148",
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "779adb6561515d179188ad94393515c0aabfff25",
+            "tool_calls": 4,
+            "capped": false,
+            "wall_s": 14.102,
+            "model_calls": 3,
+            "usage": {
+              "input_tokens": 8,
+              "output_tokens": 2899,
+              "cache_creation_input_tokens": 4236,
+              "cache_read_input_tokens": 2596
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    },
+    {
+      "plant": "bad_rule",
+      "arm": "without",
+      "run": 2,
+      "check": "rejects_bad_urls",
+      "valid": true,
+      "pass": true,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "alias_resolves": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "clicks_counted": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "codes_6_digits": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'codes'"
+        },
+        "delete_link": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "expiry_from_last_click": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "heldout_alias_digits_hyphens": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "heldout_expiry_keeps_alive": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "heldout_shorten_rejects_bad_url": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "rejects_bad_urls": {
+          "pass": true,
+          "msg": "ValueError for ftp://, no scheme, no host"
+        },
+        "same_url_same_code": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "shorten_resolve": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "stats_json": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "unknown_code_is_none": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "urls_normalized": {
+          "pass": true,
+          "msg": "scheme+host lowercased, rest kept"
+        }
+      },
+      "wall_s": 15.089,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-b7w8d1le/disk",
+        "route": "flip-bad-rule",
+        "from_step": 1,
+        "to_step": 1,
+        "last_done": 1,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": true,
+        "spec_sha_before": "48dd9b386e8ef92ae6a02d693a0093bf86f49e64136654bf0bee939617c9d148",
+        "spec_sha_after": "48dd9b386e8ef92ae6a02d693a0093bf86f49e64136654bf0bee939617c9d148",
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "0791af86853f77278faebe376cf9bf700b33cacd",
+            "tool_calls": 4,
+            "capped": false,
+            "wall_s": 13.719,
+            "model_calls": 3,
+            "usage": {
+              "input_tokens": 8,
+              "output_tokens": 2498,
+              "cache_creation_input_tokens": 2785,
+              "cache_read_input_tokens": 3741
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    },
+    {
+      "plant": "bad_rule",
+      "arm": "without",
+      "run": 3,
+      "check": "rejects_bad_urls",
+      "valid": true,
+      "pass": true,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "alias_resolves": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "clicks_counted": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "codes_6_digits": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'codes'"
+        },
+        "delete_link": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "expiry_from_last_click": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "heldout_alias_digits_hyphens": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "heldout_expiry_keeps_alive": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "heldout_shorten_rejects_bad_url": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "rejects_bad_urls": {
+          "pass": true,
+          "msg": "ValueError for ftp://, no scheme, no host"
+        },
+        "same_url_same_code": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "shorten_resolve": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "stats_json": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "unknown_code_is_none": {
+          "pass": false,
+          "msg": "ModuleNotFoundError: No module named 'links'"
+        },
+        "urls_normalized": {
+          "pass": true,
+          "msg": "scheme+host lowercased, rest kept"
+        }
+      },
+      "wall_s": 9.825,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-zs3daftn/disk",
+        "route": "flip-bad-rule",
+        "from_step": 1,
+        "to_step": 1,
+        "last_done": 1,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": true,
+        "spec_sha_before": "48dd9b386e8ef92ae6a02d693a0093bf86f49e64136654bf0bee939617c9d148",
+        "spec_sha_after": "48dd9b386e8ef92ae6a02d693a0093bf86f49e64136654bf0bee939617c9d148",
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "d1333541a9ce7b7b1f87201b4e35d72a688b403d",
+            "tool_calls": 3,
+            "capped": false,
+            "wall_s": 8.828,
+            "model_calls": 4,
+            "usage": {
+              "input_tokens": 10,
+              "output_tokens": 1500,
+              "cache_creation_input_tokens": 1702,
+              "cache_read_input_tokens": 6209
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    }
+  ]
+}

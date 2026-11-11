@@ -13,3 +13,15 @@ no two plants share a check. `golden/` passes every check except the decoy.
 
 Flip `--to-step` per plant = the step its check first becomes checkable: bad_rule 1, ambiguity 4, contradiction 5.
 A plant that doesn't flip cleanly (anything other than 3/3 fail with vs 3/3 pass without) is dropped.
+
+## Flip result (1:25 gate), claude-haiku-5-5, 3 runs per arm, from `demo/runs/flip-*.json`
+
+| Plant | Check | with p/f/inv | without p/f/inv | Verdict | Kept |
+|---|---|---|---|---|---|
+| bad_rule | rejects_bad_urls | 0/3/0 | 3/0/0 | FLIP | yes |
+| ambiguity | expiry_from_last_click | 0/3/0 | 3/0/0 | FLIP | yes |
+| contradiction | alias_resolves | 3/0/0 | 3/0/0 | no flip | **dropped**: Haiku reconciles step 2 with step 5 itself |
+
+The spec text is unchanged; the contradiction line stays in step 2, but it isn't a plant any more and has no
+expected verdict. `codes_6_digits` timed out in 4 of 12 runs because the check passed a 333k-code `taken` set; it now
+passes 1,000 codes (a check fix, not a plant change).

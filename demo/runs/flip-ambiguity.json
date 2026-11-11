@@ -1,0 +1,888 @@
+{
+  "params": {
+    "runs": 3,
+    "to_step": 4,
+    "matrix": true,
+    "template": "/Users/edan/dev/dry-run-p2/demo/disk",
+    "fake_llm": null,
+    "check_cmd": "python3 demo/grade.py",
+    "plants": [
+      {
+        "id": "ambiguity",
+        "check": "expiry_from_last_click"
+      }
+    ]
+  },
+  "runs": [
+    {
+      "plant": "ambiguity",
+      "arm": "with",
+      "run": 1,
+      "check": "expiry_from_last_click",
+      "valid": true,
+      "pass": false,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "alias_resolves": {
+          "pass": false,
+          "msg": "TypeError: Shortlink.shorten() got an unexpected keyword argument 'alias'"
+        },
+        "clicks_counted": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "codes_6_digits": {
+          "pass": false,
+          "msg": "timeout after 10s"
+        },
+        "delete_link": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'delete'"
+        },
+        "expiry_from_last_click": {
+          "pass": false,
+          "msg": "clicked on day 20, gone on day 45 (None): expiry counts from creation"
+        },
+        "heldout_alias_digits_hyphens": {
+          "pass": false,
+          "msg": "TypeError: Shortlink.shorten() got an unexpected keyword argument 'alias'"
+        },
+        "heldout_expiry_keeps_alive": {
+          "pass": false,
+          "msg": "clicked every 29 days, gone on day 58 (None)"
+        },
+        "heldout_shorten_rejects_bad_url": {
+          "pass": false,
+          "msg": "shorten('javascript:alert(1)') returned None instead of raising ValueError"
+        },
+        "rejects_bad_urls": {
+          "pass": false,
+          "msg": "normalize('ftp://example.com/x') returned None instead of raising ValueError"
+        },
+        "same_url_same_code": {
+          "pass": true,
+          "msg": "same code"
+        },
+        "shorten_resolve": {
+          "pass": true,
+          "msg": "round trip"
+        },
+        "stats_json": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "unknown_code_is_none": {
+          "pass": true,
+          "msg": "None"
+        },
+        "urls_normalized": {
+          "pass": true,
+          "msg": "scheme+host lowercased, rest kept"
+        }
+      },
+      "wall_s": 45.156,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-4n7fj2d7/disk",
+        "route": null,
+        "from_step": 1,
+        "to_step": 4,
+        "last_done": 4,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": false,
+        "spec_sha_before": null,
+        "spec_sha_after": null,
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "e16ff152bfcee34a5b83a02f32cc3dd2544edefd",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 12.491,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2509,
+              "cache_creation_input_tokens": 2656,
+              "cache_read_input_tokens": 2402
+            }
+          },
+          {
+            "step": 2,
+            "commit": "f364c133f6c31aebccad71e9c701859c7fe46238",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 16.094,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1104,
+              "cache_creation_input_tokens": 4028,
+              "cache_read_input_tokens": 5306
+            }
+          },
+          {
+            "step": 3,
+            "commit": "478431e72fb25628ee9d2c16780f6d17e59239c8",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 5.828,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1059,
+              "cache_creation_input_tokens": 5210,
+              "cache_read_input_tokens": 6801
+            }
+          },
+          {
+            "step": 4,
+            "commit": "839b0652bba2a386e37b18e06fa06135dd108120",
+            "tool_calls": 3,
+            "capped": false,
+            "wall_s": 9.06,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1979,
+              "cache_creation_input_tokens": 7326,
+              "cache_read_input_tokens": 8108
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    },
+    {
+      "plant": "ambiguity",
+      "arm": "with",
+      "run": 2,
+      "check": "expiry_from_last_click",
+      "valid": true,
+      "pass": false,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "alias_resolves": {
+          "pass": false,
+          "msg": "TypeError: Shortlink.shorten() got an unexpected keyword argument 'alias'"
+        },
+        "clicks_counted": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "codes_6_digits": {
+          "pass": true,
+          "msg": "6 digits, never taken"
+        },
+        "delete_link": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'delete'"
+        },
+        "expiry_from_last_click": {
+          "pass": false,
+          "msg": "clicked on day 20, gone on day 45 (None): expiry counts from creation"
+        },
+        "heldout_alias_digits_hyphens": {
+          "pass": false,
+          "msg": "TypeError: Shortlink.shorten() got an unexpected keyword argument 'alias'"
+        },
+        "heldout_expiry_keeps_alive": {
+          "pass": false,
+          "msg": "clicked every 29 days, gone on day 58 (None)"
+        },
+        "heldout_shorten_rejects_bad_url": {
+          "pass": false,
+          "msg": "shorten('javascript:alert(1)') returned None instead of raising ValueError"
+        },
+        "rejects_bad_urls": {
+          "pass": false,
+          "msg": "normalize('ftp://example.com/x') returned None instead of raising ValueError"
+        },
+        "same_url_same_code": {
+          "pass": true,
+          "msg": "same code"
+        },
+        "shorten_resolve": {
+          "pass": true,
+          "msg": "round trip"
+        },
+        "stats_json": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "unknown_code_is_none": {
+          "pass": true,
+          "msg": "None"
+        },
+        "urls_normalized": {
+          "pass": true,
+          "msg": "scheme+host lowercased, rest kept"
+        }
+      },
+      "wall_s": 40.142,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-gsql8nxu/disk",
+        "route": null,
+        "from_step": 1,
+        "to_step": 4,
+        "last_done": 4,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": false,
+        "spec_sha_before": null,
+        "spec_sha_after": null,
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "bc6b97ca3273bec73fc0bced27da638253273bb4",
+            "tool_calls": 3,
+            "capped": false,
+            "wall_s": 11.197,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2328,
+              "cache_creation_input_tokens": 2600,
+              "cache_read_input_tokens": 2402
+            }
+          },
+          {
+            "step": 2,
+            "commit": "cb3c424158c4d0f9f149234294f2a914c452b969",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 9.68,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1471,
+              "cache_creation_input_tokens": 4189,
+              "cache_read_input_tokens": 5262
+            }
+          },
+          {
+            "step": 3,
+            "commit": "4bf1f7ebe30223024ee3f35a6023c98d06d3ee7c",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 6.192,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1035,
+              "cache_creation_input_tokens": 5482,
+              "cache_read_input_tokens": 7124
+            }
+          },
+          {
+            "step": 4,
+            "commit": "4a52aeb78b05580dfda76bdd035d10e46a5ffca1",
+            "tool_calls": 3,
+            "capped": false,
+            "wall_s": 12.222,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2534,
+              "cache_creation_input_tokens": 8169,
+              "cache_read_input_tokens": 8393
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    },
+    {
+      "plant": "ambiguity",
+      "arm": "with",
+      "run": 3,
+      "check": "expiry_from_last_click",
+      "valid": true,
+      "pass": false,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "alias_resolves": {
+          "pass": false,
+          "msg": "TypeError: Shortlink.shorten() got an unexpected keyword argument 'alias'"
+        },
+        "clicks_counted": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "codes_6_digits": {
+          "pass": true,
+          "msg": "6 digits, never taken"
+        },
+        "delete_link": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'delete'"
+        },
+        "expiry_from_last_click": {
+          "pass": false,
+          "msg": "clicked on day 20, gone on day 45 (None): expiry counts from creation"
+        },
+        "heldout_alias_digits_hyphens": {
+          "pass": false,
+          "msg": "TypeError: Shortlink.shorten() got an unexpected keyword argument 'alias'"
+        },
+        "heldout_expiry_keeps_alive": {
+          "pass": false,
+          "msg": "clicked every 29 days, gone on day 58 (None)"
+        },
+        "heldout_shorten_rejects_bad_url": {
+          "pass": false,
+          "msg": "shorten('javascript:alert(1)') returned None instead of raising ValueError"
+        },
+        "rejects_bad_urls": {
+          "pass": false,
+          "msg": "normalize('ftp://example.com/x') returned None instead of raising ValueError"
+        },
+        "same_url_same_code": {
+          "pass": true,
+          "msg": "same code"
+        },
+        "shorten_resolve": {
+          "pass": true,
+          "msg": "round trip"
+        },
+        "stats_json": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "unknown_code_is_none": {
+          "pass": true,
+          "msg": "None"
+        },
+        "urls_normalized": {
+          "pass": true,
+          "msg": "scheme+host lowercased, rest kept"
+        }
+      },
+      "wall_s": 38.962,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-1j19zqj7/disk",
+        "route": null,
+        "from_step": 1,
+        "to_step": 4,
+        "last_done": 4,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": false,
+        "spec_sha_before": null,
+        "spec_sha_after": null,
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "4afcf81c9c183508e5dd81c26463c6762b345448",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 12.113,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2285,
+              "cache_creation_input_tokens": 2483,
+              "cache_read_input_tokens": 2402
+            }
+          },
+          {
+            "step": 2,
+            "commit": "65f76c4da1d1be6d76f2fd51be07d4af3c6277c2",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 7.309,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1203,
+              "cache_creation_input_tokens": 3942,
+              "cache_read_input_tokens": 5118
+            }
+          },
+          {
+            "step": 3,
+            "commit": "349143fe811c4f989ab720268d52a22f99810ab9",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 5.068,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 993,
+              "cache_creation_input_tokens": 5047,
+              "cache_read_input_tokens": 6713
+            }
+          },
+          {
+            "step": 4,
+            "commit": "1087a52a946dd0b21c2c90826a6287b4c511d45a",
+            "tool_calls": 3,
+            "capped": false,
+            "wall_s": 11.372,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2341,
+              "cache_creation_input_tokens": 7512,
+              "cache_read_input_tokens": 7954
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    },
+    {
+      "plant": "ambiguity",
+      "arm": "without",
+      "run": 1,
+      "check": "expiry_from_last_click",
+      "valid": true,
+      "pass": true,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "alias_resolves": {
+          "pass": false,
+          "msg": "TypeError: Shortlink.shorten() got an unexpected keyword argument 'alias'"
+        },
+        "clicks_counted": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "codes_6_digits": {
+          "pass": false,
+          "msg": "timeout after 10s"
+        },
+        "delete_link": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'delete'"
+        },
+        "expiry_from_last_click": {
+          "pass": true,
+          "msg": "30 days from the last click"
+        },
+        "heldout_alias_digits_hyphens": {
+          "pass": false,
+          "msg": "TypeError: Shortlink.shorten() got an unexpected keyword argument 'alias'"
+        },
+        "heldout_expiry_keeps_alive": {
+          "pass": true,
+          "msg": "kept alive by clicks"
+        },
+        "heldout_shorten_rejects_bad_url": {
+          "pass": false,
+          "msg": "shorten('javascript:alert(1)') returned None instead of raising ValueError"
+        },
+        "rejects_bad_urls": {
+          "pass": false,
+          "msg": "normalize('ftp://example.com/x') returned None instead of raising ValueError"
+        },
+        "same_url_same_code": {
+          "pass": true,
+          "msg": "same code"
+        },
+        "shorten_resolve": {
+          "pass": true,
+          "msg": "round trip"
+        },
+        "stats_json": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "unknown_code_is_none": {
+          "pass": true,
+          "msg": "None"
+        },
+        "urls_normalized": {
+          "pass": true,
+          "msg": "scheme+host lowercased, rest kept"
+        }
+      },
+      "wall_s": 51.418,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-nvoywseu/disk",
+        "route": "flip-ambiguity",
+        "from_step": 1,
+        "to_step": 4,
+        "last_done": 4,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": true,
+        "spec_sha_before": "48dd9b386e8ef92ae6a02d693a0093bf86f49e64136654bf0bee939617c9d148",
+        "spec_sha_after": "d36ba243d2a44eab131578ee367fb2832073df560b0d6acc969d1d5dd018b5f9",
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "01eab6b2d063a646b28a410c0fac340cb596f4dd",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 14.212,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2824,
+              "cache_creation_input_tokens": 2991,
+              "cache_read_input_tokens": 2402
+            }
+          },
+          {
+            "step": 2,
+            "commit": "12e39ae70c4945727b71538dda3f8d6c8119ead8",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 16.803,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1584,
+              "cache_creation_input_tokens": 4797,
+              "cache_read_input_tokens": 5594
+            }
+          },
+          {
+            "step": 3,
+            "commit": "e9370e75c7fdc7f8c4b3c1dce3aa8cb1240acbf1",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 5.611,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1035,
+              "cache_creation_input_tokens": 5929,
+              "cache_read_input_tokens": 7568
+            }
+          },
+          {
+            "step": 4,
+            "commit": "93fc6e6f9629656a4e3708b0ba65e46816909e36",
+            "tool_calls": 3,
+            "capped": false,
+            "wall_s": 13.874,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2913,
+              "cache_creation_input_tokens": 10178,
+              "cache_read_input_tokens": 7459
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    },
+    {
+      "plant": "ambiguity",
+      "arm": "without",
+      "run": 2,
+      "check": "expiry_from_last_click",
+      "valid": true,
+      "pass": true,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "alias_resolves": {
+          "pass": false,
+          "msg": "TypeError: Shortlink.shorten() got an unexpected keyword argument 'alias'"
+        },
+        "clicks_counted": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "codes_6_digits": {
+          "pass": true,
+          "msg": "6 digits, never taken"
+        },
+        "delete_link": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'delete'"
+        },
+        "expiry_from_last_click": {
+          "pass": true,
+          "msg": "30 days from the last click"
+        },
+        "heldout_alias_digits_hyphens": {
+          "pass": false,
+          "msg": "TypeError: Shortlink.shorten() got an unexpected keyword argument 'alias'"
+        },
+        "heldout_expiry_keeps_alive": {
+          "pass": true,
+          "msg": "kept alive by clicks"
+        },
+        "heldout_shorten_rejects_bad_url": {
+          "pass": false,
+          "msg": "shorten('javascript:alert(1)') returned None instead of raising ValueError"
+        },
+        "rejects_bad_urls": {
+          "pass": false,
+          "msg": "normalize('ftp://example.com/x') returned None instead of raising ValueError"
+        },
+        "same_url_same_code": {
+          "pass": true,
+          "msg": "same code"
+        },
+        "shorten_resolve": {
+          "pass": true,
+          "msg": "round trip"
+        },
+        "stats_json": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "unknown_code_is_none": {
+          "pass": true,
+          "msg": "None"
+        },
+        "urls_normalized": {
+          "pass": true,
+          "msg": "scheme+host lowercased, rest kept"
+        }
+      },
+      "wall_s": 45.165,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-dpdl5m5z/disk",
+        "route": "flip-ambiguity",
+        "from_step": 1,
+        "to_step": 4,
+        "last_done": 4,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": true,
+        "spec_sha_before": "48dd9b386e8ef92ae6a02d693a0093bf86f49e64136654bf0bee939617c9d148",
+        "spec_sha_after": "d36ba243d2a44eab131578ee367fb2832073df560b0d6acc969d1d5dd018b5f9",
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "98186eba5d9977452bdd1fbde72861b59e46ae5f",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 16.378,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 3228,
+              "cache_creation_input_tokens": 3395,
+              "cache_read_input_tokens": 2402
+            }
+          },
+          {
+            "step": 2,
+            "commit": "d56765ec6b8f891f92f431f7dea80a2f06f4350a",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 10.681,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1063,
+              "cache_creation_input_tokens": 4674,
+              "cache_read_input_tokens": 5992
+            }
+          },
+          {
+            "step": 3,
+            "commit": "32614bef0c8a5dcd83b57b61d0c1915717a2c977",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 6.61,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1081,
+              "cache_creation_input_tokens": 5852,
+              "cache_read_input_tokens": 7439
+            }
+          },
+          {
+            "step": 4,
+            "commit": "467da791efb8d4370315c79b046db00b23c8ca46",
+            "tool_calls": 3,
+            "capped": false,
+            "wall_s": 10.717,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2165,
+              "cache_creation_input_tokens": 8163,
+              "cache_read_input_tokens": 8797
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    },
+    {
+      "plant": "ambiguity",
+      "arm": "without",
+      "run": 3,
+      "check": "expiry_from_last_click",
+      "valid": true,
+      "pass": true,
+      "exit": 0,
+      "capped": false,
+      "reason": null,
+      "checks": {
+        "alias_resolves": {
+          "pass": false,
+          "msg": "TypeError: Shortlink.shorten() got an unexpected keyword argument 'alias'"
+        },
+        "clicks_counted": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "codes_6_digits": {
+          "pass": true,
+          "msg": "6 digits, never taken"
+        },
+        "delete_link": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'delete'"
+        },
+        "expiry_from_last_click": {
+          "pass": true,
+          "msg": "30 days from the last click"
+        },
+        "heldout_alias_digits_hyphens": {
+          "pass": false,
+          "msg": "TypeError: Shortlink.shorten() got an unexpected keyword argument 'alias'"
+        },
+        "heldout_expiry_keeps_alive": {
+          "pass": true,
+          "msg": "kept alive by clicks"
+        },
+        "heldout_shorten_rejects_bad_url": {
+          "pass": false,
+          "msg": "shorten('javascript:alert(1)') returned None instead of raising ValueError"
+        },
+        "rejects_bad_urls": {
+          "pass": false,
+          "msg": "normalize('ftp://example.com/x') returned None instead of raising ValueError"
+        },
+        "same_url_same_code": {
+          "pass": true,
+          "msg": "same code"
+        },
+        "shorten_resolve": {
+          "pass": true,
+          "msg": "round trip"
+        },
+        "stats_json": {
+          "pass": false,
+          "msg": "AttributeError: 'Shortlink' object has no attribute 'stats'"
+        },
+        "unknown_code_is_none": {
+          "pass": true,
+          "msg": "None"
+        },
+        "urls_normalized": {
+          "pass": true,
+          "msg": "scheme+host lowercased, rest kept"
+        }
+      },
+      "wall_s": 39.471,
+      "result": {
+        "ok": true,
+        "disk": "/var/folders/v0/01zmydvn41v1bh15lwlld07m0000gn/T/flip-bt7akx6r/disk",
+        "route": "flip-ambiguity",
+        "from_step": 1,
+        "to_step": 4,
+        "last_done": 4,
+        "capped": false,
+        "invalid": false,
+        "patch_applied": true,
+        "spec_sha_before": "48dd9b386e8ef92ae6a02d693a0093bf86f49e64136654bf0bee939617c9d148",
+        "spec_sha_after": "d36ba243d2a44eab131578ee367fb2832073df560b0d6acc969d1d5dd018b5f9",
+        "repairs": [],
+        "steps": [
+          {
+            "step": 1,
+            "commit": "bbd816d6b01a36d7aac53c1ca4d7fe82cdc6b477",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 11.48,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2424,
+              "cache_creation_input_tokens": 2590,
+              "cache_read_input_tokens": 2402
+            }
+          },
+          {
+            "step": 2,
+            "commit": "f9edb7a2fa1fe3cb02e54d823ae0f68f67523a7c",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 10.588,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1123,
+              "cache_creation_input_tokens": 3902,
+              "cache_read_input_tokens": 5190
+            }
+          },
+          {
+            "step": 3,
+            "commit": "ea0eca63ef0f5d1597e989cafbb9cab15d7040c3",
+            "tool_calls": 2,
+            "capped": false,
+            "wall_s": 6.022,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 1045,
+              "cache_creation_input_tokens": 5085,
+              "cache_read_input_tokens": 6699
+            }
+          },
+          {
+            "step": 4,
+            "commit": "6352031421df78bdf7cc43d3a68e470df5571dbc",
+            "tool_calls": 3,
+            "capped": false,
+            "wall_s": 10.657,
+            "model_calls": 2,
+            "usage": {
+              "input_tokens": 6,
+              "output_tokens": 2215,
+              "cache_creation_input_tokens": 7287,
+              "cache_read_input_tokens": 8025
+            }
+          }
+        ],
+        "drop_conversation": false,
+        "model": "claude-haiku-5-5",
+        "error": null
+      }
+    }
+  ]
+}
