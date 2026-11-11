@@ -1,6 +1,6 @@
 """One entry point: build -> grade -> triage -> locate -> suspects -> swarm, per CONTRACT.md "How it works".
 
-    .venv/bin/python -m orchestrator.pipeline [--local] [--swarm-copies 3]
+    .venv/bin/python -m orchestrator.pipeline [--local] [--copies 3] [--builder stub|real]
 
 Writes orchestrator/runs/<stamp>/: run.json, triage.json, results.json (every wave), swarm.json, archil.json.
 Uses the STUB builder, checks, spec, rules, golden/ and rewrites in orchestrator/ until the real ones land.
@@ -20,7 +20,7 @@ from pathlib import Path
 
 from orchestrator.archil_log import ArchilLog
 from orchestrator.stores import ArchilStore, LocalStore
-from orchestrator.wave import CHECKS, HERE, _write_json, build, run_wave
+from orchestrator.wave import CHECKS, HERE, REAL_BUILDER, STUB_BUILDER, _write_json, build, run_wave
 
 ROOT = HERE.parent
 N_COPIES = 3  # per hypothesis: verdicts are counts (3/3 vs 0/3), never one run
@@ -56,13 +56,14 @@ def _verdict(fails: int, runs: int, errors: int) -> str:
     return {0: "model_slip", runs: "real_problem"}.get(fails, "inconclusive")
 
 
-def pipeline(store, run_dir: Path, *, steps: int = 7, slip_step: int | None = 4, copies: int = N_COPIES) -> dict:
+def pipeline(store, run_dir: Path, *, steps: int = 7, slip_step: int | None = 4, copies: int = N_COPIES,
+             builder_src: Path = STUB_BUILDER) -> dict:
     spec = (HERE / "fake_spec.md").read_text()
     rules = {p.name: p.read_text() for p in sorted((HERE / "fake_rules").glob("*.md"))}
     t_start = time.perf_counter()
 
     # BUILD + GRADE (checks after every step, from outside the agent's disk)
-    run = build(store, spec, rules, steps, run_dir, slip_step=slip_step)
+    run = build(store, spec, rules, steps, run_dir, slip_step=slip_step, builder_src=builder_src)
     ckpt = run["checkpoints"]
     log = ArchilLog(run_dir / "run.json", run_dir / "archil.json", ROOT / "spikes" / "disk_spike.json")
     meta = local_checks("--meta")
@@ -82,12 +83,12 @@ def pipeline(store, run_dir: Path, *, steps: int = 7, slip_step: int | None = 4,
         else:
             wv = run_wave(store, ckpt[str(surfaced - 1)], [{"route": "rebuild", "kind": "none"}], copies,
                           wave=f"triage-{c}", to_step=surfaced, run_dir=run_dir, log=log, targets=[c],
-                          purpose="triage", check=c)
+                          purpose="triage", check=c, builder_src=builder_src)
             r = _route(wv, "rebuild")
-            fails = r["runs"] - r["passed"] - r["errors"]
+            fails = r["graded"] - r["passed"]
             t["rebuild"] = {"checkpoint_id": wv["checkpoint_id"], "step": surfaced, "fails": f"{fails}/{r['runs']}",
-                            "errors": r["errors"], "wave": wv["wave"]}
-            t["verdict"] = _verdict(fails, r["runs"], r["errors"])
+                            "errors": r["errors"], "invalid": r["invalid"], "wave": wv["wave"]}
+            t["verdict"] = _verdict(fails, r["runs"], r["errors"] + r["invalid"])
         if t["verdict"] == "real_problem":
             t["fork_checkpoint_id"] = ckpt[str(origin - 1)]  # LOCATE: the checkpoint just before the origin step
         triage.append(t)
@@ -106,12 +107,12 @@ def pipeline(store, run_dir: Path, *, steps: int = 7, slip_step: int | None = 4,
                    "hypothesis": f"rule {r} is the cause"} for r in rules]
         edits.append({"route": "control", "kind": "control", "old": lines[0], "hypothesis": "no change"})
         sv = run_wave(store, fork, edits, copies * len(edits), wave=f"suspects-{c}", to_step=steps, run_dir=run_dir,
-                      log=log, targets=[c], purpose="suspects", check=c)
+                      log=log, targets=[c], purpose="suspects", check=c,
+                      builder_src=builder_src)
         ctrl = _route(sv, "control")
         suspects = [{**{k: e.get(k) for k in ("route", "kind", "step", "old", "new", "rule")},
                      "score": _route(sv, e["route"])["score"]} for e in edits if e["route"] != "control"]
-        flips = [s for s in suspects if s["score"] == f"{copies}/{copies}" and ctrl["passed"] == 0
-                 and ctrl["errors"] == 0]
+        flips = [s for s in suspects if s["score"] == f"{copies}/{copies}" and ctrl["score"] == f"0/{copies}"]
         t["suspects"] = {"wave": sv["wave"], "control": ctrl["score"], "suspects": suspects}
         t["culprit"] = flips[0] if len(flips) == 1 else None
         print(f"suspects {c}: control {ctrl['score']}, " + ", ".join(f"{s['route']} {s['score']}" for s in suspects),
@@ -127,7 +128,7 @@ def pipeline(store, run_dir: Path, *, steps: int = 7, slip_step: int | None = 4,
         rws = [{"route": f"rw{i + 1}", "kind": "spec_line", "step": t["culprit"]["step"], "old": old, "new": new,
                 "hypothesis": "rewrite of the culprit line"} for i, new in enumerate(REWRITES.get(old, []))]
         ww = run_wave(store, fork, rws, copies * len(rws), wave=f"swarm-{c}", to_step=steps, run_dir=run_dir, log=log,
-                      targets=[c], purpose="swarm", check=c)
+                      targets=[c], purpose="swarm", check=c, builder_src=builder_src)
         rewrites = []
         for e in rws:
             cps = [cp for cp in ww["copies"] if cp["route"] == e["route"]]
@@ -185,6 +186,8 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--local", action="store_true", help="plain folders instead of Archil")
     ap.add_argument("--copies", type=int, default=N_COPIES, help="copies per hypothesis")
+    ap.add_argument("--builder", choices=["stub", "real"], default="stub",
+                    help="stub = orchestrator/stub_builder/builder; real = brendan's builder/ at the repo root")
     a = ap.parse_args()
     stamp = time.strftime("%Y%m%d-%H%M%S")
     run_dir = HERE / "runs" / f"{stamp}{'-local' if a.local else ''}"
@@ -199,7 +202,8 @@ def main() -> None:
         store = ArchilStore.new(client, region, f"dryrun-run-{stamp}")
     try:
         print(f"run dir: {run_dir}\ndisk: {store.disk_id}", flush=True)
-        out = pipeline(store, run_dir, copies=a.copies)
+        out = pipeline(store, run_dir, copies=a.copies,
+                       builder_src=REAL_BUILDER if a.builder == "real" else STUB_BUILDER)
         for t in out["triage"]:
             print(" ", t["card"])
     finally:

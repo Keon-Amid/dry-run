@@ -91,16 +91,17 @@ against fakes first. `python -m orchestrator.pipeline [--local]` writes all five
 
 - **`run.json`** (the build): `{run_id, disk_id, store, builder, n_steps, model, simulated_slip, checkpoints{"k":
   checkpoint_id}, final_checks{name: bool}, steps[{step, wall_s, wrote[files], checks{name: bool},
-  checks_hidden_during_build, checkpoint_ms}]}`. Optional per step, filled by the builder when it can:
-  `model_calls`, `usage` (the sum of the API's `usage` objects: `input_tokens`, `output_tokens`,
+  checks_hidden_during_build, checkpoint_ms}]}`. `wrote` = files changed on the disk by that step (hash diff).
+  Optional per step, copied from the builder's RESULT `steps[]` when present: `tool_calls`, `commit`, `model_calls`, `usage` (the sum of the API's `usage` objects: `input_tokens`, `output_tokens`,
   `cache_creation_input_tokens`, `cache_read_input_tokens`); missing ones make the matching savings `"unknown"`.
 - **`triage.json`**: `checks[{check, verdict: test_wrong|model_slip|real_problem|inconclusive, surfaced_step,
-  origin_step, fails_on_golden, rebuild{checkpoint_id, step, fails: "3/3", errors, wave}|null, fork_checkpoint_id?,
+  origin_step, fails_on_golden, rebuild{checkpoint_id, step, fails: "3/3", errors, invalid, wave}|null, fork_checkpoint_id?,
   suspects{wave, control: "0/3", suspects[{route, kind, step, old, new, rule, score}]}?, culprit{...one suspect}|null?,
   swarm{branches, rewrites, winners}?, card}]`. `card` is the one-line card text, built from these fields.
 - **`results.json`** (every wave, appended): `waves[{wave, purpose: triage|suspects|swarm, check, targets,
-  checkpoint_id, fork_step, to_step, n, wall_s, routes[{route, kind, edit, runs, passed, errors, score}],
-  copies[{id, route, kind, edit, branch, ok, passed, checks{name: bool}, builder{...the worker's JSON line},
+  checkpoint_id, fork_step, to_step, n, wall_s, routes[{route, kind, edit, runs, graded, passed, errors, invalid,
+  score: "passed/graded"}],
+  copies[{id, route, kind, edit, branch, ok, invalid?, passed, checks{name: bool}, builder{...RESULT json + exit_code},
   wall_s, timings_ms{branch, sandbox, mount}, error?}]}]`.
 - **`swarm.json`**: `swarms[{check, culprit, fork_checkpoint_id, wave, heldout_checks, n_branches, n_rewrites,
   rewrites[{route, text, visible: "3/3", heldout: "3/3", regressions[checks], errors, winner}], winners[routes]}]`.

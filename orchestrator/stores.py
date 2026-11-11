@@ -5,7 +5,8 @@ it; resume() branches the disk at a checkpoint and mounts the branch in a fresh 
 LocalStore: same calls on plain folders (save = copytree), for tests and the no-Archil flip test.
 
 A worker exposes: mnt (the agent's disk), tools (a folder outside the disk for builder/check code),
-exec(cmd) -> (code, stdout, stderr), put(path, text), delete(), and timings_ms {branch, sandbox, mount}.
+exec(cmd) -> (code, stdout, stderr), put(path, text), put_tree(local_dir, remote_dir), delete(),
+and timings_ms {branch, sandbox, mount}.
 Disk tokens live only in memory; nothing here writes one to a file.
 """
 from __future__ import annotations
@@ -15,6 +16,8 @@ import os
 import re
 import shutil
 import subprocess
+import tarfile
+import tempfile
 import time
 import uuid
 from pathlib import Path
@@ -53,6 +56,16 @@ class ArchilWorker:
     def put(self, path: str, text: str) -> None:
         b64 = base64.b64encode(text.encode()).decode()
         self.must(f"mkdir -p {os.path.dirname(path)} && echo {b64} | base64 -d > {path}")
+
+    def put_tree(self, local_dir: Path, remote_dir: str) -> None:
+        """Copy a local folder (e.g. a Python package) into the sandbox: tar.gz, upload, extract."""
+        with tempfile.NamedTemporaryFile(suffix=".tar.gz") as tmp:
+            with tarfile.open(tmp.name, "w:gz") as tar:
+                tar.add(local_dir, arcname=Path(local_dir).name,
+                        filter=lambda ti: None if "__pycache__" in ti.name else ti)
+            remote_tar = f"/tmp/{uuid.uuid4().hex}.tar.gz"
+            self.sandbox.files.upload_file(tmp.name, remote_tar)
+        self.must(f"mkdir -p {remote_dir} && tar xzf {remote_tar} -C {remote_dir} && rm -f {remote_tar}")
 
     def delete(self) -> None:
         for step in ("stop", "delete"):
@@ -142,6 +155,10 @@ class LocalWorker:
     def put(self, path: str, text: str) -> None:
         Path(path).parent.mkdir(parents=True, exist_ok=True)
         Path(path).write_text(text)
+
+    def put_tree(self, local_dir: Path, remote_dir: str) -> None:
+        shutil.copytree(local_dir, Path(remote_dir) / Path(local_dir).name, dirs_exist_ok=True,
+                        ignore=shutil.ignore_patterns("__pycache__"))
 
     def delete(self) -> None:
         pass  # branches stay on disk for inspection, like Archil branches
