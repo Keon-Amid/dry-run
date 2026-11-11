@@ -1,0 +1,10 @@
+[
+  {"id": "ambiguity", "check": "pit_stays_back",
+   "patch": {"route": "flip-ambiguity", "kind": "spec_line", "step": 4,
+             "old": "The pit costs a life.",
+             "new": "Trying to step onto a pit costs a life, and the player stays on the square they came from.",
+             "rule": null, "hypothesis": "'the pit costs a life' doesn't say whether the player ends up in the pit"}},
+  {"id": "bad_rule", "check": "step_returns_new_state",
+   "patch": {"route": "flip-bad-rule", "kind": "rule_off", "step": null, "old": null, "new": null,
+             "rule": "performance.md", "hypothesis": "harness rule 'update the state in place' overrides spec step 2"}}
+]
