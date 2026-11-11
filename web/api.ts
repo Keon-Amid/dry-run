@@ -4,6 +4,7 @@
 //   GET  /api/caps                 what this machine can run (python, pipeline, archil SDK, which keys exist: names only)
 //   GET  /api/job                  the pipeline process this server started, if any (state + last log lines)
 //   POST /api/start                start `python -m orchestrator.pipeline ...` with allow-listed options (localhost only)
+//   POST /api/live                 run `python -m orchestrator.live wave|both <run>` on a finished real run (localhost only)
 //   POST /api/stop                 stop it (localhost only)
 import fs from 'node:fs'
 import path from 'node:path'
@@ -60,6 +61,7 @@ export function makeApi(repoRoot: string, RUNS: string) {
       keys: { ARCHIL_API_KEY: hasKey('ARCHIL_API_KEY'), ANTHROPIC_API_KEY: hasKey('ANTHROPIC_API_KEY') },
       fixtures,
       fixtureNames: FIXTURE_NAMES,
+      liveCmd: fs.existsSync(path.join(repoRoot, 'orchestrator/live.py')),
     }
     return caps
   }
@@ -68,7 +70,7 @@ export function makeApi(repoRoot: string, RUNS: string) {
     job
       ? {
           id: job.id,
-          command: 'python -m orchestrator.pipeline ' + job.args.slice(3).join(' '),
+          command: 'python ' + job.args.slice(1).join(' '),
           opts: job.opts,
           startedAt: job.startedAt,
           endedAt: job.endedAt,
@@ -97,8 +99,25 @@ export function makeApi(repoRoot: string, RUNS: string) {
     const mb = Number(o?.maxBuilders)
     if (Number.isInteger(mb) && mb >= 1 && mb <= 64) args.push('--max-builders', String(mb))
     if (typeof o?.model === 'string' && /^[\w.-]{3,60}$/.test(o.model)) args.push('--model', o.model)
+    return launch(args, { fixture, builder, local }, null)
+  }
+
+  // Edan's two extra commands on a finished real run: `wave` (a 3-copy judges' wave) and `both` (combined confirm).
+  const live = (o: any) => {
+    if (job && job.exitCode === null) throw new Error('a run is already in progress')
+    const c = getCaps()
+    const cmd = o?.cmd === 'both' ? 'both' : 'wave'
+    const runId = String(o?.runId ?? '')
+    if (!NAME.test(runId) || !fs.existsSync(path.join(RUNS, runId, 'run.json'))) throw new Error('unknown run')
+    if (!fs.existsSync(path.join(repoRoot, 'orchestrator/live.py'))) throw new Error('orchestrator/live.py is missing')
+    if (!c.keys.ANTHROPIC_API_KEY || !c.keys.ARCHIL_API_KEY || !c.archilSdk)
+      throw new Error("a live wave needs ANTHROPIC_API_KEY, the run's own ARCHIL_API_KEY and the archil Python SDK on this machine")
+    return launch(['-u', '-m', 'orchestrator.live', cmd, path.join(RUNS, runId)], { live: cmd }, runId)
+  }
+
+  const launch = (args: string[], opts: any, runId: string | null) => {
     const proc = spawn(py, args, { cwd: repoRoot, env: { ...process.env, PYTHONUNBUFFERED: '1' } })
-    const j: Job = { id: String(Date.now()), args, opts: { fixture, builder, local }, startedAt: Date.now(), endedAt: null, exitCode: null, runId: null, log: [], proc }
+    const j: Job = { id: String(Date.now()), args, opts, startedAt: Date.now(), endedAt: null, exitCode: null, runId, log: [], proc }
     const onData = (buf: any) => {
       for (const raw of String(buf).split(/\r?\n/)) {
         if (!raw.trim()) continue
@@ -117,7 +136,7 @@ export function makeApi(repoRoot: string, RUNS: string) {
       j.proc = null
     })
     proc.on('error', (e) => {
-      j.log.push('could not start the pipeline: ' + e.message)
+      j.log.push('could not start: ' + e.message)
       j.exitCode = -1
       j.endedAt = Date.now()
       j.proc = null
@@ -207,7 +226,7 @@ export function makeApi(repoRoot: string, RUNS: string) {
     try {
       if (url === '/api/caps') return send(res, 200, getCaps())
       if (url === '/api/job') return send(res, 200, { job: jobView() })
-      if (url === '/api/start' || url === '/api/stop') {
+      if (url === '/api/start' || url === '/api/stop' || url === '/api/live') {
         if (req.method !== 'POST') return send(res, 405, { error: 'POST only' })
         if (!isLocal(req)) return send(res, 403, { error: 'runs can only be started from the machine that serves this page' })
         if (url === '/api/stop') {
@@ -215,6 +234,7 @@ export function makeApi(repoRoot: string, RUNS: string) {
           return send(res, 200, { job: jobView() })
         }
         try {
+          if (url === '/api/live') return send(res, 200, { job: live(await body(req)) })
           return send(res, 200, { job: start(await body(req)) })
         } catch (e: any) {
           return send(res, 409, { error: String(e?.message || e) })

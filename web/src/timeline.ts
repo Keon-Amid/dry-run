@@ -517,7 +517,9 @@ export function buildTimeline(d: RunData): Timeline {
         ? `First, the original spec built ${nCopies} more times from step ${fork}, nothing changed. Does it fail every time?`
         : w.purpose === 'baseline'
           ? `The baseline for "${w.check ?? '?'}": one plain ${base?.fixer ?? 'Claude'} call rewrites the whole spec, then ${nCopies} fresh builds from step ${fork}.`
-          : `"${w.wave}": ${nCopies} copies branched from checkpoint ${fork}.`,
+          : w.purpose === 'live'
+            ? `LIVE WAVE: ${nCopies} copies branched from checkpoint ${fork} just now. Steps 1 to ${fork} are not rebuilt.`
+            : `"${w.wave}": ${nCopies} copies branched from checkpoint ${fork}.`,
       'archil',
     )
     t = playWave(w, t, { tri: triChecks.find((x) => x.check === w.check) })
@@ -529,8 +531,8 @@ export function buildTimeline(d: RunData): Timeline {
         ? `Original spec, fresh builds: ${lane?.sub ?? lane?.score ?? 'unknown'}.`
         : w.purpose === 'baseline' && base
           ? `Baseline for "${w.check}": visible check ${base.visible ?? 'unknown'}, held-out ${base.heldout ?? 'unknown'}.`
-          : `"${w.wave}" finished${typeof w.wall_s === 'number' ? ' in ' + w.wall_s + ' s' : ''}.`,
-      w.purpose === 'baseline' && base?.passes_all === false ? 'bad' : 'info',
+          : `${w.purpose === 'live' ? 'Live wave' : `"${w.wave}"`} finished${typeof w.wall_s === 'number' ? ' in ' + w.wall_s + ' s' : ''}: ${lane?.score ?? 'unknown'} pass.`,
+      w.purpose === 'baseline' && base?.passes_all === false ? 'bad' : w.purpose === 'live' ? 'gold' : 'info',
     )
     t += 2.6
     endWave(t)
@@ -653,11 +655,15 @@ export function buildTimeline(d: RunData): Timeline {
           T += 2
         }
         endWave(T)
-      } else if (w.purpose === 'confirm') {
+      } else if (w.purpose === 'confirm' || w.purpose === 'confirm_both') {
         closeTags(T)
         const c0 = (Array.isArray(w.copies) ? w.copies : [])[0]
-        const a = mk(String(c0?.id ?? 'confirm'), String(c0?.id ?? 'confirm'), 'confirm: a fresh build from step 0 with the winning fix', GOLD)
-        cap(T, 'CONFIRM', `One fresh build from step 0 with the winning fix.`, 'gold')
+        const both = w.purpose === 'confirm_both'
+        const nConfirm = actors.filter((x) => x.wave === '__confirm').length
+        const gateAt = GATE_X - 16 - nConfirm * 15
+        const a = mk(String(c0?.id ?? w.wave ?? 'confirm'), String(c0?.id ?? 'confirm'), both ? 'confirm: a fresh build from step 0 with every fix applied' : 'confirm: a fresh build from step 0 with the winning fix', GOLD)
+        a.wave = '__confirm'
+        cap(T, 'CONFIRM', both ? `Last check: one fresh build from step 0 with every fix applied at once.` : `One fresh build from step 0 with the winning fix.`, 'gold')
         seg(a, T, T + 0.4, at(0), at(0), FY, FY, 'idle')
         let t = T + 0.4
         for (let k = 1; k <= n; k++) {
@@ -666,7 +672,17 @@ export function buildTimeline(d: RunData): Timeline {
           fires[k - 1].goldT = t
         }
         const ctext = (triChecks.find((x) => x.check === w.check) ?? triChecks.find((x) => x.confirm?.text))?.confirm?.text
-        const text = ctext ? (c0 && c0.passed === false ? `The fresh build with "${ctext}" did not pass.` : `CONFIRMED: a fresh build from step 0 with "${ctext}" passes.`) : undefined
+        const ab = d.report?.after_both
+        let text: string | undefined
+        if (both && ab && typeof ab.passed === 'number') {
+          const failing = Object.entries(ab.checks ?? {})
+            .filter(([, ok]) => ok === false)
+            .map(([name]) => name)
+          const wrong = failing.filter((name) => triChecks.some((x) => x.check === name && x.verdict === 'test_wrong'))
+          text =
+            `BOTH FIXES TOGETHER: ${ab.passed} of ${ab.total ?? 'unknown'} checks pass on a fresh build from step 0.` +
+            (failing.length ? ` Still failing: ${failing.join(', ')}${wrong.length === failing.length ? ', which triage already called a wrong test.' : '.'}` : '')
+        } else if (ctext) text = c0 && c0.passed === false ? `The fresh build with "${ctext}" did not pass.` : `CONFIRMED: a fresh build from step 0 with "${ctext}" passes.`
         if (c0 && c0.passed === false) {
           seg(a, t, t + 0.5, at(n), at(n), FY, FY, 'fall')
           t += 0.5
@@ -674,11 +690,11 @@ export function buildTimeline(d: RunData): Timeline {
           a.mark = { t, kind: 'dead' }
           cap(t, 'CONFIRM', text ?? `The confirm build did not pass.`, 'bad')
         } else {
-          seg(a, t, t + 0.7, at(n), GATE_X - 16, FY, FY, 'walk')
+          seg(a, t, t + 0.7, at(n), gateAt, FY, FY, 'walk')
           t += 0.7
-          seg(a, t, t, GATE_X - 16, GATE_X - 16, FY, FY, 'cheer')
+          seg(a, t, t, gateAt, gateAt, FY, FY, 'cheer')
           a.mark = { t, kind: 'ok' }
-          gateOpenT = t
+          if (gateOpenT == null) gateOpenT = t
           cap(t, 'CONFIRM', text ?? `The fixed spec builds clean from step 0.`, 'gold')
         }
         T = t + 3

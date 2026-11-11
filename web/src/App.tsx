@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { getJob, listRuns, loadRun, show, stopRun, type Job, type RunData, type RunInfo } from './data'
+import { getCaps, getJob, listRuns, liveWave, loadRun, show, stopRun, type Caps, type Job, type RunData, type RunInfo } from './data'
 import { buildTimeline, captionAt, hudAt, W, H, type Caption, type Hud, type Timeline } from './timeline'
 import { Scene } from './scene'
 import { Cards } from './Cards'
@@ -48,6 +48,13 @@ function Main({ reportOpen, preferRun }: { reportOpen: boolean; preferRun: strin
   const [showUpload, setShowUpload] = useState(qs.get('upload') === '1')
   const [ui, setUi] = useState<{ t: number; cap: Caption | null; hud: Hud | null; ended: boolean; finished: boolean }>({ t: 0, cap: null, hud: null, ended: false, finished: false })
   const [job, setJob] = useState<Job | null>(null)
+  const [caps, setCaps] = useState<Caps | null>(null)
+  const prevTl = useRef<Timeline | null>(null)
+  useEffect(() => {
+    getCaps()
+      .then(setCaps)
+      .catch(() => {})
+  }, [])
   const [tip, setTip] = useState<{ x: number; y: number; text: string } | null>(null)
   const [err, setErr] = useState<string | null>(null)
 
@@ -67,6 +74,14 @@ function Main({ reportOpen, preferRun }: { reportOpen: boolean; preferRun: strin
   // keep the HUD and caption in step with freshly loaded data, even while paused
   useEffect(() => {
     if (!tl) return
+    // a wave appended to an already finished run (the judges' live wave): jump to where it starts
+    const before = prevTl.current
+    if (before && before.complete && st.current.live && tl.laneSets.length > before.laneSets.length && tRef.current >= before.duration - 1) {
+      tRef.current = Math.max(0, tl.laneSets[before.laneSets.length].t0 - 3)
+      setShowCards(false)
+      setPlaying(true)
+    }
+    prevTl.current = tl
     const t = Math.min(tRef.current, tl.duration)
     setUi((u) => ({ ...u, t, cap: captionAt(tl, t), hud: hudAt(tl, t), ended: t >= tl.duration - 0.001 }))
   }, [tl])
@@ -117,6 +132,7 @@ function Main({ reportOpen, preferRun }: { reportOpen: boolean; preferRun: strin
     if (!runId) return
     let stop = false
     setData(null)
+    prevTl.current = null
     if (!firstLoad.current) tRef.current = 0
     firstLoad.current = false
     if (qs.get('cards') !== '1') setShowCards(false)
@@ -311,7 +327,31 @@ function Main({ reportOpen, preferRun }: { reportOpen: boolean; preferRun: strin
         <button className={'btn' + (showCards ? ' on' : '')} disabled={!tl?.hasCards} onClick={() => setShowCards((s) => !s)}>
           CARDS
         </button>
-        <button className="btn new" onClick={() => setShowUpload(true)} title="upload a spec bundle (N)">
+        {caps?.liveCmd && /real/i.test(String(run?.builder ?? '')) && run?.store === 'archil' && (
+          <button
+            className="btn new"
+            disabled={!(caps.keys.ANTHROPIC_API_KEY && caps.keys.ARCHIL_API_KEY && caps.archilSdk) || !!job?.running || !runId}
+            title={
+              caps.keys.ANTHROPIC_API_KEY && caps.keys.ARCHIL_API_KEY && caps.archilSdk
+                ? 'branch 3 fresh copies from this run right now (python -m orchestrator.live wave)'
+                : "needs ANTHROPIC_API_KEY, this run's ARCHIL_API_KEY and the archil Python SDK on this machine"
+            }
+            onClick={() =>
+              runId &&
+              liveWave(runId)
+                .then((j) => {
+                  setJob(j)
+                  setShowCards(false)
+                  setLive(true)
+                  setPlaying(true)
+                })
+                .catch((e) => setErr(String(e?.message || e)))
+            }
+          >
+            LIVE WAVE
+          </button>
+        )}
+        <button className="btn new" onClick={() => setShowUpload(true)} title="start a new run (N)">
           + NEW RUN
         </button>
       </header>

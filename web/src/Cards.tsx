@@ -173,6 +173,20 @@ function ResultPanel({ data }: { data: RunData }) {
           </table>
         </div>
       )}
+      {rep.after_both && typeof rep.after_both.passed === 'number' && (
+        <div className="win">
+          ★ EVERY FIX TOGETHER, FRESH BUILD FROM STEP 0: {rep.after_both.passed} of {rep.after_both.total ?? 'unknown'} checks pass
+          <small>
+            {Object.entries(rep.after_both.checks ?? {}).filter(([, ok]) => ok === false).length
+              ? 'still failing: ' +
+                Object.entries(rep.after_both.checks ?? {})
+                  .filter(([, ok]) => ok === false)
+                  .map(([name]) => name)
+                  .join(', ')
+              : 'nothing still failing'}
+          </small>
+        </div>
+      )}
       <div className="row">
         <span>spent on the whole run</span>
         <em>{sp ? `${show(sp.model_calls)} model calls · ${typeof sp.usd === 'number' ? '$' + (sp.usd < 1 ? sp.usd.toFixed(4) : sp.usd.toFixed(2)) : 'cost unknown'}` : 'unknown'}</em>

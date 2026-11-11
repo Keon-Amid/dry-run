@@ -1,7 +1,7 @@
 // The page reads only the orchestrator's run files (shapes: CONTRACT.md > Roles). Nothing here invents a number.
 export type Json = any
 export type RunInfo = { id: string; files: string[]; mtime: number; sizes?: Record<string, number>; meta?: Json; label?: string }
-export type Caps = { python: string | null; pipeline: boolean; archilSdk: boolean; keys: { ARCHIL_API_KEY: boolean; ANTHROPIC_API_KEY: boolean }; fixtures: string[]; fixtureNames?: Record<string, string> }
+export type Caps = { python: string | null; pipeline: boolean; archilSdk: boolean; keys: { ARCHIL_API_KEY: boolean; ANTHROPIC_API_KEY: boolean }; fixtures: string[]; fixtureNames?: Record<string, string>; liveCmd?: boolean }
 export type Job = { id: string; command: string; opts: Json; startedAt: number; endedAt: number | null; exitCode: number | null; running: boolean; runId: string | null; tail: string[] }
 export type RunData = {
   id: string
@@ -41,6 +41,12 @@ export async function startRun(opts: Json): Promise<Job> {
   const r = await fetch('/api/start', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(opts) })
   const j = await r.json().catch(() => ({}))
   if (!r.ok) throw new Error(j.error || 'could not start the run')
+  return j.job
+}
+export async function liveWave(runId: string, cmd: 'wave' | 'both' = 'wave'): Promise<Job> {
+  const r = await fetch('/api/live', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ runId, cmd }) })
+  const j = await r.json().catch(() => ({}))
+  if (!r.ok) throw new Error(j.error || 'could not start the live wave')
   return j.job
 }
 export const stopRun = () => fetch('/api/stop', { method: 'POST' }).then((r) => r.json())
