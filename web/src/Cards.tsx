@@ -35,6 +35,7 @@ export function Cards({ data, onClose }: { data: RunData; onClose: () => void })
           const sm = swarms.find((s) => s.check === c.check)
           const wins: any[] = (sm?.rewrites ?? []).filter((r: any) => r.winner)
           const q = c.culprit
+          const base = (data.baseline?.baselines ?? []).find((b: any) => b.check === c.check)
           return (
             <div key={c.check} className={'scroll v-' + (c.verdict ?? 'pending')}>
               <div className="emblem">
@@ -86,8 +87,27 @@ export function Cards({ data, onClose }: { data: RunData; onClose: () => void })
               {wins.map((w) => (
                 <div key={w.route} className="win">
                   ★ {w.text}
+                  <small>
+                    visible {w.visible ?? 'unknown'} · held-out {w.heldout ?? 'unknown'}
+                  </small>
                 </div>
               ))}
+              {base && (
+                <div className="baseline">
+                  <div className="row">
+                    <span>one plain Claude call instead</span>
+                    <em>{base.passes_all === true ? 'passes all' : base.passes_all === false ? 'does not pass all' : 'unknown'}</em>
+                  </div>
+                  <div className="row">
+                    <span>· visible</span>
+                    <Slots score={base.visible} />
+                  </div>
+                  <div className="row">
+                    <span>· held-out</span>
+                    <Slots score={base.heldout} />
+                  </div>
+                </div>
+              )}
               {c.confirm && (
                 <div className="row">
                   <span>confirm</span>

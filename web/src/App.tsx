@@ -4,6 +4,7 @@ import { buildTimeline, captionAt, hudAt, W, H, type Caption, type Hud, type Tim
 import { Scene } from './scene'
 import { Cards } from './Cards'
 import { Report } from './Report'
+import { Upload } from './Upload'
 
 const qs = new URLSearchParams(location.search)
 
@@ -44,6 +45,7 @@ function Main({ reportOpen, preferRun }: { reportOpen: boolean; preferRun: strin
   const [speed, setSpeed] = useState(Number(qs.get('speed')) || 1)
   const [live, setLive] = useState(qs.get('live') === '1')
   const [showCards, setShowCards] = useState(qs.get('cards') === '1')
+  const [showUpload, setShowUpload] = useState(qs.get('upload') === '1')
   const [ui, setUi] = useState<{ t: number; cap: Caption | null; hud: Hud | null; ended: boolean }>({ t: 0, cap: null, hud: null, ended: false })
   const [tip, setTip] = useState<{ x: number; y: number; text: string } | null>(null)
   const [err, setErr] = useState<string | null>(null)
@@ -177,7 +179,7 @@ function Main({ reportOpen, preferRun }: { reportOpen: boolean; preferRun: strin
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (st.current.reportOpen || (e.target as HTMLElement)?.tagName === 'SELECT') return
+      if (st.current.reportOpen || ['SELECT', 'INPUT'].includes((e.target as HTMLElement)?.tagName)) return
       if (e.code === 'Space') {
         e.preventDefault()
         setPlaying((p) => !p)
@@ -213,6 +215,12 @@ function Main({ reportOpen, preferRun }: { reportOpen: boolean; preferRun: strin
     if (a && runId) location.hash = `#/run/${encodeURIComponent(runId)}/copy/${encodeURIComponent(a.reportId)}`
   }
 
+  // one jump button per phase of the story, for presenting
+  const phases = useMemo(() => {
+    const out: { phase: string; t: number }[] = []
+    for (const c of tl?.captions ?? []) if (!out.some((p) => p.phase === c.phase)) out.push({ phase: c.phase, t: c.t })
+    return out
+  }, [tl])
   const hud = ui.hud
   const arch = data?.archil
   const run = data?.run
@@ -278,6 +286,9 @@ function Main({ reportOpen, preferRun }: { reportOpen: boolean; preferRun: strin
         <button className={'btn' + (showCards ? ' on' : '')} disabled={!tl?.hasCards} onClick={() => setShowCards((s) => !s)}>
           CARDS
         </button>
+        <button className="btn" onClick={() => setShowUpload(true)}>
+          NEW RUN
+        </button>
       </header>
       <div className="hud">
         <Stat k="ARCHIL DISK" v={run?.disk_id ? String(run.disk_id).replace(/^(dsk-)0+/, '$1…') : 'unknown'} />
@@ -298,10 +309,28 @@ function Main({ reportOpen, preferRun }: { reportOpen: boolean; preferRun: strin
       <div className="stage" ref={stageRef}>
         <canvas ref={canvasRef} onMouseMove={onMove} onMouseLeave={() => setTip(null)} onClick={onClick} />
         {showCards && data && <Cards data={data} onClose={() => setShowCards(false)} />}
+        {showUpload && <Upload onClose={() => setShowUpload(false)} />}
       </div>
       <footer className={'caption ' + (waiting ? 'archil' : (ui.cap?.tone ?? 'info'))}>
         <span className="phase">{waiting ? (live ? 'LIVE' : 'END OF FILES') : (ui.cap?.phase ?? '…')}</span>
         <span className="captext">{capText}</span>
+        <span className="jumps">
+          {phases.map((p) => (
+            <button
+              key={p.phase}
+              className={'jump' + (!waiting && ui.cap?.phase === p.phase ? ' on' : '')}
+              title={`jump to ${p.phase}`}
+              onClick={() => {
+                tRef.current = p.t
+                st.current.cardsFor = ''
+                setShowCards(false)
+                setUi((u) => ({ ...u, t: p.t }))
+              }}
+            >
+              {p.phase}
+            </button>
+          ))}
+        </span>
       </footer>
       {tip && (
         <div className="tip" style={{ left: tip.x + 14, top: tip.y + 16 }}>
