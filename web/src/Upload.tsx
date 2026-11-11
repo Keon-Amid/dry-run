@@ -25,7 +25,7 @@ export function Upload({ onClose, onStarted, job }: { onClose: () => void; onSta
         const real = c.keys.ANTHROPIC_API_KEY
         const archil = c.keys.ARCHIL_API_KEY && c.archilSdk
         setBuilder(real ? 'real' : 'stub')
-        setFixture(real ? 'demo' : 'stub')
+        setFixture(real && c.fixtures.includes('demo') ? 'demo' : 'stub')
         setLocal(!archil)
       })
       .catch(() => setErr('Cannot reach the page server.'))
@@ -99,7 +99,7 @@ export function Upload({ onClose, onStarted, job }: { onClose: () => void; onSta
             why="needs ANTHROPIC_API_KEY on this machine"
             set={() => {
               setBuilder('real')
-              setFixture('demo')
+              setFixture(caps?.fixtures.includes('demo') ? 'demo' : (caps?.fixtures.find((f) => f !== 'stub') ?? 'stub'))
             }}
           >
             Real builder (Claude)
@@ -107,15 +107,12 @@ export function Upload({ onClose, onStarted, job }: { onClose: () => void; onSta
         </div>
         <div className="optrow">
           <b>WHAT SPEC</b>
-          <Opt on={fixture === 'stub'} ok={fixtureOk('stub')} set={() => setFixture('stub')}>
-            Stub spec<small>7 steps, scripted checks</small>
-          </Opt>
-          <Opt on={fixture === 'toy'} ok={fixtureOk('toy')} why="needs the real builder" set={() => setFixture('toy')}>
-            Toy<small>3 steps</small>
-          </Opt>
-          <Opt on={fixture === 'demo'} ok={fixtureOk('demo')} why="needs the real builder" set={() => setFixture('demo')}>
-            Shortlink demo<small>7 steps, real checks</small>
-          </Opt>
+          {(caps?.fixtures ?? ['stub']).map((f) => (
+            <Opt key={f} on={fixture === f} ok={fixtureOk(f)} why="needs the real builder" set={() => setFixture(f)}>
+              {f === 'stub' ? 'Stub spec' : `${caps?.fixtureNames?.[f] ?? f}${f.startsWith('demo') ? ' demo' : ''}`}
+              <small>{f === 'stub' ? 'scripted checks' : f === 'toy' ? '3 steps' : 'real checks'}</small>
+            </Opt>
+          ))}
         </div>
         <div className="optrow">
           <b>WHERE</b>

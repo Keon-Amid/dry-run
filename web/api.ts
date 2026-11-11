@@ -11,7 +11,8 @@ import { spawn, spawnSync, type ChildProcess } from 'node:child_process'
 
 const NAME = /^[\w][\w.-]*$/
 const FILE = /^[\w][\w.-]*\.(json|jsonl|md)$/
-const FIXTURES = ['stub', 'toy', 'demo']
+const FIXTURES = ['stub', 'toy', 'demo'] // fallback; the real list is read from the pipeline's own --help
+const FIXTURE_NAMES: Record<string, string> = { stub: 'Stub', toy: 'Toy', demo: 'Shortlink', demo2: 'Dungeon Painter' }
 const scrub = (s: string) =>
   s
     .replace(/sk-ant-[A-Za-z0-9_-]{6,}/g, 'sk-ant-…')
@@ -48,13 +49,17 @@ export function makeApi(repoRoot: string, RUNS: string) {
     if (caps && Date.now() - caps.at < 20000) return caps
     const v = spawnSync(py, ['-c', 'import sys; print(sys.version.split()[0])'], { encoding: 'utf8' })
     const sdk = spawnSync(py, ['-c', 'import archil'], { cwd: repoRoot }).status === 0
+    const help = spawnSync(py, ['-m', 'orchestrator.pipeline', '--help'], { cwd: repoRoot, encoding: 'utf8' })
+    const fx = String(help.stdout || '').match(/--fixture \{([^}]+)\}/)
+    const fixtures = fx ? fx[1].split(',').map((x) => x.trim()).filter((x) => /^[\w-]+$/.test(x)) : FIXTURES
     caps = {
       at: Date.now(),
       python: v.status === 0 ? String(v.stdout).trim() : null,
       pipeline: fs.existsSync(path.join(repoRoot, 'orchestrator/pipeline.py')),
       archilSdk: sdk,
       keys: { ARCHIL_API_KEY: hasKey('ARCHIL_API_KEY'), ANTHROPIC_API_KEY: hasKey('ANTHROPIC_API_KEY') },
-      fixtures: FIXTURES,
+      fixtures,
+      fixtureNames: FIXTURE_NAMES,
     }
     return caps
   }
@@ -78,7 +83,7 @@ export function makeApi(repoRoot: string, RUNS: string) {
     if (job && job.exitCode === null) throw new Error('a run is already in progress')
     const c = getCaps()
     if (!c.python || !c.pipeline) throw new Error('python3 or orchestrator/pipeline.py is missing on this machine')
-    const fixture = FIXTURES.includes(o?.fixture) ? o.fixture : 'stub'
+    const fixture = c.fixtures.includes(o?.fixture) ? o.fixture : 'stub'
     const builder = o?.builder === 'real' ? 'real' : 'stub'
     const local = o?.local !== false
     if (builder === 'real' && !c.keys.ANTHROPIC_API_KEY) throw new Error('the real builder needs ANTHROPIC_API_KEY on this machine')
@@ -141,8 +146,9 @@ export function makeApi(repoRoot: string, RUNS: string) {
     const who = mm ? mm[1][0].toUpperCase() + mm[1].slice(1).toLowerCase() : model || 'model unknown'
     const local = meta?.store && meta.store !== 'archil' ? ', local folders' : ''
     if (!real) return `Stub (fake agent)${local || (meta?.store === 'archil' ? ', on Archil' : '')}${time}`
-    if (/^demo-/.test(tail)) return `Shortlink: real run (${who})${local}${time}`
-    if (/^toy-/.test(tail)) return `Toy: real-model smoke test (${who})${local}${time}`
+    const fxName = (tail.match(/^([\w]+?)-(?:real|stub)/) || [])[1]
+    if (fxName === 'toy') return `Toy: real-model smoke test (${who})${local}${time}`
+    if (fxName) return `${FIXTURE_NAMES[fxName] ?? fxName}: real run (${who})${local}${time}`
     return `Real run (${who})${local}${time}`
   }
   const listRuns = () => {
